@@ -572,11 +572,7 @@
                 const offset = -currentIndex * cardWidth + (containerWidth - cardWidth) / 2;
                 slider.style.transform = `translateX(${offset}px)`;
                 slider.style.width = `${cards.length * (cardWidth)}px`;
-
-                console.log("currentIndex", currentIndex);
-                console.log("containerWidth", containerWidth);
                 
-
                 // Update active state
                 cards.forEach((card, index) => {
                     card.classList.toggle('active', index === currentIndex);
