@@ -133,11 +133,11 @@
             }
     
             .btn-49 {
-                background-color: #34b253;
+                background-color: #ef362d ;
             }
     
             .btn-50 {
-                background-color: #ef362d;
+                background-color:  #34b253;
             }
     
             .btn-disable {
