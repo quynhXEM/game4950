@@ -38,6 +38,7 @@
                 position: relative;
                 overflow: hidden;
                 width: 100%;
+                flex: 1;
             }
     
             .slider {
