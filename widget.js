@@ -217,6 +217,7 @@
                 color: black;
                 font-weight: bold;
                 flex: 1;
+                font-family: 'Courier New', Courier, monospace;
                 justify-content: start;
             }
     
