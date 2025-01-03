@@ -245,10 +245,12 @@
                 border-radius: 5px;
                 min-height: 30px;
                 margin-top: 10px;
+                color: black;
                 width: 100%;
                 padding-left: 10px;
                 overflow: hidden;
                 font-size: 12px;
+                font-family: 'Courier New', Courier, monospace;
                 font-weight: bold;
                 outline: none;
             }
