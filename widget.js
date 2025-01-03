@@ -398,6 +398,8 @@
         // Create initial elements (actions container, slider, nav buttons)
         function createInitialElements() {
             const sliderContainer = container.querySelector('.slider-container');
+
+            container.appendChild(sliderContainer);
             // Create the actions container
             const actionsContainer = document.createElement("div");
             actionsContainer.className = "actions-container";
