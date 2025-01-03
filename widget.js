@@ -359,12 +359,9 @@
             container.id = containerId;
             document.body.appendChild(container);
         }
-        container.className = 'trading-cards-widget-container';
     
         container.innerHTML = `
-            <div class="container">
-                <div class="slider-container"></div>
-            </div>
+            <div class="slider-container"></div>
         `;
     
     
