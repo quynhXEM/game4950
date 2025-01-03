@@ -215,6 +215,7 @@
                 margin: 10px 0;
                 display: flex;
                 color: black;
+                font-weight: bold;
                 flex: 1;
                 justify-content: start;
             }
