@@ -36,8 +36,6 @@
     
             .slider-container {
                 position: relative;
-                width: 100%;
-                overflow: hidden;
             }
     
             .slider {
@@ -568,10 +566,10 @@
                 const cards = document.querySelectorAll('.card');
                 const cardWidth = cards[0].offsetWidth + 20; // Include gap
                 const containerWidth = document.querySelector('.slider-container').offsetWidth;
+                
                 const offset = -currentIndex * cardWidth + (containerWidth - cardWidth) / 2;
-    
                 slider.style.transform = `translateX(${offset}px)`;
-    
+                slider.style.width = `${cards.length * (cardWidth)}px`;
                 // Update active state
                 cards.forEach((card, index) => {
                     card.classList.toggle('active', index === currentIndex);
