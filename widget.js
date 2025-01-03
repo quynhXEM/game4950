@@ -12,6 +12,9 @@
     function createTradingCardsWidget(containerId) {
         // Inject CSS styles
         const style = document.createElement('style');
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/@lottiefiles/lottie-player@2.0.8/dist/lottie-player.js';
+        script.type = 'module';
         style.textContent = `
             * {
                 margin: 0;
@@ -353,7 +356,7 @@
             }
         `;
         document.head.appendChild(style);
-    
+        document.head.appendChild(script);
         // Create or find widget container
         const container = document.getElementById(containerId) || document.createElement('div');
         if (!document.getElementById(containerId)) {
@@ -552,7 +555,7 @@
                                 <button id="btn-min" class="btn btn-49 btn-${item.id}"><p class="text-range text-range-min">49</p></button>
                             </div>
                             <div class="card-filter no-display">
-                                <dotlottie-player src="https://lottie.host/b5652d98-b56c-4b89-9409-b305fc11807b/krUTeNCeSi.json" background="transparent" speed="1" style="width: 100px; height: 100px" direction="1" playMode="normal" loop autoplay></dotlottie-player>
+                                <lottie-player src="https://lottie.host/b5652d98-b56c-4b89-9409-b305fc11807b/krUTeNCeSi.json" background="##FFFFFF" speed="1" style="width: 100px; height: 100px" loop autoplay direction="1" mode="normal"></lottie-player>
                                 Summarizing, Waiting for new transactions
                             </div>
                         `;
