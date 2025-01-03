@@ -448,11 +448,11 @@
     
             const prevButton = document.createElement("button");
             prevButton.className = "nav-btn prev";
-            prevButton.textContent = "Previous";
+            prevButton.textContent = "<";
     
             const nextButton = document.createElement("button");
             nextButton.className = "nav-btn next";
-            nextButton.textContent = "Next";
+            nextButton.textContent = ">";
     
             navButtons.appendChild(prevButton);
             navButtons.appendChild(nextButton);
@@ -501,7 +501,7 @@
                         const dis_max = Number(item.lastPrice.substring(item.lastPrice.length - 2)) > 49 && 'btn-disable';
                         card.className = 'card card-expired';
                         card.innerHTML = `
-                            <div class="card-header">
+                            <div id="${index}" class="card-header">
                                 <div class="status">
                                     <div class="status-dot-expired"></div>
                                     ${item.status}
@@ -532,7 +532,7 @@
                         currentIndex = index;
                         card.className = 'card';
                         card.innerHTML = `
-                            <div id="card-header" class="card-header">
+                            <div id="${index}" class="card-header">
                                 <div class="status">
                                     <div class="status-dot-active"></div>
                                     ${item.status}
@@ -621,9 +621,9 @@
     
                 }
     
-                if (event.target.id === "card-header") {
-                    const active = document.querySelector('.active');
-    
+                if (event.target.className === "card-header") {
+                    currentIndex = Number(event.target.id);
+                    updateSlider()
                 }
             });
     
