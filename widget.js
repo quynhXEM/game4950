@@ -214,6 +214,7 @@
             .last-price {
                 margin: 10px 0;
                 display: flex;
+                color: black;
                 flex: 1;
                 justify-content: start;
             }
@@ -247,6 +248,7 @@
                 overflow: hidden;
                 font-size: 12px;
                 font-weight: bold;
+                outline: none;
             }
     
             .input-token:focus {
