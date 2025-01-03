@@ -568,7 +568,7 @@
             function updateSlider() {
                 const cards = document.querySelectorAll('.card');
                 const cardWidth = cards[0].offsetWidth + 20; // Include gap
-                const containerWidth = document.querySelector('.slider-container').offsetWidth;
+                const containerWidth = document.querySelector('.actions-container').offsetWidth;
                 const offset = -currentIndex * cardWidth + (containerWidth - cardWidth) / 2;
                 slider.style.transform = `translateX(${offset}px)`;
                 slider.style.width = `${cards.length * (cardWidth)}px`;
