@@ -36,6 +36,8 @@
     
             .slider-container {
                 position: relative;
+                overflow: hidden;
+                width: 100%;
             }
     
             .slider {
