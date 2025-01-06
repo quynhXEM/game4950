@@ -3,6 +3,8 @@
     let container = document.getElementById(containerId);
 
     if (!container) {
+        console.log('aaaaaaaaaaa');
+        
         container = document.createElement('div');
         container.id = containerId;
         document.body.appendChild(container);
@@ -24,7 +26,7 @@
     
             body {
                 font-family: Arial, sans-serif;
-                min-height: 100vh;
+                // min-height: 100vh;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -347,13 +349,13 @@
             
             @media (max-width: 768px) {
                 .card {
-                    min-width: 260px;
+                    min-width: 280px;
                 }
             }
     
             @media (max-width: 480px) {
                 .card {
-                    min-width: 220px;
+                    min-width: 260px;
                 }
     
                 .container {
