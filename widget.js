@@ -20,6 +20,18 @@
         document.body.appendChild(container);
     }
 
+    if (typeof window.ethereum === "undefined") {
+        console.warn("⚠️ Metamask không được cài đặt!");
+        return;
+    }
+
+    // Load ethers.js từ CDN
+    if (typeof window.ethers === "undefined") {
+        const script = document.createElement("script");
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js";
+        document.head.appendChild(script);
+    }
+
     function nextBetBlock(n) {
         return Math.ceil((n + 1) / 10) * 10;
     }
@@ -100,6 +112,7 @@
 
     // Create Card and add Function, action button
     function createTradingCardsWidget(containerId) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
         // Inject CSS styles
         const style = document.createElement('style');
         const script = document.createElement('script');
@@ -541,12 +554,36 @@
             const btnwallet = document.querySelector('.btn-wallet');
             const nextBtn = document.querySelector('.next');
             const pevBtn = document.querySelector('.prev');
+            const btnwallet_text = document.querySelector('.btn-wallet-text');
 
-            btnwallet.addEventListener('click', () => {
-                const input = prompt('Enter your wallet address');
-                currentWallet = input;
-                const btnwallet_text = document.querySelector('.btn-wallet-text');
-                btnwallet_text.textContent = input
+            async function GetWallet() {
+                try {
+                    await window.ethereum.request({ method: "eth_requestAccounts" });
+                    const signer = provider.getSigner();
+                    const address = await signer.getAddress();
+                    btnwallet_text.innerText = `${address.slice(0, 6)}...${address.slice(-4)}`;
+                    btnwallet.disabled = true;
+                    currentWallet = address;
+                } catch (err) {
+                    alert("Connect Wallet failed ")
+                    console.error("Lỗi khi kết nối ví:", err);
+                }
+            }
+
+            GetWallet()
+
+            btnwallet.addEventListener('click', async () => {
+                try {
+                    await window.ethereum.request({ method: "eth_requestAccounts" });
+                    const signer = provider.getSigner();
+                    const address = await signer.getAddress();
+                    btnwallet_text.innerText = `${address.slice(0, 6)}...${address.slice(-4)}`;
+                    btnwallet.disabled = true;
+                    currentWallet = address;
+                } catch (err) {
+                    alert("Connect Wallet failed ")
+                    console.error("Lỗi khi kết nối ví:", err);
+                }
 
             });
 
@@ -691,7 +728,6 @@
                             const price = card.querySelector('.now-price');
                             price.style.display = 'block';
                             price.innerHTML = `You bet: ${currentToken} ${token} for ${currentTeam}`
-                            const button = document.querySelector(`.${event.target.id}`)
                         } else {
                             alert('Please enter the number of tokens');
                         }
