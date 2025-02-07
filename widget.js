@@ -14,15 +14,9 @@
     let currentWallet = '';
     let currentTeam = '';
     if (!container) {
-
         container = document.createElement('div');
         container.id = containerId;
         document.body.appendChild(container);
-    }
-
-    if (typeof window.ethereum === "undefined") {
-        console.warn("⚠️ Metamask không được cài đặt!");
-        return;
     }
 
     // Load ethers.js từ CDN
@@ -566,7 +560,6 @@
                     currentWallet = address;
                 } catch (err) {
                     alert("Connect Wallet failed ")
-                    console.error("Lỗi khi kết nối ví:", err);
                 }
             }
 
@@ -582,7 +575,6 @@
                     currentWallet = address;
                 } catch (err) {
                     alert("Connect Wallet failed ")
-                    console.error("Lỗi khi kết nối ví:", err);
                 }
 
             });
@@ -804,11 +796,37 @@
 
     }
 
-    // Start 
-    getBlock().then(() => {
-        connect()
-        createTradingCardsWidget(container);
-    })
+    if (typeof window.ethereum === "undefined") {
+        alert("⚠️ Install Metamask to continute");
+        const button = document.createElement("button");
+        button.innerText = "🦊 Install now";
+        button.style.cssText = `
+            width: 90%; 
+            margin-top:200px;
+            padding:10px 15px;
+            font-size:16px;
+            background:#f6851b;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;`;
+        document.body.style.cssText = `
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #090a0c;
+        `
 
+        button.addEventListener("click", () => {
+            window.location.replace("https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn")
+        })
 
+        document.body.appendChild(button);
+    } else {
+        getBlock().then(() => {
+            connect()
+            createTradingCardsWidget(container);
+        })
+    }
 })();
