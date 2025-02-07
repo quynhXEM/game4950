@@ -5,7 +5,14 @@
     let current_block;
     let bet_block;
     const time_bet = 6;
+    const token = "ETH"
     const value_bet = "Size Block prediction of Bitcoin"
+
+    //
+    let currentIndex = 0;
+    let currentToken = 0;
+    let currentWallet = '';
+    let currentTeam = '';
     if (!container) {
 
         container = document.createElement('div');
@@ -19,6 +26,10 @@
 
     function BetIDBlock(n) {
         return "BTC-" + nextBetBlock(n)
+    }
+
+    function isCheck() {
+        return current_block.height > (bet_block.height - time_bet)
     }
 
     // Get Current Block
@@ -54,7 +65,6 @@
         })
             .then((reponse) => reponse.json())
             .then((data) => {
-                console.log(data);
                 return data
 
             })
@@ -458,10 +468,6 @@
         // Widget data (replace with your data fetching logic)
 
 
-        let currentIndex = 0;
-        let currentToken = 0;
-        let currentWallet = '';
-        let currentTeam = '';
 
         // Create initial elements (actions container, slider, nav buttons)
         function createInitialElements() {
@@ -616,8 +622,8 @@
                                         <img class="coin-img" src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
                                         <p class="text-price">${value_bet}</p>
                                     </div>
-                                    <h3 class="now-price last-price">---</h3>
-                                    <input class="input-token" placeholder="Enter tokens" type="number" min="0.000001" />
+                                    <h3 class="now-price last-price">- - -</h3>
+                                    <input class="input-token" placeholder="Enter tokens bet" type="number" min="0.000001" />
                                 </div>
                                 <button id="btn-min" class="btn btn-49 btn-${item.id}"><p class="text-range text-range-min">49</p></button>
                             </div>
@@ -660,32 +666,36 @@
             updateSlider()
 
             slider.addEventListener('click', (event) => {
+
                 if (event.target.id === 'btn-min' || event.target.id === 'btn-max') {
-                    const card = event.target.closest('.card');
-                    const input = card.querySelector('.input-token');
-
-                    if (currentTeam) {
-                        alert('You have already bet on this transactions');
+                    if (isCheck()) {
                         return;
-                    }
-
-                    if (!currentWallet) {
-                        alert('Please connect your wallet');
-                        return;
-                    }
-
-                    if (input.value) {
-                        input.style.display = 'none';
-                        currentTeam = event.target.id === 'btn-min' ? 49 : 50;
-                        currentToken = input.value;
-                        const price = card.querySelector('.now-price');
-                        price.style.display = 'block';
-                        const button = document.querySelector(`.${event.target.id}`)
-                        console.log(button);
                     } else {
-                        alert('Please enter the number of tokens');
-                    }
+                        const card = event.target.closest('.card');
+                        const input = card.querySelector('.input-token');
 
+                        if (currentTeam) {
+                            alert('You have already bet on this transactions');
+                            return;
+                        }
+
+                        if (!currentWallet) {
+                            alert('Please connect your wallet');
+                            return;
+                        }
+
+                        if (input.value) {
+                            input.style.display = 'none';
+                            currentTeam = event.target.id === 'btn-min' ? 49 : 50;
+                            currentToken = input.value;
+                            const price = card.querySelector('.now-price');
+                            price.style.display = 'block';
+                            price.innerHTML = `You bet: ${currentToken} ${token} for ${currentTeam}`
+                            const button = document.querySelector(`.${event.target.id}`)
+                        } else {
+                            alert('Please enter the number of tokens');
+                        }
+                    }
 
                 }
 
@@ -698,54 +708,54 @@
             function updateClock() {
                 if (temp.length === 0) {
                     return;
-                }
-
-                timeCount.textContent = `${current_block.height}`;
-
-                if (current_block.height < (bet_block.height )) {
-                    if ((current_block.height > (bet_block.height - time_bet))) {
-                        const card = document.querySelector('.card.active');
-                        const filter = card.querySelector('.card-filter');
-                        filter.classList.remove('no-display');
-                    }
                 } else {
-                    getBetBlock(current_block.hash).then(() => {
-                        console.log("===", temp);
 
-                        temp[temp.length - 1].status = 'EXPIRED';
-                        temp[temp.length - 1].time = bet_block.time + "";
-                        temp.push({
-                            status: 'ACTIVE',
-                            id: BetIDBlock(current_block.height),
-                            time: '',
+                    timeCount.textContent = `${current_block.height}`;
+
+                    if (current_block.height < (bet_block.height)) {
+                        if ((current_block.height > (bet_block.height - time_bet))) {
+                            const card = document.querySelector('.card.active');
+                            const filter = card.querySelector('.card-filter');
+                            filter.classList.remove('no-display');
+                        }
+                    } else {
+                        getBetBlock(current_block.hash).then(() => {
+                            temp[temp.length - 1].status = 'EXPIRED';
+                            temp[temp.length - 1].time = bet_block.time + "";
+                            temp.push({
+                                status: 'ACTIVE',
+                                id: BetIDBlock(current_block.height),
+                                time: '',
+                            })
+
+                            function getRessault() {
+                                return temp[temp.length - 2].time.substring(temp[temp.length - 2].time.length - 2)
+                            }
+
+                            renderCard();
+                            updateSlider();
+
+                            if (!currentTeam) {
+                                return;
+                            }
+
+                            if ((currentTeam === 49) && (getRessault() < 50)) {
+                                alert(`You win $${currentToken}`);
+                            } else if ((currentTeam === 50) && (getRessault() > 49)) {
+                                alert(`You win $${currentToken}`);
+                            } else {
+                                alert('You lose');
+                            }
+
+                            currentTeam = '';
+                            currentToken = 0;
+
                         })
 
-                        function getRessault() {
-                            return temp[temp.length - 2].time.substring(temp[temp.length - 2].time.length - 2)
-                        }
 
-                        renderCard();
-                        updateSlider();
-
-                        if (!currentTeam) {
-                            return;
-                        }
-
-                        if ((currentTeam === 49) && (getRessault() < 50)) {
-                            alert(`You win $${currentToken}`);
-                        } else if ((currentTeam === 50) && (getRessault() > 49)) {
-                            alert(`You win $${currentToken}`);
-                        } else {
-                            alert('You lose');
-                        }
-
-                        currentTeam = '';
-                        currentToken = 0;
-
-                    })
-
-
+                    }
                 }
+
             }
             setInterval(updateClock, 10000);
             updateClock()
