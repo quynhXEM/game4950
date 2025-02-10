@@ -22,9 +22,9 @@
         const script = document.createElement("script");
         script.src = "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js";
         const script_wallet = document.createElement("script");
-        script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/client@1.7.1/dist/index.umd.min.js",
+        script_wallet.src = "https://cdnjs.cloudflare.com/ajax/libs/@walletconnect/web3-provider/1.6.2/umd/index.min.js",
 
-            document.head.appendChild(script);
+        document.head.appendChild(script);
         document.head.appendChild(script_wallet);
     }
 
@@ -566,7 +566,7 @@
 
                 if (isMobileDevice()) {
                     try {
-                        const WalletConnectProvider = window.WalletConnect.default;
+                        const WalletConnectProvider = window.WalletConnectProvider;
                         const walletProvider = new WalletConnectProvider({
                             bridge: "https://bridge.walletconnect.org",
                         });
