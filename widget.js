@@ -21,7 +21,11 @@
     if (typeof window.ethers === "undefined") {
         const script = document.createElement("script");
         script.src = "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js";
-        document.head.appendChild(script);
+        const script_wallet = document.createElement("script");
+        script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/client@1.7.1/dist/index.umd.min.js",
+
+            document.head.appendChild(script);
+        document.head.appendChild(script_wallet);
     }
 
     function nextBetBlock(n) {
