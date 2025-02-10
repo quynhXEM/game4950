@@ -1,7 +1,16 @@
 (function () {  // Immediately Invoked Function Expression (IIFE)
     const containerId = 'trading-cards-widget';
     let container = document.getElementById(containerId);
-    let temp = [];
+    let temp = [
+        {
+            status: 'EXPIRED',
+            id: 883130,
+            issummar: false,
+            token: '',
+            team: '',
+            size: '2025573',
+        }
+    ];
     let current_block;
     let bet_block;
     const time_bet = 6;
@@ -24,10 +33,6 @@
 
     const script_wallet = document.createElement("script");
     script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js";
-    script_wallet.onload = async () => {
-        console.log("aaaaaaaaa");
-        
-    }
     document.head.appendChild(script_wallet);
 
     function nextBetBlock(n) {
@@ -714,6 +719,7 @@
                             </div>
                         `;
                     }
+                    currentIndex = temp.findIndex(item => item.status === "ACTIVE")
                     return card;
                 });
                 // Append all cards to the slider
@@ -798,6 +804,7 @@
                     timeCount.textContent = `${current_block.height}`;
                     if (current_block.height < temp[block_0].id) {
                         if ((current_block.height > (temp[block_0].id - time_bet))) {
+                            temp[block_0].issummar = true
                             const card = document.getElementById(`${temp[block_0].id}`)
                             const filter = card.querySelector('.card-filter');
                             filter.classList.remove('no-display');
@@ -834,6 +841,7 @@
 
                             temp[block_0].status = 'EXPIRED';
                             temp[block_0].size = bet_block.size + "";
+                            temp[block_0].issummar = false
 
                             renderCard();
                             updateSlider();
