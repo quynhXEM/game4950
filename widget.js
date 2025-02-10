@@ -576,6 +576,9 @@
                         const signer = web3Provider.getSigner();
                         const address = await signer.getAddress();
 
+                        alert(address)
+                        
+
                         btnwallet_text.innerText = `✅ ${address.slice(0, 6)}...${address.slice(-4)}`;
                         btnwallet.disabled = true;
                     } catch (err) {
