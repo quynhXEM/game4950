@@ -562,7 +562,7 @@
 
                 if (isMobileDevice()) {
 
-                    if (!provider) {
+                    if (provider) {
                         // MOBILE
                         try {
                             const WalletConnectProvider = window.WalletConnect.default;
@@ -585,7 +585,7 @@
                     }
                 } else {
                     // PC
-                    if (!provider) {
+                    if (provider) {
                         try {
                             await window.ethereum.request({ method: "eth_requestAccounts" });
                             const signer = provider.getSigner();
