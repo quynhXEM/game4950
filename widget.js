@@ -565,27 +565,21 @@
                 }
 
                 if (isMobileDevice()) {
+                    try {
+                        const WalletConnectProvider = window.WalletConnect.default;
+                        const walletProvider = new WalletConnectProvider({
+                            bridge: "https://bridge.walletconnect.org",
+                        });
 
-                    if (provider) {
-                        // MOBILE
-                        try {
-                            const WalletConnectProvider = window.WalletConnect.default;
-                            const walletProvider = new WalletConnectProvider({
-                                bridge: "https://bridge.walletconnect.org",
-                            });
+                        await walletProvider.enable();
+                        const web3Provider = new ethers.providers.Web3Provider(walletProvider);
+                        const signer = web3Provider.getSigner();
+                        const address = await signer.getAddress();
 
-                            await walletProvider.enable();
-                            const web3Provider = new ethers.providers.Web3Provider(walletProvider);
-                            const signer = web3Provider.getSigner();
-                            const address = await signer.getAddress();
-
-                            btnwallet_text.innerText = `✅ ${address.slice(0, 6)}...${address.slice(-4)}`;
-                            btnwallet.disabled = true;
-                        } catch (err) {
-                            console.error("Lỗi kết nối WalletConnect:", err);
-                        }
-                    } else {
-                        alert("download app wallet")
+                        btnwallet_text.innerText = `✅ ${address.slice(0, 6)}...${address.slice(-4)}`;
+                        btnwallet.disabled = true;
+                    } catch (err) {
+                        console.error("Lỗi kết nối WalletConnect:", err);
                     }
                 } else {
                     // PC
