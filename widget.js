@@ -5,14 +5,12 @@
     let current_block;
     let bet_block;
     const time_bet = 6;
+    const number_block = 5;
     const token = "ETH"
     const value_bet = "Size Block prediction of Bitcoin"
-
     //
     let currentIndex = 0;
-    let currentToken = 0;
     let currentWallet = '';
-    let currentTeam = '';
     if (!container) {
         container = document.createElement('div');
         container.id = containerId;
@@ -30,12 +28,10 @@
         return Math.ceil((n + 1) / 10) * 10;
     }
 
-    function BetIDBlock(n) {
-        return "BTC-" + nextBetBlock(n)
-    }
 
-    function isCheck() {
-        return current_block.height > (bet_block.height - time_bet)
+
+    function checkSummar(n, m) {
+        return n > (m - time_bet)
     }
 
     // Get Current Block
@@ -56,11 +52,16 @@
 
         bet_block = { height: nextBetBlock(current_block.height) }
 
-        temp.push({
-            status: 'ACTIVE',
-            id: BetIDBlock(current_block.height),
-            time: '',
-        })
+        for (let i = 0; i < number_block; i++) {
+            temp.push({
+                status: 'ACTIVE',
+                id: nextBetBlock(current_block.height + i * 10),
+                issummar: checkSummar(current_block.height, nextBetBlock(current_block.height + i * 10)),
+                token: '',
+                team: '',
+                size: '',
+            })
+        }
     }
 
 
@@ -106,7 +107,7 @@
 
     // Create Card and add Function, action button
     function createTradingCardsWidget(containerId) {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+
         // Inject CSS styles
         const style = document.createElement('style');
         const script = document.createElement('script');
@@ -550,31 +551,80 @@
             const pevBtn = document.querySelector('.prev');
             const btnwallet_text = document.querySelector('.btn-wallet-text');
 
-            async function GetWallet() {
-                try {
-                    await window.ethereum.request({ method: "eth_requestAccounts" });
-                    const signer = provider.getSigner();
-                    const address = await signer.getAddress();
-                    btnwallet_text.innerText = `${address.slice(0, 6)}...${address.slice(-4)}`;
-                    btnwallet.disabled = true;
-                    currentWallet = address;
-                } catch (err) {
-                    alert("Connect Wallet failed ")
-                }
-            }
-
-            GetWallet()
-
             btnwallet.addEventListener('click', async () => {
-                try {
-                    await window.ethereum.request({ method: "eth_requestAccounts" });
-                    const signer = provider.getSigner();
-                    const address = await signer.getAddress();
-                    btnwallet_text.innerText = `${address.slice(0, 6)}...${address.slice(-4)}`;
-                    btnwallet.disabled = true;
-                    currentWallet = address;
-                } catch (err) {
-                    alert("Connect Wallet failed ")
+                const provider = typeof window.ethereum !== "undefined"
+                    ? new ethers.providers.Web3Provider(window.ethereum)
+                    : null;
+
+                function isMobileDevice() {
+                    return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                }
+
+                if (isMobileDevice()) {
+
+                    if (!provider) {
+                        // MOBILE
+                        try {
+                            const WalletConnectProvider = window.WalletConnect.default;
+                            const walletProvider = new WalletConnectProvider({
+                                bridge: "https://bridge.walletconnect.org",
+                            });
+
+                            await walletProvider.enable();
+                            const web3Provider = new ethers.providers.Web3Provider(walletProvider);
+                            const signer = web3Provider.getSigner();
+                            const address = await signer.getAddress();
+
+                            btnwallet_text.innerText = `✅ ${address.slice(0, 6)}...${address.slice(-4)}`;
+                            btnwallet.disabled = true;
+                        } catch (err) {
+                            console.error("Lỗi kết nối WalletConnect:", err);
+                        }
+                    } else {
+                        alert("download app wallet")
+                    }
+                } else {
+                    // PC
+                    if (!provider) {
+                        try {
+                            await window.ethereum.request({ method: "eth_requestAccounts" });
+                            const signer = provider.getSigner();
+                            const address = await signer.getAddress();
+                            btnwallet_text.innerText = `${address.slice(0, 6)}...${address.slice(-4)}`;
+                            btnwallet.disabled = true;
+                            currentWallet = address;
+                        } catch (err) {
+                            alert("Connect Wallet failed ")
+                        }
+                    } else {
+                        alert("⚠️ Install Metamask to continute");
+                        const button = document.createElement("button");
+                        button.innerText = "🦊 Install now";
+                        button.style.cssText = `
+                        width: 90%; 
+                        margin-top:200px;
+                        padding:10px 15px;
+                        font-size:16px;
+                        background:#f6851b;
+                        color:white;
+                        border:none;
+                        border-radius:5px;
+                        cursor:pointer;`;
+                        document.body.style.cssText = `
+                        font-family: Arial, sans-serif;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: #090a0c;
+                    `
+
+                        button.addEventListener("click", () => {
+                            window.location.replace("https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn")
+                        })
+                        document.body.innerHTML = ''
+                        document.body.appendChild(button);
+                    }
+
                 }
 
             });
@@ -602,8 +652,8 @@
                 const children = temp.map((item, index) => {
                     const card = document.createElement('div');
                     if (item.status === 'EXPIRED') {
-                        const dis_min = Number(item.time.substring(item.time.length - 2)) < 50 && 'btn-disable';
-                        const dis_max = Number(item.time.substring(item.time.length - 2)) > 49 && 'btn-disable';
+                        const dis_min = Number(item.size.substring(item.size.length - 2)) < 50 && 'btn-disable';
+                        const dis_max = Number(item.size.substring(item.size.length - 2)) > 49 && 'btn-disable';
                         card.className = 'card card-expired';
                         card.innerHTML = `
                             <div id="${index}" class="card-header">
@@ -611,7 +661,7 @@
                                     <div class="status-dot-expired"></div>
                                     ${item.status}
                                 </div>
-                                <div class="id">${item.id}</div>
+                                <div class="id">BTC~${item.id}</div>
                             </div>
                             <div class="card-content">
                                 <button class="btn btn-expired btn-50 ${dis_min}"><p class="text-range text-range-max">50</p></button>
@@ -622,9 +672,9 @@
                                     </div>
                                     <div class="price-content">
                                         <h3 class="last-price">
-                                            $${item.time.substring(0, item.time.length - 2)}
+                                            $${item.size.substring(0, item.size.length - 2)}
                                             <span class="final-price">
-                                            ${item.time.substring(item.time.length - 2)}
+                                            ${item.size.substring(item.size.length - 2)}
                                             </span>
                                         </h3>
                                     
@@ -634,15 +684,15 @@
                             </div>
                         `;
                     } else if (item.status === 'ACTIVE') {
-                        currentIndex = index;
-                        card.className = 'card';
+                        card.className = `card`;
+                        card.id = `${item.id}`
                         card.innerHTML = `
                             <div id="${index}" class="card-header">
                                 <div class="status">
                                     <div class="status-dot-active"></div>
                                     ${item.status}
                                 </div>
-                                <div class="id">${item.id}</div>
+                                <div class="id">BTC~${item.id}</div>
                             </div>
                             <div class="card-content">
                                 <button id="btn-max" class="btn btn-50"><p class="text-range text-range-max">50</p></button>
@@ -656,7 +706,7 @@
                                 </div>
                                 <button id="btn-min" class="btn btn-49 btn-${item.id}"><p class="text-range text-range-min">49</p></button>
                             </div>
-                            <div class="card-filter no-display">
+                            <div class="card-filter ${!item.issummar && "no-display"} ">
                                 <lottie-player src="https://lottie.host/b5652d98-b56c-4b89-9409-b305fc11807b/krUTeNCeSi.json" background="##FFFFFF" speed="1" style="width: 100px; height: 100px" loop autoplay direction="1" mode="normal"></lottie-player>
                                 Summarizing, Waiting for new transactions
                             </div>
@@ -695,15 +745,19 @@
             updateSlider()
 
             slider.addEventListener('click', (event) => {
-
                 if (event.target.id === 'btn-min' || event.target.id === 'btn-max') {
-                    if (isCheck()) {
+                    const card = event.target.closest('.card');
+                    const input = card.querySelector('.input-token');
+                    const index_block = temp.findIndex(item => item.id == card.id)
+
+                    function isCheck(n, m) {
+                        return n > (m - time_bet)
+                    }
+
+                    if (isCheck(current_block.height, temp[index_block].id)) {
                         return;
                     } else {
-                        const card = event.target.closest('.card');
-                        const input = card.querySelector('.input-token');
-
-                        if (currentTeam) {
+                        if (temp[index_block].team) {
                             alert('You have already bet on this transactions');
                             return;
                         }
@@ -713,13 +767,14 @@
                             return;
                         }
 
-                        if (input.value) {
+                        if (input.value > 0) {
                             input.style.display = 'none';
-                            currentTeam = event.target.id === 'btn-min' ? 49 : 50;
-                            currentToken = input.value;
+                            temp[index_block].team = event.target.id === 'btn-min' ? 49 : 50;
+                            temp[index_block].token = input.value
                             const price = card.querySelector('.now-price');
                             price.style.display = 'block';
-                            price.innerHTML = `You bet: ${currentToken} ${token} for ${currentTeam}`
+                            price.innerHTML = `You bet: ${temp[index_block].token} ${token} for ${temp[index_block].team}`
+
                         } else {
                             alert('Please enter the number of tokens');
                         }
@@ -737,54 +792,54 @@
                 if (temp.length === 0) {
                     return;
                 } else {
-
+                    const block_0 = temp.findIndex(item => item.status === 'ACTIVE')
                     timeCount.textContent = `${current_block.height}`;
-
-                    if (current_block.height < (bet_block.height)) {
-                        if ((current_block.height > (bet_block.height - time_bet))) {
-                            const card = document.querySelector('.card.active');
+                    if (current_block.height < temp[block_0].id) {
+                        if ((current_block.height > (temp[block_0].id - time_bet))) {
+                            const card = document.getElementById(`${temp[block_0].id}`)
                             const filter = card.querySelector('.card-filter');
                             filter.classList.remove('no-display');
                         }
+
                     } else {
                         getBetBlock(current_block.hash).then(() => {
-                            temp[temp.length - 1].status = 'EXPIRED';
-                            temp[temp.length - 1].time = bet_block.time + "";
+
                             temp.push({
                                 status: 'ACTIVE',
-                                id: BetIDBlock(current_block.height),
-                                time: '',
+                                id: nextBetBlock(current_block.height + (number_block - 1) * 10),
+                                issummar: false,
+                                token: '',
+                                team: '',
+                                size: '',
                             })
 
-                            function getRessault() {
-                                return temp[temp.length - 2].time.substring(temp[temp.length - 2].time.length - 2)
+                            function burnToken(n) {
+                                return parseFloat(n) * 90 / 100
                             }
+                            function getRessault() {
+                                return temp[block_0].size.substring(temp[block_0].size.length - 2)
+                            }
+
+                            if (temp[block_0].team) {
+                                if ((temp[block_0].team === 49) && (getRessault() < 50)) {
+                                    alert(`You win $${burnToken(temp[block_0].token)}`);
+                                } else if ((temp[block_0].team === 50) && (getRessault() > 49)) {
+                                    alert(`You win $${burnToken(temp[block_0].token)}`);
+                                } else {
+                                    alert('You lose');
+                                }
+                            }
+
+                            temp[block_0].status = 'EXPIRED';
+                            temp[block_0].size = bet_block.size + "";
 
                             renderCard();
                             updateSlider();
-
-                            if (!currentTeam) {
-                                return;
-                            }
-
-                            if ((currentTeam === 49) && (getRessault() < 50)) {
-                                alert(`You win $${currentToken}`);
-                            } else if ((currentTeam === 50) && (getRessault() > 49)) {
-                                alert(`You win $${currentToken}`);
-                            } else {
-                                alert('You lose');
-                            }
-
-                            currentTeam = '';
-                            currentToken = 0;
-
                         })
-
-
                     }
                 }
-
             }
+
             setInterval(updateClock, 10000);
             updateClock()
 
@@ -796,37 +851,9 @@
 
     }
 
-    if (typeof window.ethereum === "undefined") {
-        alert("⚠️ Install Metamask to continute");
-        const button = document.createElement("button");
-        button.innerText = "🦊 Install now";
-        button.style.cssText = `
-            width: 90%; 
-            margin-top:200px;
-            padding:10px 15px;
-            font-size:16px;
-            background:#f6851b;
-            color:white;
-            border:none;
-            border-radius:5px;
-            cursor:pointer;`;
-        document.body.style.cssText = `
-            font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #090a0c;
-        `
+    getBlock().then(() => {
+        connect()
+        createTradingCardsWidget(container);
+    })
 
-        button.addEventListener("click", () => {
-            window.location.replace("https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn")
-        })
-
-        document.body.appendChild(button);
-    } else {
-        getBlock().then(() => {
-            connect()
-            createTradingCardsWidget(container);
-        })
-    }
 })();
