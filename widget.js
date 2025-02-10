@@ -21,12 +21,13 @@
     if (typeof window.ethers === "undefined") {
         const script = document.createElement("script");
         script.src = "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js";
-        const script_wallet = document.createElement("script");
-        script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js";
-
         document.head.appendChild(script);
-        document.head.appendChild(script_wallet);
+
     }
+
+    const script_wallet = document.createElement("script");
+    script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js";
+    document.head.appendChild(script_wallet);
 
     function nextBetBlock(n) {
         return Math.ceil((n + 1) / 10) * 10;
