@@ -18,14 +18,13 @@
     }
 
     // Load ethers.js từ CDN
-    if (typeof window.ethers === "undefined") {
-        const script = document.createElement("script");
-        script.src = "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js";
-        document.head.appendChild(script);
+    const script = document.createElement("script");
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js";
+    document.head.appendChild(script);
 
-    }
-
-
+    const script_wallet = document.createElement("script");
+    script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js";
+    document.head.appendChild(script_wallet);
 
     function nextBetBlock(n) {
         return Math.ceil((n + 1) / 10) * 10;
@@ -564,9 +563,6 @@
                 }
 
                 if (isMobileDevice()) {
-                    const script_wallet = document.createElement("script");
-                    script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js";
-                    document.head.appendChild(script_wallet);
                     try {
                         const WalletConnectProvider = window.WalletConnectProvider;
                         const walletProvider = new WalletConnectProvider({
