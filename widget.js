@@ -24,6 +24,10 @@
 
     const script_wallet = document.createElement("script");
     script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js";
+    script_wallet.onload = async () => {
+        console.log("aaaaaaaaa");
+        
+    }
     document.head.appendChild(script_wallet);
 
     function nextBetBlock(n) {
