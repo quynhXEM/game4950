@@ -119,21 +119,6 @@
         script.src = 'https://unpkg.com/@lottiefiles/lottie-player@2.0.8/dist/lottie-player.js';
         script.type = 'module';
         style.textContent = `
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-    
-            body {
-                font-family: Arial, sans-serif;
-                // min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: #090a0c;
-            }
-    
             .container-widget {
                 position: relative;
                 padding: 20px;
