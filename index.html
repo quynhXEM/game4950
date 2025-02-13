@@ -7,14 +7,15 @@
 
 <body>
     <div id="trading-cards-widget"></div>
+    <!-- <script src="./widget.js"></script> -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const widget = document.getElementById('trading-cards-widget');
-            widget.setAttribute("data-id", window.location.pathname.substring(1));
-        });
-    </script>
-    <script src="./widget.js" defer></script>
+        const widget = document.getElementById('trading-cards-widget')
+        widget.setAttribute("data-id", window.location.pathname.substring(1))
 
+        const script = document.createElement("script");
+        script.src = "./widget.js";
+        document.body.appendChild(script);
+    </script>
 </body>
 
 </html>
