@@ -475,7 +475,7 @@
         }
 
         container.innerHTML = `
-            <div class="slider-container"></div>
+            <div class="slider-container" id="slider-container"></div>
         `;
 
 
