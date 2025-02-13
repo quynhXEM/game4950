@@ -467,26 +467,13 @@
         document.head.appendChild(style);
         document.head.appendChild(script);
         // Create or find widget container
-        const container = document.getElementById(containerId) || document.createElement('div');
-        if (!document.getElementById(containerId)) {
-            container.id = containerId;
-            document.body.appendChild(container);
-        }
 
-        container.innerHTML = `
-            <div class="slider-container" id="slider-container"></div>
-        `;
-
-
-        // Widget data (replace with your data fetching logic)
-
-
-
-        // Create initial elements (actions container, slider, nav buttons)
         function createInitialElements() {
-            const sliderContainer = container.querySelector('.slider-container');
+            const container = document.getElementById(containerId)
 
-            container.appendChild(sliderContainer);
+            const sliderContainer = document.createElement('div');
+            sliderContainer.id = "slider-container"
+
             // Create the actions container
             const actionsContainer = document.createElement("div");
             actionsContainer.className = "actions-container";
@@ -548,8 +535,8 @@
             sliderContainer.appendChild(slider);
             sliderContainer.appendChild(navButtons);
 
+            container.appendChild(sliderContainer)
             // Append the slider container to the body
-            document.body.appendChild(sliderContainer);
 
             const btnwallet = document.querySelector('.btn-wallet');
             const nextBtn = document.querySelector('.next');
@@ -857,7 +844,7 @@
 
     getBlock().then(() => {
         connect()
-        createTradingCardsWidget(container);
+        createTradingCardsWidget(containerId);
     })
 
 })();
