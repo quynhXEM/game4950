@@ -134,20 +134,20 @@
                 background: #090a0c;
             }
     
-            .container {
+            .container-widget {
                 position: relative;
                 padding: 20px;
                 background: #090a0c;
             }
     
-            .slider-container {
+            .slider-container-widget {
                 position: relative;
                 overflow: hidden;
                 width: 100%;
                 flex: 1;
             }
     
-            .slider {
+            .slider-widget {
                 display: flex;
                 padding: 5px;
                 transition: transform 0.5s ease;
@@ -155,7 +155,7 @@
                 margin-top: 15px;
             }
     
-            .card {
+            .card-widget {
                 min-width: 280px;
                 position: relative;
                 transition: all 0.3s ease;
@@ -165,11 +165,11 @@
                 background-color: white;
                 border: 1px solid rgb(0, 0, 0);
             }
-            .card.active {
+            .card-widget.active-widget {
                 transform: scale(1.05);
             }
     
-            .card-header {
+            .card-header-widget {
                 color: white;
                 padding: 10px 15px;
                 border-radius: 10px 10px 0 0;
@@ -180,7 +180,7 @@
                 cursor: pointer;
             }
     
-            .card-content {
+            .card-content-widget {
                 position: relative;
                 padding: 30px;
                 display: flex;
@@ -190,7 +190,7 @@
                 align-items: center;
             }
     
-            .card-filter {
+            .card-filter-widget {
                 position: absolute;
                 width: 100%;
                 height: 100%;
@@ -206,7 +206,7 @@
                 z-index: 3;
             }
     
-            .content-bet {
+            .content-bet-widget {
                 position: absolute;
                 width: 90%;
                 padding: 10px;
@@ -216,7 +216,7 @@
                 background: white;
             }
     
-            .btn {
+            .btn-widget {
                 padding: 10px;
                 width: 80px;
                 height: 80px;
@@ -231,82 +231,82 @@
                 overflow: hidden;
             }
     
-            .btn:hover {
+            .btn-widget:hover {
                 opacity: 0.7;
             }
     
-            .btn-49 {
+            .btn-49-widget {
                 background-color: #ef362d ;
             }
     
-            .btn-50 {
+            .btn-50-widget {
                 background-color:  #34b253;
             }
     
-            .btn-disable {
+            .btn-disable-widget {
                 background-color: gray;
                 cursor: not-allowed;
                 opacity: 0.5;
             }
     
-            .btn-expired {
+            .btn-expired-widget {
                 cursor: not-allowed;
             }
     
-            .text-range {
+            .text-range-widget {
                 transform: rotate(-45deg);
             }
     
-            .text-range-min {
+            .text-range-min-widget {
                 position: absolute;
                 right: 20px;
                 bottom: 20px;
             }
     
-            .text-range-max {
+            .text-range-max-widget {
                 position: absolute;
                 left: 20px;
                 top: 20px;
             }
     
-            .status {
+            .status-widget {
                 display: flex;
                 align-items: center;
                 gap: 8px;
                 color: rgba(16, 18, 121, 0.8);
             }
     
-            .status-dot-active {
+            .status-dot-active-widget {
                 width: 15px;
                 height: 15px;
                 background: rgb(24, 98, 235);
                 border-radius: 50%;
             }
     
-            .status-dot-expired {
+            .status-dot-expired-widget {
                 width: 15px;
                 height: 15px;
                 background: rgb(95, 95, 95);
                 border-radius: 50%;
             }
     
-            .status-dot-next {
+            .status-dot-next-widget {
                 width: 15px;
                 height: 15px;
                 background: rgb(7, 224, 0);
                 border-radius: 50%;
             }
     
-            .id {
+            .id-widget {
                 color: rgba(16, 18, 121, 0.8);
             }
     
-            .change {
+            .change-widget {
                 font-size: 1rem;
                 color: #ff6b9d;
             }
     
-            .price-content {
+            .price-content-widget {
                 flex-direction: row;
                 display: flex;
                 gap: 5px;
@@ -314,7 +314,7 @@
                 align-items: center;
             }
     
-            .last-price {
+            .last-price-widget {
                 margin: 10px 0;
                 display: flex;
                 color: black;
@@ -324,26 +324,26 @@
                 justify-content: start;
             }
     
-            .text-price {
+            .text-price-widget {
                 font-size: 10px;
                 font-weight: 600;
                 color: gray;
             }
     
-            .final-price {
+            .final-price-widget {
                 color: red;
             }
     
-            .coin-img {
+            .coin-img-widget {
                 width: 20px;
                 height: 20px;
             }
     
-            .input-container {
+            .input-container-widget {
                 padding: 10px;
             }
     
-            .input-token {
+            .input-token-widget {
                 border: 1px solid gray;
                 border-radius: 5px;
                 min-height: 30px;
@@ -358,17 +358,17 @@
                 outline: none;
             }
     
-            .input-token:focus {
+            .input-token-widget:focus {
                 outline: none;
             }
     
-            .nav-buttons {
+            .nav-buttons-widget {
                 display: flex;
                 justify-content: center;
                 gap: 20px;
             }
     
-            .nav-btn {
+            .nav-btn-widget {
                 padding: 10px 20px;
                 border: none;
                 background: #6c5ce7;
@@ -378,16 +378,16 @@
                 cursor: pointer;
             }
     
-            .nav-btn:hover {
+            .nav-btn-widget:hover {
                 opacity: 0.8;
             }
     
-            .nav-btn:disabled {
+            .nav-btn-widget:disabled {
                 opacity: 0.5;
                 cursor: not-allowed;
             }
     
-            .actions-container {
+            .actions-container-widget {
                 width: 100%;
                 display: flex;
                 flex-wrap: wrap;
@@ -396,7 +396,7 @@
                 align-items: center;
             }
     
-            .btn-wallet {
+            .btn-wallet-widget {
                 padding: 10px 10px;
                 margin-top: 10px;
                 border: none;
@@ -411,21 +411,21 @@
                 transition: opacity 0.3s;
             }
     
-            .btn-wallet-text {
+            .btn-wallet-text-widget {
                 text-wrap: nowrap;
             }
     
-            .btn-wallet:hover {
+            .btn-wallet-widget:hover {
                 opacity: 0.9;
             }
     
-            .icon {
+            .icon-widget {
                 width: 20px;
                 height: 20px;
                 margin: 0px 5px;
             }
     
-            .time-clock {
+            .time-clock-widget {
                 padding: 10px 10px;
                 border: none;
                 background: #ffffff;
@@ -440,26 +440,26 @@
                 transition: opacity 0.3s;
             }
     
-            .no-display {
+            .no-display-widget {
                 display: none;
             }
     
-            .now-price {
+            .now-price-widget {
                 display: none
             }
             
             @media (max-width: 768px) {
-                .card {
+                .card-widget {
                     min-width: 280px;
                 }
             }
     
             @media (max-width: 480px) {
-                .card {
+                .card-widget {
                     min-width: 260px;
                 }
     
-                .container {
+                .container-widget {
                     padding: 10px;
                 }
             }
@@ -470,24 +470,30 @@
 
         function createInitialElements() {
             const container = document.getElementById(containerId)
+            container.style = `
+               position: relative;
+                overflow: hidden;
+                width: 100%;
+                flex: 1;
+            `
 
             const sliderContainer = document.createElement('div');
-            sliderContainer.id = "slider-container"
+            sliderContainer.id = "slider-container-widget"
 
             // Create the actions container
             const actionsContainer = document.createElement("div");
-            actionsContainer.className = "actions-container";
+            actionsContainer.className = "actions-container-widget";
 
             // Create the wallet button
             const walletButton = document.createElement("button");
-            walletButton.className = "btn-wallet";
+            walletButton.className = "btn-wallet-widget";
 
             const walletIcon = document.createElement("img");
-            walletIcon.className = "icon";
+            walletIcon.className = "icon-widget";
             walletIcon.src = "https://e7.pngegg.com/pngimages/337/177/png-clipart-bitcoin-cryptocurrency-wallet-blockchain-bitcoin-text-rectangle.png";
 
             const walletText = document.createElement("p");
-            walletText.className = "btn-wallet-text";
+            walletText.className = "btn-wallet-text-widget";
             walletText.textContent = "Wallet";
 
             walletButton.appendChild(walletIcon);
@@ -495,13 +501,13 @@
 
             // Create the time clock
             const timeClock = document.createElement("div");
-            timeClock.className = "time-clock";
+            timeClock.className = "time-clock-widget";
 
             const timeCount = document.createElement("p");
-            timeCount.className = "time-count";
+            timeCount.className = "time-count-widget";
 
             const clockIcon = document.createElement("img");
-            clockIcon.className = "icon";
+            clockIcon.className = "icon-widget";
             clockIcon.src = "https://cdn.freelogovectors.net/wp-content/uploads/2021/12/blockchain-com-logo-freelogovectors.net_.png";
 
             timeClock.appendChild(clockIcon);
@@ -513,18 +519,18 @@
 
             // Create the slider element
             const slider = document.createElement("div");
-            slider.className = "slider";
+            slider.className = "slider-widget";
 
             // Create navigation buttons
             const navButtons = document.createElement("div");
-            navButtons.className = "nav-buttons";
+            navButtons.className = "nav-buttons-widget";
 
             const prevButton = document.createElement("button");
-            prevButton.className = "nav-btn prev";
+            prevButton.className = "nav-btn-widget prev-widget";
             prevButton.textContent = "<";
 
             const nextButton = document.createElement("button");
-            nextButton.className = "nav-btn next";
+            nextButton.className = "nav-btn-widget next-widget";
             nextButton.textContent = ">";
 
             navButtons.appendChild(prevButton);
@@ -538,10 +544,10 @@
             container.appendChild(sliderContainer)
             // Append the slider container to the body
 
-            const btnwallet = document.querySelector('.btn-wallet');
-            const nextBtn = document.querySelector('.next');
-            const pevBtn = document.querySelector('.prev');
-            const btnwallet_text = document.querySelector('.btn-wallet-text');
+            const btnwallet = document.querySelector('.btn-wallet-widget');
+            const nextBtn = document.querySelector('.next-widget');
+            const pevBtn = document.querySelector('.prev-widget');
+            const btnwallet_text = document.querySelector('.btn-wallet-text-widget');
 
             btnwallet.addEventListener('click', async () => {
                 const provider = typeof window.ethereum !== "undefined"
@@ -625,7 +631,7 @@
             });
 
             nextBtn.addEventListener('click', () => {
-                const cards = document.querySelectorAll('.card');
+                const cards = document.querySelectorAll('.card-widget');
                 if (currentIndex < cards.length - 1) {
                     currentIndex++;
                     updateSlider();
@@ -642,59 +648,59 @@
                     if (item.status === 'EXPIRED') {
                         const dis_min = Number(item.size.substring(item.size.length - 2)) < 50 && 'btn-disable';
                         const dis_max = Number(item.size.substring(item.size.length - 2)) > 49 && 'btn-disable';
-                        card.className = 'card card-expired';
+                        card.className = 'card-widget card-expired-widget';
                         card.innerHTML = `
-                            <div id="${index}" class="card-header">
-                                <div class="status">
-                                    <div class="status-dot-expired"></div>
+                            <div id="${index}" class="card-header-widget">
+                                <div class="status-widget">
+                                    <div class="status-dot-expired-widget"></div>
                                     ${item.status}
                                 </div>
-                                <div class="id">BTC~${item.id}</div>
+                                <div class="id-widget">BTC~${item.id}</div>
                             </div>
-                            <div class="card-content">
-                                <button class="btn btn-expired btn-50 ${dis_min}"><p class="text-range text-range-max">50</p></button>
-                                <div class="content-bet">
-                                    <div class="price-content">
-                                        <img class="coin-img" src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
-                                        <p class="text-price">${value_bet}</p>
+                            <div class="card-content-widget">
+                                <button class="btn-widget btn-expired-widget btn-50-widget ${dis_min}"><p class="text-range-widget text-range-max-widget">50</p></button>
+                                <div class="content-bet-widget">
+                                    <div class="price-content-widget">
+                                        <img class="coin-img-widget" src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
+                                        <p class="text-price-widget">${value_bet}</p>
                                     </div>
-                                    <div class="price-content">
-                                        <h3 class="last-price">
+                                    <div class="price-content-widget">
+                                        <h3 class="last-price-widget">
                                             $${item.size.substring(0, item.size.length - 2)}
-                                            <span class="final-price">
+                                            <span class="final-price-widget">
                                             ${item.size.substring(item.size.length - 2)}
                                             </span>
                                         </h3>
                                     
                                     </div>
                                 </div>
-                                <button class="btn btn-expired btn-49 ${dis_max}"><p class="text-range text-range-min">49</p></button>
+                                <button class="btn-widget btn-expired-widget btn-49-widget ${dis_max}"><p class="text-range-widget text-range-min-widget">49</p></button>
                             </div>
                         `;
                     } else if (item.status === 'ACTIVE') {
-                        card.className = `card`;
+                        card.className = `card-widget`;
                         card.id = `${item.id}`
                         card.innerHTML = `
-                            <div id="${index}" class="card-header">
-                                <div class="status">
-                                    <div class="status-dot-active"></div>
+                            <div id="${index}" class="card-header-widget">
+                                <div class="status-widget">
+                                    <div class="status-dot-active-widget"></div>
                                     ${item.status}
                                 </div>
-                                <div class="id">BTC~${item.id}</div>
+                                <div class="id-widget">BTC~${item.id}</div>
                             </div>
-                            <div class="card-content">
-                                <button id="btn-max" class="btn btn-50"><p class="text-range text-range-max">50</p></button>
-                                <div class="content-bet">
-                                    <div class="price-content">
-                                        <img class="coin-img" src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
-                                        <p class="text-price">${value_bet}</p>
+                            <div class="card-content-widget">
+                                <button id="btn-max-widget" class="btn-widget btn-50-widget"><p class="text-range-widget text-range-max-widget">50</p></button>
+                                <div class="content-bet-widget">
+                                    <div class="price-content-widget">
+                                        <img class="coin-img-widget" src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
+                                        <p class="text-price-widget">${value_bet}</p>
                                     </div>
-                                    <h3 class="now-price last-price">- - -</h3>
-                                    <input class="input-token" placeholder="Enter tokens bet" type="number" min="0.000001" />
+                                    <h3 class="now-price-widget last-price-widget">- - -</h3>
+                                    <input class="input-token-widget" placeholder="Enter tokens bet" type="number" min="0.000001" />
                                 </div>
-                                <button id="btn-min" class="btn btn-49 btn-${item.id}"><p class="text-range text-range-min">49</p></button>
+                                <button id="btn-min-widget" class="btn-widget btn-49-widget btn-${item.id}"><p class="text-range-widget text-range-min-widget">49</p></button>
                             </div>
-                            <div class="card-filter ${!item.issummar && "no-display"} ">
+                            <div class="card-filter-widget ${!item.issummar && "no-display-widget"} ">
                                 <lottie-player src="https://lottie.host/b5652d98-b56c-4b89-9409-b305fc11807b/krUTeNCeSi.json" background="##FFFFFF" speed="1" style="width: 100px; height: 100px" loop autoplay direction="1" mode="normal"></lottie-player>
                                 Summarizing, Waiting for new transactions
                             </div>
@@ -713,16 +719,16 @@
                 if (temp.length === 0) {
                     return;
                 } else {
-                    const cards = document.querySelectorAll('.card');
+                    const cards = document.querySelectorAll('.card-widget');
                     const cardWidth = cards[0].offsetWidth + 20;
-                    const containerWidth = document.querySelector('.actions-container').offsetWidth;
+                    const containerWidth = document.querySelector('.actions-container-widget').offsetWidth;
                     const offset = -currentIndex * cardWidth + (containerWidth - cardWidth) / 2;
                     slider.style.transform = `translateX(${offset}px)`;
                     slider.style.width = `${cards.length * (cardWidth)}px`;
 
                     // Update active state
                     cards.forEach((card, index) => {
-                        card.classList.toggle('active', index === currentIndex);
+                        card.classList.toggle('active-widget-widget', index === currentIndex);
                     });
 
                     // Update button states
@@ -734,9 +740,9 @@
             updateSlider()
 
             slider.addEventListener('click', (event) => {
-                if (event.target.id === 'btn-min' || event.target.id === 'btn-max') {
-                    const card = event.target.closest('.card');
-                    const input = card.querySelector('.input-token');
+                if (event.target.id === 'btn-min-widget' || event.target.id === 'btn-max-widget') {
+                    const card = event.target.closest('.card-widget');
+                    const input = card.querySelector('.input-token-widget');
                     const index_block = temp.findIndex(item => item.id == card.id)
 
                     function isCheck(n, m) {
@@ -758,9 +764,9 @@
 
                         if (input.value > 0) {
                             input.style.display = 'none';
-                            temp[index_block].team = event.target.id === 'btn-min' ? 49 : 50;
+                            temp[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
                             temp[index_block].token = input.value
-                            const price = card.querySelector('.now-price');
+                            const price = card.querySelector('.now-price-widget');
                             price.style.display = 'block';
                             price.innerHTML = `You bet: ${temp[index_block].token} ${token} for ${temp[index_block].team}`
 
@@ -771,7 +777,7 @@
 
                 }
 
-                if (event.target.className === "card-header") {
+                if (event.target.className === "card-header-widget") {
                     currentIndex = Number(event.target.id);
                     updateSlider()
                 }
