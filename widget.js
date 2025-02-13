@@ -1,6 +1,12 @@
 (function () {  // Immediately Invoked Function Expression (IIFE)
     const containerId = 'trading-cards-widget';
     let container = document.getElementById(containerId);
+    if (container) {
+        console.log("aaaaaaaaaaaaaaaaaaaa");
+        
+    } else {
+        return;
+    }
     let temp = [
 
     ];
@@ -108,9 +114,6 @@
 
     // Create Card and add Function, action button
     function createTradingCardsWidget(containerId) {
-
-
-
         // Inject CSS styles
         const style = document.createElement('style');
         const script = document.createElement('script');
