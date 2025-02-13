@@ -6,11 +6,15 @@
 </head>
 
 <body>
-    <div id="trading-cards-widget" class="aaa"></div>
-    <script src="./widget.js"></script>
+    <div id="trading-cards-widget"></div>
     <script>
-        console.log(window.location.pathname.substring(1))
+        document.addEventListener("DOMContentLoaded", function () {
+            const widget = document.getElementById('trading-cards-widget');
+            widget.setAttribute("data-id", window.location.pathname.substring(1));
+        });
     </script>
+    <script src="./widget.js" defer></script>
+
 </body>
 
 </html>

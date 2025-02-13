@@ -2,29 +2,19 @@
     const containerId = 'trading-cards-widget';
     let container = document.getElementById(containerId);
     let temp = [
-        {
-            status: 'EXPIRED',
-            id: 883130,
-            issummar: false,
-            token: '',
-            team: '',
-            size: '2025573',
-        }
+
     ];
     let current_block;
     let bet_block;
     const time_bet = 6;
     const number_block = 5;
+    const id =  container.getAttribute("data-id") || "No data";
+    console.log(id)
     const token = "ETH"
     const value_bet = "Size Block prediction of Bitcoin"
     //
     let currentIndex = 0;
     let currentWallet = '';
-    if (!container) {
-        container = document.createElement('div');
-        container.id = containerId;
-        document.body.appendChild(container);
-    }
 
     // Load ethers.js từ CDN
     const script = document.createElement("script");
@@ -118,6 +108,8 @@
 
     // Create Card and add Function, action button
     function createTradingCardsWidget(containerId) {
+
+
 
         // Inject CSS styles
         const style = document.createElement('style');
