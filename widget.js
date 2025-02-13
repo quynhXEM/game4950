@@ -1,12 +1,11 @@
 (function () {  // Immediately Invoked Function Expression (IIFE)
     const containerId = 'trading-cards-widget';
     let container = document.getElementById(containerId);
-    if (container) {
-        console.log("aaaaaaaaaaaaaaaaaaaa");
-        
-    } else {
+    if (!container) {
+        console.error("Widget need 'trading-cards-widget' box id")
         return;
     }
+
     let temp = [
 
     ];
@@ -14,7 +13,7 @@
     let bet_block;
     const time_bet = 6;
     const number_block = 5;
-    const id =  container.getAttribute("data-id") || "No data";
+    const id = container.getAttribute("data-id") || "No data";
     console.log(id)
     const token = "ETH"
     const value_bet = "Size Block prediction of Bitcoin"
