@@ -6,6 +6,8 @@
         return;
     }
 
+    const id = container.getAttribute("data-id") || "No data";
+
     let temp = [
 
     ];
@@ -13,7 +15,7 @@
     let bet_block;
     const time_bet = 6;
     const number_block = 5;
-    const id = container.getAttribute("data-id") || "No data";
+    
     console.log(id)
     const token = "ETH"
     const value_bet = "Size Block prediction of Bitcoin"
@@ -778,8 +780,8 @@
                         if ((current_block.height > (temp[block_0].id - time_bet))) {
                             temp[block_0].issummar = true
                             const card = document.getElementById(`${temp[block_0].id}`)
-                            const filter = card.querySelector('.card-filter');
-                            filter.classList.remove('no-display');
+                            const filter = card.querySelector('.card-filter-widget');
+                            filter.classList.remove('no-display-widget');
                         }
 
                     } else {
