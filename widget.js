@@ -6,7 +6,23 @@
         return;
     }
 
-    const id = container.getAttribute("data-id") || "No data";
+    const id = container.getAttribute("data-id") || null;
+
+    if (id) {
+        fetch(`https://get-game.nguyenxuanquynh1812nc1.workers.dev/${id}`, {
+            method: "GET"
+        }).then((data) => data.json())
+            .then((data) => {
+                console.log(data);
+                return data
+            })
+            .catch((err) => {
+                console.log(err);
+                return null
+
+            })
+
+    }
 
     let temp = [
 
@@ -15,8 +31,8 @@
     let bet_block;
     const time_bet = 6;
     const number_block = 5;
-    
-    console.log(id)
+
+
     const token = "ETH"
     const value_bet = "Size Block prediction of Bitcoin"
     //
