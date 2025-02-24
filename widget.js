@@ -380,21 +380,6 @@
                 z-index: 2;
                 background: white;
             }
-
-            .info-button-widget {
-                padding: 10px 100px;
-                margin-top: 10px;
-                border: 1px solid black;
-                background: #ffffff;
-                color: rgb(0, 0, 0);
-                font-size: 12px;
-                font-weight: bold;
-                border-radius: 5px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                transition: opacity 0.3s;
-            }
     
             .btn-widget {
                 padding: 10px;
@@ -578,7 +563,7 @@
             }
     
             .btn-wallet-widget {
-                padding: 0px 10px;
+                padding: 5px;
                 margin-top: 10px;
                 border: 2px solid black;
                 background: #ffffff;
@@ -608,7 +593,7 @@
             }
     
             .time-clock-widget {
-                padding: 0px 10px;
+                padding: 5px;
                 margin-top: 10px;
                 border: 2px solid black;
                 background: #ffffff;
