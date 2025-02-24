@@ -1,4 +1,4 @@
-(function () {  // Immediately Invoked Function Expression (IIFE)
+(function () {
     const containerId = 'trading-cards-widget';
     let container = document.getElementById(containerId);
     if (!container) {
@@ -7,33 +7,105 @@
     }
 
     const id = container.getAttribute("data-id") || null;
-
     if (id) {
-        fetch(`https://get-game.nguyenxuanquynh1812nc1.workers.dev/${id}`, {
-            method: "GET"
-        }).then((data) => data.json())
-            .then((data) => {
-                console.log(data);
-                return data
-            })
-            .catch((err) => {
-                console.log(err);
-                return null
-
-            })
-
+        data_game()
+    } else {
+        window.location.reload('https://new.bitrefund.co/')
     }
 
-    let temp = [
-
-    ];
+    const network = [
+        {
+            "name": "Ethereum",
+            "chain_id": 1,
+            "api_explorer": "https://api.etherscan.io/v2/api",
+            "api_url": "https://mainnet.infura.io/v3"
+        },
+        {
+            "name": "Binance Smart Chain",
+            "chain_id": 56,
+            "api_url": "https://bsc-testnet.infura.io/v3",
+            "api_explorer": "https://api.bscscan.com/api"
+        },
+        {
+            "name": "Polygon",
+            "chain_id": 137,
+            "api_explorer": "https://api.polygonscan.com/api",
+            "api_url": "https://polygon-mainnet.infura.io/v3"
+        },
+        {
+            "name": "Avalanche (Coming Soon)",
+            "chain_id": 43114,
+            "api_explorer": "https://snowtrace.io",
+            "api_url": "https://avalanche-mainnet.infura.io/v3"
+        },
+        {
+            "name": "Arbitrum One",
+            "chain_id": 42161,
+            "api_explorer": "https://api.arbiscan.io/api",
+            "api_url": "https://arbitrum-mainnet.infura.io/v3"
+        },
+        {
+            "name": "Optimism Ethescan",
+            "chain_id": 10,
+            "api_explorer": "https://api-optimistic.etherscan.io/api",
+            "api_url": "https://optimism-mainnet.infura.io/v3"
+        },
+        {
+            "name": "Celo",
+            "chain_id": 42220,
+            "api_explorer": "https://api.celoscan.io/api",
+            "api_url": "https://celo-mainnet.infura.io/v3"
+        },
+        {
+            "name": "Ethereum Sepolia Testnet",
+            "chain_id": 11155111,
+            "api_explorer": "https://api-sepolia.etherscan.io/api",
+            "api_url": "https://sepolia.infura.io/v3"
+        },
+        {
+            "name": "BSC Testnet",
+            "chain_id": 97,
+            "api_explorer": "https://api-testnet.bscscan.com/api",
+            "api_url": "https://bsc-testnet.infura.io/v3"
+        },
+        {
+            "name": "Avalanche Fuji Testnet (Coming Soon)",
+            "chain_id": 43113,
+            "api_explorer": "https://testnet.snowtrace.io",
+            "api_url": "https://avalanche-fuji.infura.io/v3"
+        },
+        {
+            "name": "Fantom",
+            "chain_id": 250,
+            "api_explorer": "https://api.ftmscan.com/api",
+            "api_url": "https://rpc.ftm.tools"
+        },
+        {
+            "name": "Cronos",
+            "chain_id": 25,
+            "api_explorer": "https://api.cronoscan.com/api",
+            "api_url": "https://evm.cronos.org"
+        },
+        {
+            "name": "Moonbeam",
+            "chain_id": 1284,
+            "api_explorer": "https://api-moonbeam.moonscan.io/api",
+            "api_url": "https://1rpc.io/glmr"
+        },
+        {
+            "name": "Moonbase Alpha Testnet",
+            "chain_id": 1287,
+            "api_explorer": "https://api-moonbase.moonscan.io/api",
+            "api_url": "https://rpc.testnet.moonbeam.network"
+        }
+    ]
+    let temp = [];
+    let gameData;
     let current_block;
     let bet_block;
     const time_bet = 6;
     const number_block = 5;
 
-
-    const token = "ETH"
     const value_bet = "Size Block prediction of Bitcoin"
     //
     let currentIndex = 0;
@@ -48,17 +120,95 @@
     script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js";
     document.head.appendChild(script_wallet);
 
+    // Get data game with ID
+    async function data_game() {
+        const data = await fetch(`https://get-game.nguyenxuanquynh1812nc1.workers.dev/${id}`, {
+            method: "GET"
+        })
+            .then((data) => data.json())
+            .then((data) => {
+                return data.data
+            })
+            .catch((err) => {
+                return null
+            })
+
+        const providerUrl = getNetwork(data.network).api_url + "/379175b6c6c3436eab583d759cdeea5e"
+
+        function sendRpcRequest(method, params) {
+            return new Promise((resolve, reject) => {
+                const requestData = {
+                    jsonrpc: "2.0",
+                    id: 1,
+                    method: method,
+                    params: params
+                };
+
+                const requestOptions = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(requestData)
+                };
+
+                fetch(providerUrl, requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            reject(data.error);
+                        } else {
+                            resolve(data.result);
+                        }
+                    })
+                    .catch(error => reject(error));
+            });
+        }
+
+        function decodeFromHex(hex) {
+            const hexStr = hex.slice(2);
+            let decodedStr = '';
+            for (let i = 0; i < hexStr.length; i += 2) {
+                decodedStr += String.fromCharCode(parseInt(hexStr.substr(i, 2), 16));
+            }
+            return decodedStr.replace(/[\x00-\x1F\x7F]/g, '');
+        }
+
+        async function getTokenData() {
+            const symbol = await Promise.all([
+                sendRpcRequest("eth_call", [{
+                    to: data.contract_address,
+                    data: "0x95d89b41"
+                }, "latest"])
+            ])
+                .then(([symbol]) => {
+                    const tokenSymbol = decodeFromHex(symbol);
+                    return tokenSymbol
+                })
+
+            return { symbol, ...data }
+        }
+        const reponse = await getTokenData()
+        return reponse
+    }
+
+    function Image(id) {
+        return `https://soc.bitrefund.co/assets/${id}`
+    }
+
+    function getNetwork(chain_id) {
+        return network.find((item) => item.chain_id == chain_id);
+    };
+
     function nextBetBlock(n) {
         return Math.ceil((n + 1) / 10) * 10;
     }
-
-
 
     function checkSummar(n, m) {
         return n > (m - time_bet)
     }
 
-    // Get Current Block
+    // Get Block 
     async function getBlock() {
         current_block = await fetch("https://block.nguyenxuanquynh1812nc1.workers.dev/", {
             method: "GET",
@@ -87,7 +237,6 @@
             })
         }
     }
-
 
     // Get Info Block Betted
     async function getBetBlock(hash_block) {
@@ -157,6 +306,13 @@
                 gap: 20px;
                 margin-top: 15px;
             }
+
+            .info-modal-widget {
+                width: 100%;
+                height: 100%;
+                flex: 1;
+                position: relative;
+            }
     
             .card-widget {
                 min-width: 280px;
@@ -181,6 +337,12 @@
                 justify-content: space-between;
                 align-items: center;
                 cursor: pointer;
+            }
+
+            .logo-widget {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%
             }
     
             .card-content-widget {
@@ -217,6 +379,21 @@
                 border: 1px solid gray;
                 z-index: 2;
                 background: white;
+            }
+
+            .info-button-widget {
+                padding: 10px 100px;
+                margin-top: 10px;
+                border: 1px solid black;
+                background: #ffffff;
+                color: rgb(0, 0, 0);
+                font-size: 12px;
+                font-weight: bold;
+                border-radius: 5px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                transition: opacity 0.3s;
             }
     
             .btn-widget {
@@ -280,10 +457,11 @@
             }
     
             .status-dot-active-widget {
-                width: 15px;
-                height: 15px;
+                width: 20px;
+                height: 20px;
                 background: rgb(24, 98, 235);
                 border-radius: 50%;
+                over-flow: hilden;
             }
     
             .status-dot-expired-widget {
@@ -347,12 +525,12 @@
             }
     
             .input-token-widget {
-                border: 1px solid gray;
+                border: 0.5px solid gray;
                 border-radius: 5px;
                 min-height: 30px;
                 margin-top: 10px;
                 color: black;
-                width: 100%;
+                width: 94%;
                 padding-left: 10px;
                 overflow: hidden;
                 font-size: 12px;
@@ -400,13 +578,14 @@
             }
     
             .btn-wallet-widget {
-                padding: 10px 10px;
+                padding: 0px 10px;
                 margin-top: 10px;
-                border: none;
+                border: 2px solid black;
                 background: #ffffff;
                 color: rgb(0, 0, 0);
                 font-size: 12px;
                 font-weight: bold;
+                font-family: 'Courier New', Courier, monospace;
                 border-radius: 5px;
                 cursor: pointer;
                 display: flex;
@@ -429,17 +608,18 @@
             }
     
             .time-clock-widget {
-                padding: 10px 10px;
-                border: none;
+                padding: 0px 10px;
+                margin-top: 10px;
+                border: 2px solid black;
                 background: #ffffff;
                 color: rgb(0, 0, 0);
-                border-radius: 5px;
-                font-size: 16px;
-                font-weight: 700;
-                display: flex;
-                margin-top: 10px;
-                align-items: center;
+                font-size: 13px;
+                font-weight: bold;
                 font-family: 'Courier New', Courier, monospace;
+                border-radius: 5px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
                 transition: opacity 0.3s;
             }
     
@@ -519,6 +699,7 @@
             // Append wallet button and time clock to actions container
             actionsContainer.appendChild(walletButton);
             actionsContainer.appendChild(timeClock);
+
 
             // Create the slider element
             const slider = document.createElement("div");
@@ -655,7 +836,9 @@
                         card.innerHTML = `
                             <div id="${index}" class="card-header-widget">
                                 <div class="status-widget">
-                                    <div class="status-dot-expired-widget"></div>
+                                    <div class="status-dot-expired-widget">
+                                        <img src="${Image(gameData.icon)}" class="logo-widget"/>
+                                    </div>
                                     ${item.status}
                                 </div>
                                 <div class="id-widget">BTC~${item.id}</div>
@@ -686,7 +869,9 @@
                         card.innerHTML = `
                             <div id="${index}" class="card-header-widget">
                                 <div class="status-widget">
-                                    <div class="status-dot-active-widget"></div>
+                                    <div class="status-dot-active-widget">
+                                        <img src="${Image(gameData.icon)}" class="logo-widget"/>
+                                    </div>
                                     ${item.status}
                                 </div>
                                 <div class="id-widget">BTC~${item.id}</div>
@@ -699,7 +884,7 @@
                                         <p class="text-price-widget">${value_bet}</p>
                                     </div>
                                     <h3 class="now-price-widget last-price-widget">- - -</h3>
-                                    <input class="input-token-widget" placeholder="Enter tokens bet" type="number" min="0.000001" />
+                                    <input class="input-token-widget" placeholder="Enter${gameData.symbol} to bet" type="number" min="0.000001" />
                                 </div>
                                 <button id="btn-min-widget" class="btn-widget btn-49-widget btn-${item.id}"><p class="text-range-widget text-range-min-widget">49</p></button>
                             </div>
@@ -771,7 +956,7 @@
                             temp[index_block].token = input.value
                             const price = card.querySelector('.now-price-widget');
                             price.style.display = 'block';
-                            price.innerHTML = `You bet: ${temp[index_block].token} ${token} for ${temp[index_block].team}`
+                            price.innerHTML = `You bet: ${temp[index_block].token} ${gameData.symbol} for ${temp[index_block].team}`
 
                         } else {
                             alert('Please enter the number of tokens');
@@ -846,14 +1031,33 @@
             window.addEventListener('resize', updateSlider);
 
         }
+
         createInitialElements()
-
-
     }
 
-    getBlock().then(() => {
-        connect()
-        createTradingCardsWidget(containerId);
-    })
+    function changeFavicon(url) {
+        let link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+            link = document.createElement("link");
+            link.rel = "icon";
+            document.head.appendChild(link);
+        }
+        link.href = url;
+    }
+
+    // Genarate UI
+    window.onload = function () {
+        data_game().then((data) => {
+            gameData = data
+            changeFavicon(Image(gameData.icon));
+            getBlock().then(() => {
+                connect()
+                createTradingCardsWidget(containerId);
+                console.log(gameData);
+
+            })
+        })
+    };
 
 })();
+
