@@ -1046,18 +1046,16 @@
     }
 
     // Genarate UI
-    window.onload = function () {
-        data_game().then((data) => {
-            gameData = data
-            changeFavicon(Image(gameData.icon));
-            getBlock().then(() => {
-                connect()
-                createTradingCardsWidget(containerId);
-                console.log(gameData);
+    data_game().then((data) => {
+        gameData = data
+        changeFavicon(Image(gameData.icon));
+        getBlock().then(() => {
+            connect()
+            createTradingCardsWidget(containerId);
+            console.log(gameData);
 
-            })
         })
-    };
+    })
 
 })();
 
