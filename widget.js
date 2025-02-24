@@ -1041,8 +1041,9 @@
             link = document.createElement("link");
             link.rel = "icon";
             document.head.appendChild(link);
+            link.href = url;
         }
-        link.href = url;
+        
     }
 
     // Genarate UI
