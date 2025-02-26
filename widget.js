@@ -779,19 +779,9 @@
             blockdiv.appendChild(action_div)
             blockdiv.appendChild(move_container);
 
-
             // Create the slider element
             const slider = document.createElement("div");
             slider.className = "slider-widget";
-
-            // Create navigation buttons
-            // const navButtons = document.createElement("div");
-            // navButtons.className = "nav-buttons-widget";
-
-            // 
-
-            // navButtons.appendChild(prevButton);
-            // navButtons.appendChild(nextButton);
 
             // Append all elements to the slider container
             sliderContainer.appendChild(blockdiv);
