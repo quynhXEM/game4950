@@ -99,6 +99,8 @@
             "api_url": "https://rpc.testnet.moonbeam.network"
         }
     ]
+    let isinfo = false;
+    let ishistory = false;
     let temp = [];
     let gameData;
     let current_block;
@@ -107,18 +109,49 @@
     const number_block = 5;
 
     const value_bet = "Size Block prediction of Bitcoin"
-    //
     let currentIndex = 0;
     let currentWallet = '';
 
-    // Load ethers.js từ CDN
-    const script = document.createElement("script");
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js";
-    document.head.appendChild(script);
+    // Hàm xử lý 
+    function Image(id) {
+        return `https://soc.bitrefund.co/assets/${id}`
+    }
 
-    const script_wallet = document.createElement("script");
-    script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js";
-    document.head.appendChild(script_wallet);
+    function getNetwork(chain_id) {
+        return network.find((item) => item.chain_id == chain_id);
+    };
+
+    function nextBetBlock(n) {
+        return Math.ceil((n + 1) / 10) * 10;
+    }
+
+    function checkSummar(n, m) {
+        return n > (m - time_bet)
+    }
+
+    // Load JS
+    function import_js() {
+        const script = document.createElement("script");
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js";
+        document.head.appendChild(script);
+
+        const links = [
+            { rel: "preconnect", href: "https://fonts.googleapis.com" },
+            { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "anonymous" },
+            { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap" }
+        ];
+
+        links.forEach(attrs => {
+            const link = document.createElement("link");
+            Object.entries(attrs).forEach(([key, value]) => link.setAttribute(key, value));
+            document.head.appendChild(link);
+        });
+
+
+        const script_wallet = document.createElement("script");
+        script_wallet.src = "https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js";
+        document.head.appendChild(script_wallet);
+    }
 
     // Get data game with ID
     async function data_game() {
@@ -190,22 +223,6 @@
         }
         const reponse = await getTokenData()
         return reponse
-    }
-
-    function Image(id) {
-        return `https://soc.bitrefund.co/assets/${id}`
-    }
-
-    function getNetwork(chain_id) {
-        return network.find((item) => item.chain_id == chain_id);
-    };
-
-    function nextBetBlock(n) {
-        return Math.ceil((n + 1) / 10) * 10;
-    }
-
-    function checkSummar(n, m) {
-        return n > (m - time_bet)
     }
 
     // Get Block 
@@ -283,40 +300,94 @@
         // Inject CSS styles
         const style = document.createElement('style');
         const script = document.createElement('script');
-        script.src = 'https://unpkg.com/@lottiefiles/lottie-player@2.0.8/dist/lottie-player.js';
+        script.src = 'https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs';
         script.type = 'module';
         style.textContent = `
-    
-            // .slider-container-widget {
-            //     position: relative;
-            //     overflow: hidden;
-            //     flex: 1;
-            // }
-    
             .slider-widget {
                 display: flex;
-                padding: 5px;
                 transition: transform 0.5s ease;
                 gap: 20px;
-                margin-top: 15px;
+                margin-top: 50px;
+            }
+            
+            .merienda-text-widget {
+                font-family: "Merienda", serif;
+                font-optical-sizing: auto;
+                font-weight: 700;
+                font-style: normal;
             }
 
-            .info-modal-widget {
-                width: 100%;
-                height: 100%;
-                flex: 1;
-                position: relative;
+            .slider-container-widget {
+                background-color: red;
             }
-    
+
+            .action-div-widget{
+                position: absolute;
+                top: -20px;
+                right: 0px;
+                display: flex;
+                padding: 5px;
+                flex-direction: row;
+                gap: 5px
+            }
+
+            .action-btn-widget {
+                width: 35px;
+                height: 35px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .move-container-widget {
+                position: relative;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .group-btn-widget {
+                width: 200px;
+                background-color: white;
+                flex-direction: row;
+                justify-content: space-between;
+                display: flex;
+                color: #000958;
+                padding: 2px 10px;
+                border-radius: 20px;
+            }
+
+            .three-card-widget {
+                width: 85px;
+                height: 85px;
+                position: absolute;
+            }
+
+            .history-btn-widget {
+                background-color: white;
+            }
+
+            .his-icon-widget {
+                width: 20px;
+                height: 20px;
+            }
+
+            .info-btn-widget {
+                background-color: #15B1FF;
+                text-align: center;
+            }
+            
             .card-widget {
                 min-width: 280px;
+                height: 300px;
                 position: relative;
                 transition: all 0.3s ease;
                 transform: scale(0.9);
                 border-radius: 20px;
-                overflow: hidden;
                 background-color: white;
-                border: 1px solid rgb(0, 0, 0);
             }
             .card-widget.active-widget {
                 transform: scale(1.05);
@@ -338,6 +409,18 @@
                 height: 20px;
                 border-radius: 50%
             }
+
+            .logo-dog-widget {
+                position: absolute;
+                z-index: 10;
+                top: -65px;
+                left: -40px;
+                animation: shake 1.75s infinite ease-in-out;
+            }
+
+            .updown-widget {
+                animation: updown 2s infinite ease-in-out;
+            }
     
             .card-content-widget {
                 position: relative;
@@ -355,6 +438,7 @@
                 height: 100%;
                 background: rgba(0, 0, 0, 0.5);
                 top: 0;
+                border-radius: 20px;
                 left: 0;
                 display: flex;
                 flex-direction: column;
@@ -363,6 +447,14 @@
                 text-align: center;
                 color: white;
                 z-index: 3;
+            }
+
+            .block-div-widget {
+                color: white;
+                font-size: 20px;
+                text-align: center;
+                width: 100%;
+                position: relative;
             }
     
             .content-bet-widget {
@@ -420,6 +512,10 @@
                 position: absolute;
                 right: 20px;
                 bottom: 20px;
+            }
+
+            .time-count-widget {
+                font-size: 32px
             }
     
             .text-range-max-widget {
@@ -480,7 +576,6 @@
                 color: black;
                 font-weight: bold;
                 flex: 1;
-                font-family: 'Courier New', Courier, monospace;
                 justify-content: start;
             }
     
@@ -513,9 +608,12 @@
                 padding-left: 10px;
                 overflow: hidden;
                 font-size: 12px;
-                font-family: 'Courier New', Courier, monospace;
                 font-weight: bold;
                 outline: none;
+                font-family: "Merienda", serif;
+                font-optical-sizing: auto;
+                font-weight: 700;
+                font-style: normal;
             }
     
             .input-token-widget:focus {
@@ -529,47 +627,28 @@
             }
     
             .nav-btn-widget {
-                padding: 10px 20px;
+                font-size: 20px;
+                outline: none;
                 border: none;
-                background: #6c5ce7;
-                color: white;
-                border-radius: 5px;
-                margin-top: 10px;
+                background: transparent;
                 cursor: pointer;
-            }
-    
-            .nav-btn-widget:hover {
-                opacity: 0.8;
-            }
-    
-            .nav-btn-widget:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
             }
     
             .actions-container-widget {
                 width: 100%;
                 display: flex;
-                flex-wrap: wrap;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
             }
     
             .btn-wallet-widget {
-                padding: 5px;
-                margin-top: 10px;
-                border: 2px solid black;
-                background: #ffffff;
-                color: rgb(0, 0, 0);
+                background: #FFC30F;
                 font-size: 12px;
                 font-weight: bold;
-                font-family: 'Courier New', Courier, monospace;
-                border-radius: 5px;
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 transition: opacity 0.3s;
+                width: 100%;
+                justify-content: center;
             }
     
             .btn-wallet-text-widget {
@@ -580,34 +659,34 @@
                 opacity: 0.9;
             }
     
-            .icon-widget {
-                width: 20px;
-                height: 20px;
-                margin: 0px 5px;
-            }
-    
-            .time-clock-widget {
-                padding: 5px;
-                margin-top: 10px;
-                border: 2px solid black;
-                background: #ffffff;
-                color: rgb(0, 0, 0);
-                font-size: 13px;
-                font-weight: bold;
-                font-family: 'Courier New', Courier, monospace;
-                border-radius: 5px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                transition: opacity 0.3s;
-            }
-    
             .no-display-widget {
                 display: none;
             }
     
             .now-price-widget {
                 display: none
+            }
+
+            @keyframes shake {
+                0% { transform: translateX(0); }
+                25% { transform: translateX(-5px) rotate(-2deg); }
+                50% { transform: translateX(5px) rotate(2deg); }
+                75% { transform: translateX(-5px) rotate(-2deg); }
+                100% { transform: translateX(0); }
+            }
+
+            @keyframes updown {
+                0% { transform: translateY(0); }
+                25% { transform: translateY(-5px) }
+                50% { transform: translateY(5px) }
+                75% { transform: translateY(-5px) }
+                100% { transform: translateY(0); }
+            }
+
+            @keyframes moveBackground {
+                0% { background-position: center top; }
+                50% { background-position: right top; }
+                100% { background-position: center top; }
             }
             
             @media (max-width: 768px) {
@@ -632,52 +711,73 @@
 
         function createInitialElements() {
             const container = document.getElementById(containerId)
-            container.style = `
-                overflow: hidden;
-                background-image: url('public/decktop.jpg');
-                height: 100%;
-                width: 100%;
-            `
-
+            container.style = `animation: moveBackground 45s infinite linear; overflow: hidden; background-image: url('images/decktop.jpg');height: 100%; width: 100%;`
             const sliderContainer = document.createElement('div');
             sliderContainer.id = "slider-container-widget"
 
-            // Create the actions container
+            // Connect wallet button
             const actionsContainer = document.createElement("div");
             actionsContainer.className = "actions-container-widget";
-
-            // Create the wallet button
-            const walletButton = document.createElement("button");
-            walletButton.className = "btn-wallet-widget";
-
+            const walletButton = document.createElement("div");
+            walletButton.className = "btn-wallet-widget ";
             const walletIcon = document.createElement("img");
             walletIcon.className = "icon-widget";
-            walletIcon.src = "https://e7.pngegg.com/pngimages/337/177/png-clipart-bitcoin-cryptocurrency-wallet-blockchain-bitcoin-text-rectangle.png";
-
+            walletIcon.src = "images/metamask.png";
             const walletText = document.createElement("p");
-            walletText.className = "btn-wallet-text-widget";
-            walletText.textContent = "Wallet";
-
+            walletText.className = "btn-wallet-text-widget merienda-text-widget";
+            walletText.textContent = "Connect wallet";
             walletButton.appendChild(walletIcon);
             walletButton.appendChild(walletText);
 
-            // Create the time clock
-            const timeClock = document.createElement("div");
-            timeClock.className = "time-clock-widget";
-
-            const timeCount = document.createElement("p");
-            timeCount.className = "time-count-widget";
-
-            const clockIcon = document.createElement("img");
-            clockIcon.className = "icon-widget";
-            clockIcon.src = "https://cdn.freelogovectors.net/wp-content/uploads/2021/12/blockchain-com-logo-freelogovectors.net_.png";
-
-            timeClock.appendChild(clockIcon);
-            timeClock.appendChild(timeCount);
-
-            // Append wallet button and time clock to actions container
             actionsContainer.appendChild(walletButton);
-            actionsContainer.appendChild(timeClock);
+
+            // Create Buutton history, button info
+            const action_div = document.createElement('div')
+            action_div.className = "action-div-widget"
+            const history_btn = document.createElement('div')
+            history_btn.className = "action-btn-widget history-btn-widget"
+            const his_icon = document.createElement('img')
+            his_icon.className = "his-icon-widget"
+            his_icon.src = "/images/history.png"
+            const info_btn = document.createElement('div')
+            info_btn.className = "action-btn-widget info-btn-widget"
+            info_btn.textContent = '?'
+            history_btn.appendChild(his_icon)
+            action_div.appendChild(history_btn)
+            action_div.appendChild(info_btn)
+
+            // Create Move Button
+            const move_container = document.createElement('div')
+            move_container.className = "move-container-widget"
+            const group_btn = document.createElement('div')
+            group_btn.className = "group-btn-widget"
+            const prevButton = document.createElement("button");
+            prevButton.className = "merienda-text-widget nav-btn-widget prev-widget";
+            prevButton.textContent = "<<";
+            const nextButton = document.createElement("button");
+            nextButton.className = "merienda-text-widget nav-btn-widget next-widget";
+            nextButton.textContent = ">>";
+            const img_three_card = document.createElement('img')
+            img_three_card.src = "/images/three_card.png"
+            img_three_card.className = "three-card-widget"
+
+            group_btn.appendChild(prevButton)
+            group_btn.appendChild(nextButton)
+            move_container.appendChild(group_btn)
+            move_container.appendChild(img_three_card)
+
+            // Create the current block
+            const blockdiv = document.createElement('div');
+            blockdiv.className = "block-div-widget"
+            const text_block = document.createElement('p')
+            text_block.textContent = "Block"
+            text_block.className = "merienda-text-widget"
+            const block_count = document.createElement('p')
+            block_count.className = "time-count-widget merienda-text-widget"
+            blockdiv.appendChild(text_block)
+            blockdiv.appendChild(block_count)
+            blockdiv.appendChild(action_div)
+            blockdiv.appendChild(move_container);
 
 
             // Create the slider element
@@ -685,31 +785,23 @@
             slider.className = "slider-widget";
 
             // Create navigation buttons
-            const navButtons = document.createElement("div");
-            navButtons.className = "nav-buttons-widget";
+            // const navButtons = document.createElement("div");
+            // navButtons.className = "nav-buttons-widget";
 
-            const prevButton = document.createElement("button");
-            prevButton.className = "nav-btn-widget prev-widget";
-            prevButton.textContent = "<";
+            // 
 
-            const nextButton = document.createElement("button");
-            nextButton.className = "nav-btn-widget next-widget";
-            nextButton.textContent = ">";
-
-            navButtons.appendChild(prevButton);
-            navButtons.appendChild(nextButton);
+            // navButtons.appendChild(prevButton);
+            // navButtons.appendChild(nextButton);
 
             // Append all elements to the slider container
-            sliderContainer.appendChild(actionsContainer);
+            sliderContainer.appendChild(blockdiv);
             sliderContainer.appendChild(slider);
-            sliderContainer.appendChild(navButtons);
 
+            container.appendChild(actionsContainer)
             container.appendChild(sliderContainer)
             // Append the slider container to the body
 
             const btnwallet = document.querySelector('.btn-wallet-widget');
-            const nextBtn = document.querySelector('.next-widget');
-            const pevBtn = document.querySelector('.prev-widget');
             const btnwallet_text = document.querySelector('.btn-wallet-text-widget');
 
             btnwallet.addEventListener('click', async () => {
@@ -768,7 +860,6 @@
                         border-radius:5px;
                         cursor:pointer;`;
                         document.body.style.cssText = `
-                        font-family: Arial, sans-serif;
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -786,14 +877,14 @@
 
             });
 
-            pevBtn.addEventListener('click', () => {
+            prevButton.addEventListener('click', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
                     updateSlider();
                 }
             });
 
-            nextBtn.addEventListener('click', () => {
+            nextButton.addEventListener('click', () => {
                 const cards = document.querySelectorAll('.card-widget');
                 if (currentIndex < cards.length - 1) {
                     currentIndex++;
@@ -827,7 +918,7 @@
                                 <div class="content-bet-widget">
                                     <div class="price-content-widget">
                                         <img class="coin-img-widget" src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
-                                        <p class="text-price-widget">${value_bet}</p>
+                                        <p class="text-price-widget merienda-text-widget">${value_bet}</p>
                                     </div>
                                     <div class="price-content-widget">
                                         <h3 class="last-price-widget">
@@ -846,31 +937,15 @@
                         card.className = `card-widget`;
                         card.id = `${item.id}`
                         card.innerHTML = `
-                            <div id="${index}" class="card-header-widget">
-                                <div class="status-widget">
-                                    <div class="status-dot-active-widget">
-                                        <img src="${Image(gameData.icon)}" class="logo-widget"/>
-                                    </div>
-                                    ${item.status}
-                                </div>
-                                <div class="id-widget">BTC~${item.id}</div>
-                            </div>
-                            <div class="card-content-widget">
-                                <button id="btn-max-widget" class="btn-widget btn-50-widget"><p class="text-range-widget text-range-max-widget">50</p></button>
-                                <div class="content-bet-widget">
-                                    <div class="price-content-widget">
-                                        <img class="coin-img-widget" src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
-                                        <p class="text-price-widget">${value_bet}</p>
-                                    </div>
-                                    <h3 class="now-price-widget last-price-widget">- - -</h3>
-                                    <input class="input-token-widget" placeholder="Enter${gameData.symbol} to bet" type="number" min="0.000001" />
-                                </div>
-                                <button id="btn-min-widget" class="btn-widget btn-49-widget btn-${item.id}"><p class="text-range-widget text-range-min-widget">49</p></button>
+                            <div class="card-header-widget">
+                                
                             </div>
                             <div class="card-filter-widget ${!item.issummar && "no-display-widget"} ">
-                                <lottie-player src="https://lottie.host/b5652d98-b56c-4b89-9409-b305fc11807b/krUTeNCeSi.json" background="##FFFFFF" speed="1" style="width: 100px; height: 100px" loop autoplay direction="1" mode="normal"></lottie-player>
-                                Summarizing, Waiting for new transactions
+                                <div class="updown-widget" ><dotlottie-player src="https://lottie.host/a1fcfa91-d888-42b6-81cf-66500f61a342/tdWY7X3hp2.lottie" background="transparent" speed="1" style="width: 120px; height: 120px" loop autoplay></dotlottie-player></div>
+                                <p class="merienda-text-widget" >Summarizing,</p>
+                                <p class="merienda-text-widget" > Waiting for new transactions</p>
                             </div>
+                            <img class="logo-dog-widget" src="/images/dog.png" />
                         `;
                     }
                     currentIndex = temp.findIndex(item => item.status === "ACTIVE")
@@ -897,10 +972,6 @@
                     cards.forEach((card, index) => {
                         card.classList.toggle('active-widget-widget', index === currentIndex);
                     });
-
-                    // Update button states
-                    pevBtn.disabled = currentIndex === 0;
-                    nextBtn.disabled = currentIndex === cards.length - 1;
                 }
             }
 
@@ -955,7 +1026,7 @@
                     return;
                 } else {
                     const block_0 = temp.findIndex(item => item.status === 'ACTIVE')
-                    timeCount.textContent = `${current_block.height}`;
+                    block_count.textContent = `${current_block.height}`;
                     if (current_block.height < temp[block_0].id) {
                         if ((current_block.height > (temp[block_0].id - time_bet))) {
                             temp[block_0].issummar = true
@@ -1022,9 +1093,11 @@
             document.head.appendChild(link);
             link.href = url;
         }
-        
+
     }
 
+
+    import_js()
     // Genarate UI
     data_game().then((data) => {
         gameData = data
@@ -1032,8 +1105,6 @@
         getBlock().then(() => {
             connect()
             createTradingCardsWidget(containerId);
-            console.log(gameData);
-
         })
     })
 
