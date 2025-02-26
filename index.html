@@ -5,8 +5,10 @@
     <title>Trading Widget</title>
 </head>
 
-<body>
-    <div id="trading-cards-widget"></div>
+<body style="background-color: black; padding: 0px; margin: 0px;">
+    <div style="width: 100%; height: 100vh; ">
+        <div id="trading-cards-widget"></div>
+    </div>
     <script>
         const widget = document.getElementById('trading-cards-widget')
         const idGame = window.location.pathname.substring(1) === 'index.html' ? '9e720e5e-5981-47a4-9ae6-f63ee4ffee41' : window.location.pathname.substring(1);

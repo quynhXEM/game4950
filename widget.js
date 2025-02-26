@@ -286,18 +286,12 @@
         script.src = 'https://unpkg.com/@lottiefiles/lottie-player@2.0.8/dist/lottie-player.js';
         script.type = 'module';
         style.textContent = `
-            .container-widget {
-                position: relative;
-                padding: 20px;
-                background: #090a0c;
-            }
     
-            .slider-container-widget {
-                position: relative;
-                overflow: hidden;
-                width: 100%;
-                flex: 1;
-            }
+            // .slider-container-widget {
+            //     position: relative;
+            //     overflow: hidden;
+            //     flex: 1;
+            // }
     
             .slider-widget {
                 display: flex;
@@ -639,10 +633,10 @@
         function createInitialElements() {
             const container = document.getElementById(containerId)
             container.style = `
-               position: relative;
                 overflow: hidden;
+                background-image: url('public/decktop.jpg');
+                height: 100%;
                 width: 100%;
-                flex: 1;
             `
 
             const sliderContainer = document.createElement('div');
