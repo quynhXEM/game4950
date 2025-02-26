@@ -13,6 +13,13 @@
         window.location.reload('https://new.bitrefund.co/')
     }
 
+    const color = {
+        red : "#FF3F3F",
+        green: "#00D335",
+        blue: "#15B1FF",
+        orange: "#FFC30F"
+    }
+
     const network = [
         {
             "name": "Ethereum",
@@ -315,6 +322,7 @@
                 font-optical-sizing: auto;
                 font-weight: 700;
                 font-style: normal;
+                margin: 0px;
             }
 
             .slider-container-widget {
@@ -323,7 +331,7 @@
 
             .action-div-widget{
                 position: absolute;
-                top: -20px;
+                top: 0px;
                 right: 0px;
                 display: flex;
                 padding: 5px;
@@ -358,6 +366,7 @@
                 color: #000958;
                 padding: 2px 10px;
                 border-radius: 20px;
+                margin-top: 20px;
             }
 
             .three-card-widget {
@@ -379,6 +388,16 @@
                 background-color: #15B1FF;
                 text-align: center;
             }
+
+            .card-line-widget {
+                width: 100%; 
+                height: 2px;
+                background: linear-gradient(to right, #EE00FF, #0099FF, #00FFB2);
+            }
+
+            .text-black {
+                color: black;
+            }
             
             .card-widget {
                 min-width: 280px;
@@ -394,14 +413,26 @@
             }
     
             .card-header-widget {
-                color: white;
-                padding: 10px 15px;
+                padding: 5px;
                 border-radius: 10px 10px 0 0;
-                border-bottom: 3px solid #6c5ce7;
                 display: flex;
+                flex-direction: column;
                 justify-content: space-between;
                 align-items: center;
                 cursor: pointer;
+                gap: 0px;
+            }
+
+            .betted-contaciner-widget {
+                display: flex;
+                flex-direction: row;
+                padding: 10px;
+                justify-content: space-evenly;
+                align-items: center;
+            }
+
+            .content-betted-widget {
+                text-align: center;
             }
 
             .logo-widget {
@@ -412,9 +443,11 @@
 
             .logo-dog-widget {
                 position: absolute;
+                width: 100px;
+                height: 100px;
                 z-index: 10;
-                top: -65px;
-                left: -40px;
+                top: -40px;
+                left: -20px;
                 animation: shake 1.75s infinite ease-in-out;
             }
 
@@ -515,7 +548,8 @@
             }
 
             .time-count-widget {
-                font-size: 32px
+                font-size: 32px;
+                margin: 20px 0px;
             }
     
             .text-range-max-widget {
@@ -627,7 +661,7 @@
             }
     
             .nav-btn-widget {
-                font-size: 20px;
+                font-size: 13px;
                 outline: none;
                 border: none;
                 background: transparent;
@@ -771,6 +805,7 @@
             blockdiv.className = "block-div-widget"
             const text_block = document.createElement('p')
             text_block.textContent = "Block"
+            text_block.style = `padding-top: 20px;`
             text_block.className = "merienda-text-widget"
             const block_count = document.createElement('p')
             block_count.className = "time-count-widget merienda-text-widget"
@@ -928,7 +963,19 @@
                         card.id = `${item.id}`
                         card.innerHTML = `
                             <div class="card-header-widget">
-                                
+                                <p class="merienda-text-widget text-black" style="font-size: 14px;">BTC - ${item.id}</p>
+                                <p class="merienda-text-widget text-black" style="font-size: 10px;">${item.status}</p>
+                            </div>
+                            <div class="card-line-widget"/>
+                            <div class="betted-contaciner-widget">
+                                <div class="content-betted-widget">
+                                    <p class="merienda-text-widget" style="color: ${color.red}">49</p>
+                                    <p class="merienda-text-widget" style="color: ${color.red}">97,29347<span style="color: black;">${gameData.symbol}</span></p>
+                                </div>
+                                <div class="content-betted-widget">
+                                    <p class="merienda-text-widget" style="color: ${color.green}">50</p>
+                                    <p class="merienda-text-widget" style="color: ${color.green}">97,29347<span style="color: black;">${gameData.symbol}</span></p>
+                                </div>
                             </div>
                             <div class="card-filter-widget ${!item.issummar && "no-display-widget"} ">
                                 <div class="updown-widget" ><dotlottie-player src="https://lottie.host/a1fcfa91-d888-42b6-81cf-66500f61a342/tdWY7X3hp2.lottie" background="transparent" speed="1" style="width: 120px; height: 120px" loop autoplay></dotlottie-player></div>
@@ -944,6 +991,7 @@
                 // Append all cards to the slider
                 children.forEach(child => slider.appendChild(child));
             }
+            
 
             renderCard();
 
