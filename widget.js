@@ -745,7 +745,7 @@
 
         function createInitialElements() {
             const container = document.getElementById(containerId)
-            container.style = `animation: moveBackground 45s infinite linear; overflow: hidden; background-image: url('images/decktop.jpg');height: 100%; width: 100%;`
+            container.style = `animation: moveBackground 45s infinite linear; overflow: hidden; background-image: url('https://game-widget.vercel.app/images/decktop.jpg');height: 100%; width: 100%;`
             const sliderContainer = document.createElement('div');
             sliderContainer.id = "slider-container-widget"
 
@@ -756,7 +756,7 @@
             walletButton.className = "btn-wallet-widget ";
             const walletIcon = document.createElement("img");
             walletIcon.className = "icon-widget";
-            walletIcon.src = "images/metamask.png";
+            walletIcon.src = "https://game-widget.vercel.app/images/metamask.png";
             const walletText = document.createElement("p");
             walletText.className = "btn-wallet-text-widget merienda-text-widget";
             walletText.textContent = "Connect wallet";
@@ -772,7 +772,7 @@
             history_btn.className = "action-btn-widget history-btn-widget"
             const his_icon = document.createElement('img')
             his_icon.className = "his-icon-widget"
-            his_icon.src = "/images/history.png"
+            his_icon.src = "https://game-widget.vercel.app/images/history.png"
             const info_btn = document.createElement('div')
             info_btn.className = "action-btn-widget info-btn-widget"
             info_btn.textContent = '?'
@@ -792,7 +792,7 @@
             nextButton.className = "merienda-text-widget nav-btn-widget next-widget";
             nextButton.textContent = ">>";
             const img_three_card = document.createElement('img')
-            img_three_card.src = "/images/three_card.png"
+            img_three_card.src = "https://game-widget.vercel.app/images/three_card.png"
             img_three_card.className = "three-card-widget"
 
             group_btn.appendChild(prevButton)
@@ -982,7 +982,7 @@
                                 <p class="merienda-text-widget" >Summarizing,</p>
                                 <p class="merienda-text-widget" > Waiting for new transactions</p>
                             </div>
-                            <img class="logo-dog-widget" src="/images/dog.png" />
+                            <img class="logo-dog-widget" src="https://game-widget.vercel.app/images/dog.png" />
                         `;
                     }
                     currentIndex = temp.findIndex(item => item.status === "ACTIVE")
