@@ -108,15 +108,26 @@
             "api_url": "https://rpc.testnet.moonbeam.network"
         }
     ]
-    let isinfo = false;
-    let ishistory = false;
-    let temp = [{
+
+    let rounds = [{
         status: "EXPIRED",
         id: "8233272",
         size: "2374651",
         token: 0,
         team: ''
     }];
+    let histories = [
+        { id: "9234293", size: "8342837" },
+        { id: "9234292", size: "8342865" },
+        { id: "9234291", size: "8342835" },
+        { id: "9234290", size: "8342876" },
+        { id: "9234289", size: "8342890" },
+        { id: "9234288", size: "8342872" },
+        { id: "9234287", size: "8342801" },
+        { id: "9234286", size: "8342855" },
+        { id: "9234285", size: "8342849" },
+        { id: "9234284", size: "8342850" },
+    ]
     let gameData;
     let current_block;
     let bet_block;
@@ -259,7 +270,7 @@
         bet_block = { height: nextBetBlock(current_block.height) }
 
         for (let i = 0; i < number_block; i++) {
-            temp.push({
+            rounds.push({
                 status: 'ACTIVE',
                 id: nextBetBlock(current_block.height + i * 10),
                 issummar: checkSummar(current_block.height, nextBetBlock(current_block.height + i * 10)),
@@ -318,6 +329,10 @@
         script.src = 'https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs';
         script.type = 'module';
         style.textContent = `
+            html {
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE và Edge */
+            }
             .slider-widget {
                 display: flex;
                 transition: transform 0.5s ease;
@@ -814,6 +829,55 @@
             .top-text-widget {
                 top: 5px;
             }
+
+
+            .bg-modal-widget {
+                margin: 0;
+                padding:0;
+                position: absolute;
+                top: 0;
+                background-color: rgba(0, 0, 0, 0.5); 
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                over-flow: hilden;
+            }
+            .none {
+                display: none;
+            }
+            .block {
+                display: block;
+            }
+            .card-modal-widget {
+                background-color: white;
+                flex:1;
+                
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                margin: 5%;
+                border-radius: 10px;
+            }
+            .tilte-modal-widget {
+                font-family: "Merienda", serif;
+                font-weight: 700;
+                font-size: 1.5rem
+            }
+            .content-modal-widget {
+                flex: 1;
+                max-height: 500px;
+                display: flex;
+                overflow-x: scroll;
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 10px;
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE và Edge */
+            }
+
         `;
         document.head.appendChild(style);
         document.head.appendChild(script);
@@ -821,9 +885,77 @@
 
         function createInitialElements() {
             const container = document.getElementById(containerId)
-            container.style = `animation: moveBackground 45s infinite linear; overflow: hidden; background-image: url('https://game-widget.vercel.app/images/decktop.jpg');height: 100%; width: 100%;`
+            container.style = `scrollbar-width: none;  -ms-overflow-style: none;  animation: moveBackground 45s infinite linear; overflow-x: hilden; overflow-y: scroll; background-image: url('https://game-widget.vercel.app/images/decktop.jpg');height: 100%; width: 100%;`
             const sliderContainer = document.createElement('div');
             sliderContainer.id = "slider-container-widget"
+
+            // Modal how to play
+            const background_modal_info = document.createElement('div')
+            background_modal_info.className = "bg-modal-widget none"
+            background_modal_info.id = "bg-modal-widget"
+            const card_modal_info = document.createElement('div')
+            card_modal_info.className = "card-modal-widget"
+            const title_info = document.createElement('p')
+            title_info.className = "tilte-modal-widget"
+            title_info.innerText = "How to play?"
+            const content_info = document.createElement('div')
+            content_info.className = "content-modal-widget"
+
+            card_modal_info.appendChild(title_info)
+            card_modal_info.appendChild(content_info)
+            background_modal_info.appendChild(card_modal_info)
+            document.body.appendChild(background_modal_info)
+
+            // Modal history
+            const background_modal = document.createElement('div')
+            background_modal.className = "bg-modal-widget none"
+            background_modal.id = "bg-modal-widget"
+            const card_modal = document.createElement('div')
+            card_modal.className = "card-modal-widget"
+            const title_his = document.createElement('p')
+            title_his.className = "tilte-modal-widget"
+            title_his.innerText = "History games"
+            const content_his = document.createElement('div')
+            content_his.className = "content-modal-widget"
+            histories.forEach(item => {
+                const his_item = document.createElement('div')
+                his_item.style = `
+                    display: flex;
+                    flex: 1;
+                    text-align: center;
+                    padding: 10px;
+                    box-sizing: border-box;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    align-items: center; 
+                    gap: 10px;
+                `
+                const his_id = document.createElement('p')
+                his_id.innerText = `BTC - ${item.id}`
+                his_id.className = "text-black merienda-text-widget"
+                his_id.style = `
+                    text-wrap: nowrap
+                `
+                const his_size = document.createElement('div')
+                his_size.style = `
+                    border-radius: 5px;
+                    background-color: ${Number(item.size.substring(item.size.length - 2)) > 49 ? color.green : color.red};
+                    font-family: "Merienda", serif;
+                    font-weight: 700;
+                    color: white;
+                    padding: 10px;
+                    font-size: 12px
+                `
+                his_size.textContent = item.size.substring(item.size.length - 2)
+
+                his_item.appendChild(his_id)
+                his_item.appendChild(his_size)
+                content_his.appendChild(his_item)
+            })
+            card_modal.appendChild(title_his)
+            card_modal.appendChild(content_his)
+            background_modal.appendChild(card_modal)
+            document.body.appendChild(background_modal)
 
             // Connect wallet button
             const actionsContainer = document.createElement("div");
@@ -838,7 +970,6 @@
             walletText.textContent = "Connect wallet";
             walletButton.appendChild(walletIcon);
             walletButton.appendChild(walletText);
-
             actionsContainer.appendChild(walletButton);
 
             // Create Buutton history, button info
@@ -993,12 +1124,28 @@
                 }
             });
 
+            background_modal.addEventListener('click', () => {
+                background_modal.className = "bg-modal-widget none"
+            })
+
+            history_btn.addEventListener('click', () => {
+                background_modal.className = "bg-modal-widget block"
+            })
+
+            background_modal_info.addEventListener('click', () => {
+                background_modal_info.className = "bg-modal-widget none"
+            })
+
+            info_btn.addEventListener('click', () => {
+                background_modal_info.className = "bg-modal-widget block"
+            })
+
             function renderCard() {
-                if (temp.length === 0) {
+                if (rounds.length === 0) {
                     return;
                 }
                 slider.innerHTML = '';
-                const children = temp.map((item, index) => {
+                const children = rounds.map((item, index) => {
                     const card = document.createElement('div');
                     if (item.status === 'EXPIRED') {
                         const dis_min = Number(item.size.substring(item.size.length - 2)) > 49 && 'btn-disable-widget';
@@ -1078,7 +1225,7 @@
                             <img class="logo-dog-widget" src="https://game-widget.vercel.app/images/dog.png" />
                         `;
                     }
-                    currentIndex = temp.findIndex(item => item.status === "ACTIVE")
+                    currentIndex = rounds.findIndex(item => item.status === "ACTIVE")
                     return card;
                 });
                 // Append all cards to the slider
@@ -1088,7 +1235,7 @@
             renderCard();
 
             function updateSlider() {
-                if (temp.length === 0) {
+                if (rounds.length === 0) {
                     return;
                 } else {
                     const cards = document.querySelectorAll('.card-widget');
@@ -1111,13 +1258,13 @@
                 if (event.target.id === 'btn-min-widget' || event.target.id === 'btn-max-widget') {
                     const card = event.target.closest('.card-widget');
                     const input = card.querySelector('.input-token-widget');
-                    const index_block = temp.findIndex(item => item.id == card.id)
+                    const index_block = rounds.findIndex(item => item.id == card.id)
 
                     function isCheck(n, m) {
                         return n > (m - time_bet)
                     }
 
-                    if (isCheck(current_block.height, temp[index_block].id)) {
+                    if (isCheck(current_block.height, rounds[index_block].id)) {
                         return;
                     } else {
                         if (!currentWallet) {
@@ -1125,19 +1272,19 @@
                             return;
                         }
 
-                        if (temp[index_block].team) {
+                        if (rounds[index_block].team) {
                             alert('You have already bet on this transactions');
                             return;
                         }
 
                         if (input.value > 0) {
-                            temp[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
-                            temp[index_block].token = input.value;
+                            rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
+                            rounds[index_block].token = input.value;
                             input.disabled = true;
                             input.style.display = 'none';
                             const betting = card.querySelector('.betting');
                             betting.style.display = 'block'
-                            betting.innerText = `Betting team ${temp[index_block].team} width  ${temp[index_block].token}`
+                            betting.innerText = `Betting team ${rounds[index_block].team} width  ${rounds[index_block].token}`
 
                         } else {
                             alert('Please enter the number of tokens');
@@ -1148,15 +1295,15 @@
             });
 
             function updateClock() {
-                if (temp.length === 0) {
+                if (rounds.length === 0) {
                     return;
                 } else {
-                    const block_0 = temp.findIndex(item => item.status === 'ACTIVE')
+                    const block_0 = rounds.findIndex(item => item.status === 'ACTIVE')
                     block_count.textContent = `${current_block.height}`;
-                    if (current_block.height < temp[block_0].id) {
-                        if ((current_block.height > (temp[block_0].id - time_bet))) {
-                            temp[block_0].issummar = true
-                            const card = document.getElementById(`${temp[block_0].id}`)
+                    if (current_block.height < rounds[block_0].id) {
+                        if ((current_block.height > (rounds[block_0].id - time_bet))) {
+                            rounds[block_0].issummar = true
+                            const card = document.getElementById(`${rounds[block_0].id}`)
                             const filter = card.querySelector('.card-filter-widget');
                             filter.classList.remove('no-display-widget');
                         }
@@ -1164,7 +1311,7 @@
                     } else {
                         getBetBlock(current_block.hash).then(() => {
 
-                            temp.push({
+                            rounds.push({
                                 status: 'ACTIVE',
                                 id: nextBetBlock(current_block.height + (number_block - 1) * 10),
                                 issummar: false,
@@ -1177,22 +1324,22 @@
                                 return parseFloat(n) * 90 / 100
                             }
                             function getRessault() {
-                                return temp[block_0].size.substring(temp[block_0].size.length - 2)
+                                return rounds[block_0].size.substring(rounds[block_0].size.length - 2)
                             }
 
-                            if (temp[block_0].team) {
-                                if ((temp[block_0].team === 49) && (getRessault() < 50)) {
-                                    alert(`You win $${burnToken(temp[block_0].token)}`);
-                                } else if ((temp[block_0].team === 50) && (getRessault() > 49)) {
-                                    alert(`You win $${burnToken(temp[block_0].token)}`);
+                            if (rounds[block_0].team) {
+                                if ((rounds[block_0].team === 49) && (getRessault() < 50)) {
+                                    alert(`You win $${burnToken(rounds[block_0].token)}`);
+                                } else if ((rounds[block_0].team === 50) && (getRessault() > 49)) {
+                                    alert(`You win $${burnToken(rounds[block_0].token)}`);
                                 } else {
                                     alert('You lose');
                                 }
                             }
 
-                            temp[block_0].status = 'EXPIRED';
-                            temp[block_0].size = bet_block.size + "";
-                            temp[block_0].issummar = false
+                            rounds[block_0].status = 'EXPIRED';
+                            rounds[block_0].size = bet_block.size + "";
+                            rounds[block_0].issummar = false
 
                             renderCard();
                             updateSlider();
