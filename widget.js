@@ -14,7 +14,7 @@
     }
 
     const color = {
-        red : "#FF3F3F",
+        red: "#FF3F3F",
         green: "#00D335",
         blue: "#15B1FF",
         orange: "#FFC30F"
@@ -429,6 +429,7 @@
                 padding: 10px;
                 justify-content: space-evenly;
                 align-items: center;
+                gap: 20px;
             }
 
             .content-betted-widget {
@@ -686,8 +687,35 @@
             }
     
             .btn-wallet-text-widget {
+                color: white;
                 text-wrap: nowrap;
             }
+            
+            .text-49-widget {
+                font-size: larger;
+                color: ${color.red}
+            }
+
+            .text-50-widget {
+                font-size: larger;
+                color: ${color.green}
+            }
+
+            .text-id {
+                font-size: larger;
+            }
+            
+            .text-status {
+                font-size: small;
+            }
+
+            .text-black-token {
+                color: black;
+                font-size: large;
+                font-family: system-ui;
+                font-weight: 500;
+            }
+    
     
             .btn-wallet-widget:hover {
                 opacity: 0.9;
@@ -737,6 +765,61 @@
                 .container-widget {
                     padding: 10px;
                 }
+            }
+
+            // Card
+            .container {
+                position: relative;
+                width: 300px;
+                display: flex;
+                justify-content: center;
+                background-color: #fef2f2;
+            }
+            .overlay {
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .bet-box {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #ccc;
+                background-color: white;
+                width: 99%;
+                height: 50px;
+                padding: 0 10px;
+                border-radius: 4px;
+            }
+            .bet-box input {
+                margin: 0 10px;
+                width: 100%;
+                font-size: 1.5rem;
+                border: none;
+                outline: none;
+                text-align: center;
+            }
+            .position-relative {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                flex: 1;
+            }
+            .absolute-text {
+                position: absolute;
+                font-size: 1.2rem;
+            }
+            .bottom-text {
+                bottom: 5px;
+            }
+            .top-text {
+                top: 5px;
             }
         `;
         document.head.appendChild(style);
@@ -963,18 +1046,36 @@
                         card.id = `${item.id}`
                         card.innerHTML = `
                             <div class="card-header-widget">
-                                <p class="merienda-text-widget text-black" style="font-size: 14px;">BTC - ${item.id}</p>
-                                <p class="merienda-text-widget text-black" style="font-size: 10px;">${item.status}</p>
+                                <p class="merienda-text-widget text-black text-id">BTC - ${item.id}</p>
+                                <p class="merienda-text-widget text-black text-status">${item.status}</p>
                             </div>
                             <div class="card-line-widget"/>
                             <div class="betted-contaciner-widget">
                                 <div class="content-betted-widget">
-                                    <p class="merienda-text-widget" style="color: ${color.red}">49</p>
-                                    <p class="merienda-text-widget" style="color: ${color.red}">97,29347<span style="color: black;">${gameData.symbol}</span></p>
+                                    <p class="merienda-text-widget text-49-widget">49</p>
+                                    <p class="merienda-text-widget text-49-widget">97,29347<span class="text-black-token">${gameData.symbol}</span></p>
                                 </div>
                                 <div class="content-betted-widget">
-                                    <p class="merienda-text-widget" style="color: ${color.green}">50</p>
-                                    <p class="merienda-text-widget" style="color: ${color.green}">97,29347<span style="color: black;">${gameData.symbol}</span></p>
+                                    <p class="merienda-text-widget text-50-widget">50</p>
+                                    <p class="merienda-text-widget text-50-widget">97,29347<span class="text-black-token">${gameData.symbol}</span></p>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <img src="https://game-widget.vercel.app/images/retanger.png" width="200" />
+                                <div class="overlay">
+                                    <div class="position-relative">
+                                        <img src="https://i.imgur.com/b3A5P9O.png" alt="" width="150" />
+                                        <p class="absolute-text bottom-text">50</p>
+                                    </div>
+                                    <div class="bet-box">
+                                        <img src="https://i.imgur.com/HDc7Dhn.png" width="30" height="30" />
+                                        <input type="text" placeholder="Enter token to bet" />
+                                        <p>ETH</p>
+                                    </div>
+                                    <div class="position-relative">
+                                        <img src="https://i.imgur.com/75bxLL1.png" alt="" width="150" />
+                                        <p class="absolute-text top-text">49</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-filter-widget ${!item.issummar && "no-display-widget"} ">
@@ -991,7 +1092,7 @@
                 // Append all cards to the slider
                 children.forEach(child => slider.appendChild(child));
             }
-            
+
 
             renderCard();
 
