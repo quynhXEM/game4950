@@ -113,7 +113,9 @@
     let temp = [{
         status: "EXPIRED",
         id: "8233272",
-        size: "2374651"
+        size: "2374651",
+        token: 0,
+        team: ''
     }];
     let gameData;
     let current_block;
@@ -412,7 +414,7 @@
             }
             
             .card-widget {
-                min-width: 290px;
+                min-width: 300px;
                 max-width: 330px;
                 height: 330px;
                 position: relative;
@@ -635,28 +637,6 @@
                 padding: 10px;
             }
     
-            .input-token-widget {
-                border: 0.5px solid gray;
-                border-radius: 5px;
-                min-height: 30px;
-                margin-top: 10px;
-                color: black;
-                width: 94%;
-                padding-left: 10px;
-                overflow: hidden;
-                font-size: 12px;
-                font-weight: bold;
-                outline: none;
-                font-family: "Merienda", serif;
-                font-optical-sizing: auto;
-                font-weight: 700;
-                font-style: normal;
-            }
-    
-            .input-token-widget:focus {
-                outline: none;
-            }
-    
             .nav-buttons-widget {
                 display: flex;
                 justify-content: center;
@@ -755,13 +735,13 @@
             
             @media (max-width: 768px) {
                 .card-widget {
-                    min-width: 280px;
+                    min-width: 300px;
                 }
             }
     
             @media (max-width: 480px) {
                 .card-widget {
-                    min-width: 260px;
+                    min-width: 280px;
                 }
     
                 .container-widget {
@@ -1079,13 +1059,14 @@
                                 <div class="container">
                                     <img src="https://game-widget.vercel.app/images/retanger.png" width="180" />
                                     <div class="overlay-widget">
-                                        <img class="position-relative-widget" src="https://game-widget.vercel.app/images/50.png" alt="" width="150" height="60" />
+                                        <img id="btn-max-widget" class="position-relative-widget" src="https://game-widget.vercel.app/images/50.png" alt="" width="150" height="60" />
                                         <div class="bet-box-widget">
                                             <img src="${Image(gameData.icon)}" width="30" height="30" />
-                                            <input type="number" placeholder="Enter token to bet" />
+                                            <input class="input-token-widget" type="number" placeholder="Enter token to bet" />
+                                             <p class="merienda-text-widget betting" style="width: 100%; text-align: center; font-size: 1.15rem; text-spacing: 10px; display: none;"></p>
                                             <p class="text-black-token">${gameData.symbol}</p>
                                         </div>
-                                        <img class="position-relative-widget" src="https://game-widget.vercel.app/images/49.png" alt="" width="150" height="60" />
+                                        <img id="btn-min-widget" class="position-relative-widget " src="https://game-widget.vercel.app/images/49.png" alt="" width="150" height="60" />
                                     </div>
                                 </div>
                             </div>
@@ -1127,8 +1108,6 @@
             updateSlider()
 
             slider.addEventListener('click', (event) => {
-                console.log("click", event.target);
-
                 if (event.target.id === 'btn-min-widget' || event.target.id === 'btn-max-widget') {
                     const card = event.target.closest('.card-widget');
                     const input = card.querySelector('.input-token-widget');
@@ -1141,23 +1120,24 @@
                     if (isCheck(current_block.height, temp[index_block].id)) {
                         return;
                     } else {
-                        if (temp[index_block].team) {
-                            alert('You have already bet on this transactions');
-                            return;
-                        }
-
                         if (!currentWallet) {
                             alert('Please connect your wallet');
                             return;
                         }
 
+                        if (temp[index_block].team) {
+                            alert('You have already bet on this transactions');
+                            return;
+                        }
+
                         if (input.value > 0) {
-                            input.style.display = 'none';
                             temp[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
-                            temp[index_block].token = input.value
-                            const price = card.querySelector('.now-price-widget');
-                            price.style.display = 'block';
-                            price.innerHTML = `You bet: ${temp[index_block].token} ${gameData.symbol} for ${temp[index_block].team}`
+                            temp[index_block].token = input.value;
+                            input.disabled = true;
+                            input.style.display = 'none';
+                            const betting = card.querySelector('.betting');
+                            betting.style.display = 'block'
+                            betting.innerText = `Betting team ${temp[index_block].team} width  ${temp[index_block].token}`
 
                         } else {
                             alert('Please enter the number of tokens');
