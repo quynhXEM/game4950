@@ -10,7 +10,9 @@
     if (id) {
         data_game()
     } else {
-        window.location.reload('https://new.bitrefund.co/')
+        document.body.innerHTML = `
+            <h1>No Data</h1>
+        `
     }
 
     const color = {
@@ -108,7 +110,11 @@
     ]
     let isinfo = false;
     let ishistory = false;
-    let temp = [];
+    let temp = [{
+        status: "EXPIRED",
+        id: "8233272",
+        size: "2374651"
+    }];
     let gameData;
     let current_block;
     let bet_block;
@@ -317,6 +323,12 @@
                 margin-top: 50px;
             }
             
+            input[type=number]::-webkit-inner-spin-button, 
+            input[type=number]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
             .merienda-text-widget {
                 font-family: "Merienda", serif;
                 font-optical-sizing: auto;
@@ -400,8 +412,9 @@
             }
             
             .card-widget {
-                min-width: 280px;
-                height: 300px;
+                min-width: 290px;
+                max-width: 330px;
+                height: 330px;
                 position: relative;
                 transition: all 0.3s ease;
                 transform: scale(0.9);
@@ -454,16 +467,6 @@
 
             .updown-widget {
                 animation: updown 2s infinite ease-in-out;
-            }
-    
-            .card-content-widget {
-                position: relative;
-                padding: 30px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-self: center;
-                align-items: center;
             }
     
             .card-filter-widget {
@@ -529,9 +532,8 @@
             }
     
             .btn-disable-widget {
-                background-color: gray;
                 cursor: not-allowed;
-                opacity: 0.5;
+                opacity: 0.2;
             }
     
             .btn-expired-widget {
@@ -766,16 +768,17 @@
                     padding: 10px;
                 }
             }
-
-            // Card
-            .container {
+                
+            .card-content {
+                width: 100%;
+            }
+            .card-content-widget .container {
                 position: relative;
-                width: 300px;
+                width: 100%;
                 display: flex;
                 justify-content: center;
-                background-color: #fef2f2;
             }
-            .overlay {
+            .overlay-widget {
                 position: absolute;
                 top: 0;
                 width: 100%;
@@ -785,40 +788,50 @@
                 align-items: center;
                 justify-content: center;
             }
-            .bet-box {
+            .bet-box-widget {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 border: 1px solid #ccc;
                 background-color: white;
-                width: 99%;
                 height: 50px;
-                padding: 0 10px;
+                width: 90%;
                 border-radius: 4px;
+                padding: 0px 10px;
             }
-            .bet-box input {
+            .bet-box-widget input {
                 margin: 0 10px;
-                width: 100%;
-                font-size: 1.5rem;
+                font-size: 1.35rem;
                 border: none;
                 outline: none;
                 text-align: center;
+                width: 100%;
+                font-family: "Merienda", serif;
             }
-            .position-relative {
+            .position-relative-widget {
                 position: relative;
                 display: flex;
                 justify-content: center;
-                width: 100%;
-                flex: 1;
+                margin: 10px;
+                background: none;
+                border: 0px;
+                over-flow: hilden;
+                cursor: pointer;
             }
-            .absolute-text {
+
+            .absolute-text-widget {
                 position: absolute;
-                font-size: 1.2rem;
+                font-size: 1.5rem;
+                font-family: "Merienda", serif;
+                font-weight: 700;
+                cursor: pointer;
+                color: white;
+                display : block;
             }
-            .bottom-text {
+            .bottom-text-widget {
                 bottom: 5px;
             }
-            .top-text {
+            .top-text-widget {
                 top: 5px;
             }
         `;
@@ -1008,46 +1021,14 @@
                 const children = temp.map((item, index) => {
                     const card = document.createElement('div');
                     if (item.status === 'EXPIRED') {
-                        const dis_min = Number(item.size.substring(item.size.length - 2)) < 50 && 'btn-disable';
-                        const dis_max = Number(item.size.substring(item.size.length - 2)) > 49 && 'btn-disable';
+                        const dis_min = Number(item.size.substring(item.size.length - 2)) > 49 && 'btn-disable-widget';
+                        const dis_max = Number(item.size.substring(item.size.length - 2)) < 50 && 'btn-disable-widget';
+                        const color_size = Number(item.size.substring(item.size.length - 2)) < 50 ? color.red : color.green;
                         card.className = 'card-widget card-expired-widget';
                         card.innerHTML = `
-                            <div id="${index}" class="card-header-widget">
-                                <div class="status-widget">
-                                    <div class="status-dot-expired-widget">
-                                        <img src="${Image(gameData.icon)}" class="logo-widget"/>
-                                    </div>
-                                    ${item.status}
-                                </div>
-                                <div class="id-widget">BTC~${item.id}</div>
-                            </div>
-                            <div class="card-content-widget">
-                                <button class="btn-widget btn-expired-widget btn-50-widget ${dis_min}"><p class="text-range-widget text-range-max-widget">50</p></button>
-                                <div class="content-bet-widget">
-                                    <div class="price-content-widget">
-                                        <img class="coin-img-widget" src="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
-                                        <p class="text-price-widget merienda-text-widget">${value_bet}</p>
-                                    </div>
-                                    <div class="price-content-widget">
-                                        <h3 class="last-price-widget">
-                                            $${item.size.substring(0, item.size.length - 2)}
-                                            <span class="final-price-widget">
-                                            ${item.size.substring(item.size.length - 2)}
-                                            </span>
-                                        </h3>
-                                    
-                                    </div>
-                                </div>
-                                <button class="btn-widget btn-expired-widget btn-49-widget ${dis_max}"><p class="text-range-widget text-range-min-widget">49</p></button>
-                            </div>
-                        `;
-                    } else if (item.status === 'ACTIVE') {
-                        card.className = `card-widget`;
-                        card.id = `${item.id}`
-                        card.innerHTML = `
-                            <div class="card-header-widget">
+                           <div class="card-header-widget">
                                 <p class="merienda-text-widget text-black text-id">BTC - ${item.id}</p>
-                                <p class="merienda-text-widget text-black text-status">${item.status}</p>
+                                <p style="color: gray" class="merienda-text-widget text-black text-status">${item.status}</p>
                             </div>
                             <div class="card-line-widget"/>
                             <div class="betted-contaciner-widget">
@@ -1060,21 +1041,51 @@
                                     <p class="merienda-text-widget text-50-widget">97,29347<span class="text-black-token">${gameData.symbol}</span></p>
                                 </div>
                             </div>
-                            <div class="container">
-                                <img src="https://game-widget.vercel.app/images/retanger.png" width="200" />
-                                <div class="overlay">
-                                    <div class="position-relative">
-                                        <img src="https://i.imgur.com/b3A5P9O.png" alt="" width="150" />
-                                        <p class="absolute-text bottom-text">50</p>
+                            <div class="card-content-widget">
+                                <div class="container">
+                                    <img src="https://game-widget.vercel.app/images/retanger.png" width="180" />
+                                    <div class="overlay-widget">
+                                        <img class="position-relative-widget ${dis_max}" src="https://game-widget.vercel.app/images/50.png" alt="" width="150" height="60" />
+                                        <div class="bet-box-widget">
+                                            <img src="${Image(gameData.icon)}" width="30" height="30" />
+                                            <p class="merienda-text-widget" style="width: 100%; text-align: center; font-size: 1.35rem; text-spacing: 10px;">${item.size.substring(0, item.size.length - 2)}<span style="color: ${color_size}">${item.size.substring(item.size.length - 2)}</span></p>
+                                            <p class="text-black-token">${gameData.symbol}</p>
+                                        </div>
+                                        <img class="position-relative-widget ${dis_min}" src="https://game-widget.vercel.app/images/49.png" alt="" width="150" height="60" />
                                     </div>
-                                    <div class="bet-box">
-                                        <img src="https://i.imgur.com/HDc7Dhn.png" width="30" height="30" />
-                                        <input type="text" placeholder="Enter token to bet" />
-                                        <p>ETH</p>
-                                    </div>
-                                    <div class="position-relative">
-                                        <img src="https://i.imgur.com/75bxLL1.png" alt="" width="150" />
-                                        <p class="absolute-text top-text">49</p>
+                                </div>
+                            </div>
+                        `;
+                    } else if (item.status === 'ACTIVE') {
+                        card.className = `card-widget`;
+                        card.id = `${item.id}`
+                        card.innerHTML = `
+                            <div class="card-header-widget">
+                                <p class="merienda-text-widget text-black text-id">BTC - ${item.id}</p>
+                                <p style="color: blue" class="merienda-text-widget text-black text-status">${item.status}</p>
+                            </div>
+                            <div class="card-line-widget"/>
+                            <div class="betted-contaciner-widget">
+                                <div class="content-betted-widget">
+                                    <p class="merienda-text-widget text-49-widget">49</p>
+                                    <p class="merienda-text-widget text-49-widget">97,29347<span class="text-black-token">${gameData.symbol}</span></p>
+                                </div>
+                                <div class="content-betted-widget">
+                                    <p class="merienda-text-widget text-50-widget">50</p>
+                                    <p class="merienda-text-widget text-50-widget">97,29347<span class="text-black-token">${gameData.symbol}</span></p>
+                                </div>
+                            </div>
+                            <div class="card-content-widget">
+                                <div class="container">
+                                    <img src="https://game-widget.vercel.app/images/retanger.png" width="180" />
+                                    <div class="overlay-widget">
+                                        <img class="position-relative-widget" src="https://game-widget.vercel.app/images/50.png" alt="" width="150" height="60" />
+                                        <div class="bet-box-widget">
+                                            <img src="${Image(gameData.icon)}" width="30" height="30" />
+                                            <input type="number" placeholder="Enter token to bet" />
+                                            <p class="text-black-token">${gameData.symbol}</p>
+                                        </div>
+                                        <img class="position-relative-widget" src="https://game-widget.vercel.app/images/49.png" alt="" width="150" height="60" />
                                     </div>
                                 </div>
                             </div>
@@ -1093,7 +1104,6 @@
                 children.forEach(child => slider.appendChild(child));
             }
 
-
             renderCard();
 
             function updateSlider() {
@@ -1103,7 +1113,7 @@
                     const cards = document.querySelectorAll('.card-widget');
                     const cardWidth = cards[0].offsetWidth + 20;
                     const containerWidth = document.querySelector('.actions-container-widget').offsetWidth;
-                    const offset = -currentIndex * cardWidth + (containerWidth - cardWidth) / 2;
+                    const offset = (-currentIndex * cardWidth + (containerWidth - cardWidth) / 2) + 10;
                     slider.style.transform = `translateX(${offset}px)`;
                     slider.style.width = `${cards.length * (cardWidth)}px`;
 
@@ -1117,6 +1127,8 @@
             updateSlider()
 
             slider.addEventListener('click', (event) => {
+                console.log("click", event.target);
+
                 if (event.target.id === 'btn-min-widget' || event.target.id === 'btn-max-widget') {
                     const card = event.target.closest('.card-widget');
                     const input = card.querySelector('.input-token-widget');
@@ -1152,11 +1164,6 @@
                         }
                     }
 
-                }
-
-                if (event.target.className === "card-header-widget") {
-                    currentIndex = Number(event.target.id);
-                    updateSlider()
                 }
             });
 
@@ -1232,9 +1239,7 @@
             document.head.appendChild(link);
             link.href = url;
         }
-
     }
-
 
     import_js()
     // Genarate UI
