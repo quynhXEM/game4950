@@ -750,6 +750,15 @@
                 .card-widget {
                     min-width: 300px;
                 }
+                .card-modal-widget {
+                    margin: 10%;
+                }
+            }
+
+             @media (min-width: 768px) {
+                .card-modal-widget {
+                    margin: 10% 20%;
+                }
             }
     
             @media (max-width: 480px) {
@@ -757,6 +766,10 @@
                     min-width: 280px;
                 }
     
+                .card-modal-widget {
+                    margin: 5%;
+                }
+
                 .container-widget {
                     padding: 10px;
                 }
@@ -828,7 +841,6 @@
                 top: 5px;
             }
 
-
             .bg-modal-widget {
                 margin: 0;
                 padding:0;
@@ -836,6 +848,7 @@
                 top: 0;
                 background-color: rgba(0, 0, 0, 0.5); 
                 display: flex;
+                flex: 1;
                 justify-content: center;
                 align-items: center;
                 width: 100%;
@@ -851,12 +864,10 @@
             .card-modal-widget {
                 background-color: white;
                 flex:1;
-                
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 flex-direction: column;
-                margin: 5%;
                 border-radius: 10px;
             }
             .tilte-modal-widget {
@@ -866,7 +877,7 @@
                 color: black;
                 margin-top: 20px;
             }
-            .content-modal-widget {
+            .content-modal-his-widget {
                 flex: 1;
                 max-height: 500px;
                 display: flex;
@@ -875,6 +886,18 @@
                 gap: 5px;
                 padding: 10px;
                 justify-content: center;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .content-modal-widget {
+                flex: 1;
+                max-height: 500px;
+                display: flex;
+                overflow-x: scroll;
+                flex-direction: column;
+                gap: 5px;
+                padding: 10px;
+                justify-content: left;
                 scrollbar-width: none;
                 -ms-overflow-style: none;
             }
@@ -970,7 +993,7 @@
             title_his.className = "tilte-modal-widget"
             title_his.innerText = "History games"
             const content_his = document.createElement('div')
-            content_his.className = "content-modal-widget"
+            content_his.className = "content-modal-his-widget"
             histories.forEach(item => {
                 const his_item = document.createElement('div')
                 his_item.style = `
