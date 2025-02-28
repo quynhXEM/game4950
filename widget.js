@@ -862,7 +862,9 @@
             .tilte-modal-widget {
                 font-family: "Merienda", serif;
                 font-weight: 700;
-                font-size: 1.5rem
+                font-size: 1.5rem;
+                color: black;
+                margin-top: 20px;
             }
             .content-modal-widget {
                 flex: 1;
@@ -878,6 +880,8 @@
             }
             .content-modal-widget p, h3, ul, li {
                 font-family: "Merienda", serif;
+                color: black;
+                margin: 5px;
             }
             .text-highlight-widget {
                 font-weight: bold;
