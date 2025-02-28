@@ -111,7 +111,7 @@
 
     let rounds = [{
         status: "EXPIRED",
-        id: "8233272",
+        id: "0000000",
         size: "2374651",
         token: 0,
         team: ''
@@ -133,8 +133,6 @@
     let bet_block;
     const time_bet = 6;
     const number_block = 5;
-
-    const value_bet = "Size Block prediction of Bitcoin"
     let currentIndex = 0;
     let currentWallet = '';
 
@@ -872,10 +870,19 @@
                 display: flex;
                 overflow-x: scroll;
                 flex-wrap: wrap;
-                gap: 10px;
+                gap: 5px;
                 padding: 10px;
-                scrollbar-width: none; /* Firefox */
-                -ms-overflow-style: none; /* IE và Edge */
+                justify-content: center;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .content-modal-widget p, h3, ul, li {
+                font-family: "Merienda", serif;
+            }
+            .text-highlight-widget {
+                font-weight: bold;
+                color: #ff5722;
+                font-family: "Merienda", serif;
             }
 
         `;
@@ -885,7 +892,7 @@
 
         function createInitialElements() {
             const container = document.getElementById(containerId)
-            container.style = `scrollbar-width: none;  -ms-overflow-style: none;  animation: moveBackground 45s infinite linear; overflow-x: hilden; overflow-y: scroll; background-image: url('https://game-widget.vercel.app/images/decktop.jpg');height: 100%; width: 100%;`
+            container.style = `scrollbar-width: none;  -ms-overflow-style: none;  animation: moveBackground 10s infinite linear; overflow-x: hilden; overflow-y: scroll; background-image: url('https://game-widget.vercel.app/images/decktop.jpg');height: 100%; width: 100%;`
             const sliderContainer = document.createElement('div');
             sliderContainer.id = "slider-container-widget"
 
@@ -897,9 +904,52 @@
             card_modal_info.className = "card-modal-widget"
             const title_info = document.createElement('p')
             title_info.className = "tilte-modal-widget"
-            title_info.innerText = "How to play?"
+            title_info.innerText = "How to play ?"
             const content_info = document.createElement('div')
             content_info.className = "content-modal-widget"
+            content_info.innerHTML = `
+                    <p>Welcome to <span class="text-highlight-widget">49-50 Game</span>, an exciting blockchain-based betting game! Follow these steps to start playing and maximize your winnings.</p>
+                    
+                    <h3>Step 1: Connect Your Wallet</h3>
+                    <ul>
+                        <li>To participate, you must connect your cryptocurrency wallet to the game.</li>
+                        <li>Ensure your wallet contains <span class="text-highlight-widget">${gameData.symbol}</span> for betting and some BNB for transaction fees.</li>
+                    </ul>
+                    
+                    <h3>Step 2: Understanding the Game Rounds</h3>
+                    <ul>
+                        <li>Each game round lasts for <span class="text-highlight-widget">10 BTC blockchain blocks</span>.</li>
+                        <li>You will be betting on the last two decimal digits of the "size" of a specific BTC block.</li>
+                        <li>You need to predict whether the value falls within <span class="text-highlight-widget">0-49</span> or <span class="text-highlight-widget">50-99</span>.</li>
+                    </ul>
+                    
+                    <h3>Step 3: Placing a Bet</h3>
+                    <ul>
+                        <li>Choose the amount of <span class="text-highlight-widget">${gameData.symbol}</span> you wish to bet in a specific round.</li>
+                        <li>Select your prediction range (<span class="text-highlight-widget">0-49</span> or <span class="text-highlight-widget">50-99</span>).</li>
+                        <li>You have <span class="text-highlight-widget">5 blocks</span> from the start of the round to place your bet before the betting phase is locked.</li>
+                    </ul>
+                    
+                    <h3>Step 4: Awaiting Results</h3>
+                    <ul>
+                        <li>After the betting phase ends, wait for the corresponding BTC block information to be published.</li>
+                        <li>The result is determined based on the last two decimal digits of the block size.</li>
+                    </ul>
+                    
+                    <h3>Step 5: Winning and Payouts</h3>
+                    <ul>
+                        <li>If your prediction is correct, you win a share of the losing side's total bet, after deducting the game fee.</li>
+                        <li>Winnings are distributed proportionally based on your bet amount relative to the total pool.</li>
+                    </ul>
+                    
+                    <h3>Additional Notes</h3>
+                    <ul>
+                        <li>Only <span class="text-highlight-widget">${gameData.symbol}</span> is accepted for betting.</li>
+                        <li>Make sure to have enough BNB in your wallet to cover transaction fees.</li>
+                    </ul>
+                    
+                    <p>Enjoy the game and good luck!</p>
+            `
 
             card_modal_info.appendChild(title_info)
             card_modal_info.appendChild(content_info)
@@ -926,7 +976,7 @@
                     padding: 10px;
                     box-sizing: border-box;
                     flex-direction: row;
-                    justify-content: space-evenly;
+                    justify-content: center;
                     align-items: center; 
                     gap: 10px;
                 `
