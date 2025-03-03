@@ -1183,6 +1183,21 @@
             blockdiv.appendChild(action_div)
             blockdiv.appendChild(move_container);
 
+
+            const jackpot = document.createElement('audio')
+            jackpot.src = 'https://game-widget.vercel.app/sounds/jackpot.mp3'
+            jackpot.type = "audio/mp3"
+            const add_coin = document.createElement('audio')
+            add_coin.src = 'https://game-widget.vercel.app/sounds/add_coin.mp3'
+            add_coin.type = "audio/mp3"
+            const error = document.createElement('audio')
+            error.src = 'https://gamebo-widget.vercel.app/sounds/error.mp3'
+            error.type = "audio/mp3"
+
+            container.appendChild(jackpot)
+            container.appendChild(add_coin)
+            container.appendChild(error)
+
             // Create the slider element
             const slider = document.createElement("div");
             slider.className = "slider-widget";
@@ -1198,9 +1213,12 @@
             const btnwallet = document.querySelector('.btn-wallet-widget');
             const btnwallet_text = document.querySelector('.btn-wallet-text-widget');
 
-            function showNoti(noti) {
+            function showNoti(noti, type = false) {
                 title_noti.innerText = noti
                 background_modal_noti.className = "bg-modal-widget block"
+                if (!type) {
+                    error.play()
+                }
             }
 
             btnwallet.addEventListener('click', async () => {
@@ -1474,7 +1492,8 @@
                                 const betting = card.querySelector('.betting');
                                 betting.style.display = 'block'
                                 betting.innerText = `Betting team ${rounds[index_block].team} width  ${rounds[index_block].token}`
-                                showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`)
+                                showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
+                                add_coin.play()
                             }
                         } else {
 
