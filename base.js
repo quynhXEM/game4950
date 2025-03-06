@@ -116,7 +116,7 @@
     ]
 
     const baseurl = "https://soc.bitrefund.co"
-   
+
     let rounds = [{
         status: "EXPIRED",
         id: "0000000",
@@ -1507,15 +1507,15 @@
                                         "bet_amount": input.value,
                                         "bet_tx_hash": tx.data.transactionHash,
                                     }
-    
+
                                     const bet = await fetch(`${urlAction.bet}`, {
                                         method: "POST",
                                         body: JSON.stringify(body)
-                                    }).then(data => data.json()).then(() => true) 
-                                    .catch(err => {
-                                        showNoti(`Transaction failed !!`)
-                                        return false
-                                    })
+                                    }).then(data => data.json()).then(() => true)
+                                        .catch(err => {
+                                            showNoti(`Transaction failed !!`)
+                                            return false
+                                        })
                                     if (bet) {
                                         rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
                                         rounds[index_block].token = input.value;
@@ -1530,7 +1530,7 @@
                                 } catch (error) {
                                     showNoti(`Transaction failed !!`)
                                 }
-                               
+
                             }
                         } else {
 
