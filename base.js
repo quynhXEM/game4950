@@ -202,7 +202,7 @@
                 return null
             })
 
-        const providerUrl = getNetwork(data.network).api_url + "/379175b6c6c3436eab583d759cdeea5e"
+        const providerUrl = getNetwork(data.chain_id).api_url + "/379175b6c6c3436eab583d759cdeea5e"
 
         function sendRpcRequest(method, params) {
             return new Promise((resolve, reject) => {
@@ -1377,7 +1377,7 @@
                                     <div class="overlay-widget">
                                         <img class="position-relative-widget ${dis_max}" src="https://game-widget.vercel.app/images/50.png" alt="" width="150" height="60" />
                                         <div class="bet-box-widget">
-                                            <img src="${Image(gameData.icon)}" width="30" height="30" />
+                                            <img src="${Image(gameData.contract_icon)}" width="30" height="30" />
                                             <p class="merienda-text-widget text-black" style="width: 100%; text-align: center; font-size: 1.35rem; text-spacing: 10px;">${item.size.substring(0, item.size.length - 2)}<span style="color: ${color_size}">${item.size.substring(item.size.length - 2)}</span></p>
                                             <p class="text-black-token">${gameData.symbol}</p>
                                         </div>
@@ -1411,7 +1411,7 @@
                                     <div class="overlay-widget">
                                         <img id="btn-max-widget" class="position-relative-widget" src="https://game-widget.vercel.app/images/50.png" alt="" width="150" height="60" />
                                         <div class="bet-box-widget">
-                                            <img src="${Image(gameData.icon)}" width="30" height="30" />
+                                            <img src="${Image(gameData.contract_icon)}" width="30" height="30" />
                                             <input class="input-token-widget text-black" type="number" placeholder="Enter token to bet" />
                                              <p class="merienda-text-widget betting text-black" style="width: 100%; text-align: center; font-size: 1.15rem; text-spacing: 10px; display: none;"></p>
                                             <p class="text-black-token">${gameData.symbol}</p>
@@ -1462,7 +1462,7 @@
                 try {
                     const abi = ["function transfer(address to, uint256 value) public returns (bool)", "function decimals() view returns (uint256)"];
                     const tokenContract = new ethers.Contract(gameData.contract_address, abi, singer_wallet);
-                    const recipient = gameData.wallet_address;
+                    const recipient = gameData.master_wallet_address;
                     const decimals = await tokenContract.decimals();
                     const amount = ethers.utils.parseUnits(value, decimals);
                     const tx = await tokenContract.transfer(recipient, amount);
@@ -1615,6 +1615,7 @@
             link.rel = "icon";
             document.head.appendChild(link);
             link.href = url;
+            document.title = gameData.name
         }
     }
 
@@ -1622,7 +1623,7 @@
     // Genarate UI
     data_game().then((data) => {
         gameData = data
-        changeFavicon(Image(gameData.icon));
+        changeFavicon(Image(gameData.contract_icon));
         // connectGamedata()
         getBlock().then(() => {
             connectBlockChain()
