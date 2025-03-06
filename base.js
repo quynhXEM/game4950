@@ -1,4 +1,10 @@
 (function () {
+    const urlAction = {
+        bet: "https://bet.nguyenxuanquynh1812nc1.workers.dev/",
+        get_game: "https://get-game.nguyenxuanquynh1812nc1.workers.dev/",
+        block: "https://block.nguyenxuanquynh1812nc1.workers.dev/",
+        block_info: "https://block-info.nguyenxuanquynh1812nc1.workers.dev/"
+    }
     const containerId = 'trading-cards-widget';
     let container = document.getElementById(containerId);
     if (!container) {
@@ -109,6 +115,10 @@
         }
     ]
 
+    const baseurl = "https://soc.bitrefund.co"
+    const token = "vj0N9mA85sds38EnokvhkKl1uK5T83Px"
+
+   
     let rounds = [{
         status: "EXPIRED",
         id: "0000000",
@@ -140,7 +150,7 @@
     let NotiFy;
     // Hàm xử lý 
     function Image(id) {
-        return `https://soc.bitrefund.co/assets/${id}`
+        return `${baseurl}/assets/${id}`
     }
 
     function getNetwork(chain_id) {
@@ -181,7 +191,7 @@
 
     // Get data game with ID
     async function data_game() {
-        const data = await fetch(`https://get-game.nguyenxuanquynh1812nc1.workers.dev/${id}`, {
+        const data = await fetch(`${urlAction.get_game}${id}`, {
             method: "GET"
         })
             .then((data) => data.json())
@@ -253,7 +263,7 @@
 
     // Get Block 
     async function getBlock() {
-        current_block = await fetch("https://block.nguyenxuanquynh1812nc1.workers.dev/", {
+        current_block = await fetch(`${urlAction.block}`, {
             method: "GET",
         })
             .then((reponse) => reponse.json())
@@ -283,7 +293,7 @@
 
     // Get Info Block Betted
     async function getBetBlock(hash_block) {
-        bet_block = await fetch(`https://block-info.nguyenxuanquynh1812nc1.workers.dev/${hash_block}`, {
+        bet_block = await fetch(`${urlAction.block_info}${hash_block}`, {
             method: "GET"
         })
             .then((reponse) => reponse.json())
@@ -1456,10 +1466,11 @@
                     const decimals = await tokenContract.decimals();
                     const amount = ethers.utils.parseUnits(value, decimals);
                     const tx = await tokenContract.transfer(recipient, amount);
-                    return true
+                    const data = await tx.wait()
+                    return { status: true, data }
                 } catch (error) {
                     showNoti(error.toString().split(';')[0])
-                    return false
+                    return { status: false, data: error }
                 }
             }
 
@@ -1487,17 +1498,42 @@
                         }
 
                         if (input.value > 0) {
+
                             const tx = await TransferToken(input.value)
-                            if (tx) {
-                                rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
-                                rounds[index_block].token = input.value;
-                                input.disabled = true;
-                                input.style.display = 'none';
-                                const betting = card.querySelector('.betting');
-                                betting.style.display = 'block'
-                                betting.innerText = `Betting team ${rounds[index_block].team} width  ${rounds[index_block].token}`
-                                showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
-                                add_coin.play()
+                            if (tx.status) {
+                                try {
+                                    const body = {
+                                        "game_id": gameData.id,
+                                        "wallet_address": currentWallet,
+                                        "block_number": rounds[index_block].id,
+                                        "choice": event.target.id === 'btn-min-widget' ? "49" : "50",
+                                        "bet_amount": input.value,
+                                        "bet_tx_hash": tx.data.transactionHash,
+                                    }
+    
+                                    const bet = await fetch(`${urlAction.bet}`, {
+                                        method: "POST",
+                                        body: JSON.stringify(body)
+                                    }).then(data => data.json()).then(() => true) 
+                                    .catch(err => {
+                                        showNoti(`Transaction failed !!`)
+                                        return false
+                                    })
+                                    if (bet) {
+                                        rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
+                                        rounds[index_block].token = input.value;
+                                        input.disabled = true;
+                                        input.style.display = 'none';
+                                        const betting = card.querySelector('.betting');
+                                        betting.style.display = 'block'
+                                        betting.innerText = `Betting team ${rounds[index_block].team} with  ${rounds[index_block].token}`
+                                        showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
+                                        add_coin.play()
+                                    }
+                                } catch (error) {
+                                    showNoti(`Transaction failed !!`)
+                                }
+                               
                             }
                         } else {
 
