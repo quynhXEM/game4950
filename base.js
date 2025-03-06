@@ -1502,7 +1502,7 @@
                                     const body = {
                                         "game_id": gameData.id,
                                         "wallet_address": currentWallet,
-                                        "block_number": rounds[index_block].id,
+                                        "block_height": rounds[index_block].id,
                                         "choice": event.target.id === 'btn-min-widget' ? "49" : "50",
                                         "bet_amount": input.value,
                                         "bet_tx_hash": tx.data.transactionHash,
