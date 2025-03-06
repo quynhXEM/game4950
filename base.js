@@ -14,7 +14,7 @@
 
     const slug = container.getAttribute("data-id") || null;
     if (slug) {
-        data_game(slug)
+        data_game()
     } else {
         document.body.innerHTML = `
             <h1>No Data</h1>
@@ -33,61 +33,61 @@
             "name": "Ethereum",
             "chain_id": 1,
             "api_explorer": "https://api.etherscan.io/v2/api",
-            "api_url": "https://eth.llamarpc.com"
+            "api_url": "https://mainnet.infura.io/v3"
         },
         {
             "name": "Binance Smart Chain",
             "chain_id": 56,
-            "api_explorer": "https://api.bscscan.com/api",
-            "api_url": "https://bsc.publicnode.com"
+            "api_url": "https://bsc-testnet.infura.io/v3",
+            "api_explorer": "https://api.bscscan.com/api"
         },
         {
             "name": "Polygon",
             "chain_id": 137,
             "api_explorer": "https://api.polygonscan.com/api",
-            "api_url": "https://polygon-rpc.com"
+            "api_url": "https://polygon-mainnet.infura.io/v3"
         },
         {
             "name": "Avalanche (Coming Soon)",
             "chain_id": 43114,
             "api_explorer": "https://snowtrace.io",
-            "api_url": "https://api.avax.network/ext/bc/C/rpc"
+            "api_url": "https://avalanche-mainnet.infura.io/v3"
         },
         {
             "name": "Arbitrum One",
             "chain_id": 42161,
             "api_explorer": "https://api.arbiscan.io/api",
-            "api_url": "https://arb1.arbitrum.io/rpc"
+            "api_url": "https://arbitrum-mainnet.infura.io/v3"
         },
         {
             "name": "Optimism Ethescan",
             "chain_id": 10,
             "api_explorer": "https://api-optimistic.etherscan.io/api",
-            "api_url": "https://mainnet.optimism.io"
+            "api_url": "https://optimism-mainnet.infura.io/v3"
         },
         {
             "name": "Celo",
             "chain_id": 42220,
             "api_explorer": "https://api.celoscan.io/api",
-            "api_url": "https://forno.celo.org"
+            "api_url": "https://celo-mainnet.infura.io/v3"
         },
         {
             "name": "Ethereum Sepolia Testnet",
             "chain_id": 11155111,
             "api_explorer": "https://api-sepolia.etherscan.io/api",
-            "api_url": "https://ethereum-sepolia.publicnode.com"
+            "api_url": "https://sepolia.infura.io/v3"
         },
         {
             "name": "BSC Testnet",
             "chain_id": 97,
             "api_explorer": "https://api-testnet.bscscan.com/api",
-            "api_url": "https://data-seed-prebsc-1-s1.binance.org:8545"
+            "api_url": "https://bsc-testnet.infura.io/v3"
         },
         {
             "name": "Avalanche Fuji Testnet (Coming Soon)",
             "chain_id": 43113,
             "api_explorer": "https://testnet.snowtrace.io",
-            "api_url": "https://api.avax-test.network/ext/bc/C/rpc"
+            "api_url": "https://avalanche-fuji.infura.io/v3"
         },
         {
             "name": "Fantom",
@@ -105,19 +105,18 @@
             "name": "Moonbeam",
             "chain_id": 1284,
             "api_explorer": "https://api-moonbeam.moonscan.io/api",
-            "api_url": "https://rpc.api.moonbeam.network"
+            "api_url": "https://1rpc.io/glmr"
         },
         {
             "name": "Moonbase Alpha Testnet",
             "chain_id": 1287,
             "api_explorer": "https://api-moonbase.moonscan.io/api",
-            "api_url": "https://rpc.api.moonbase.moonbeam.network"
+            "api_url": "https://rpc.testnet.moonbeam.network"
         }
     ]
 
-
     const baseurl = "https://soc.bitrefund.co"
-
+   
     let rounds = [{
         status: "EXPIRED",
         id: "0000000",
@@ -188,7 +187,7 @@
     }
 
     // Get data game with ID
-    async function data_game(slug) {
+    async function data_game() {
         const data = await fetch(`${urlAction.get_game}${slug}`, {
             method: "GET"
         })
@@ -200,7 +199,7 @@
                 return null
             })
 
-        const providerUrl = getNetwork(data?.chain_id).api_url
+        const providerUrl = getNetwork(data.chain_id).api_url + "/379175b6c6c3436eab583d759cdeea5e"
 
         function sendRpcRequest(method, params) {
             return new Promise((resolve, reject) => {
@@ -1508,15 +1507,15 @@
                                         "bet_amount": input.value,
                                         "bet_tx_hash": tx.data.transactionHash,
                                     }
-
+    
                                     const bet = await fetch(`${urlAction.bet}`, {
                                         method: "POST",
                                         body: JSON.stringify(body)
-                                    }).then(data => data.json()).then(() => true)
-                                        .catch(err => {
-                                            showNoti(`Transaction failed !!`)
-                                            return false
-                                        })
+                                    }).then(data => data.json()).then(() => true) 
+                                    .catch(err => {
+                                        showNoti(`Transaction failed !!`)
+                                        return false
+                                    })
                                     if (bet) {
                                         rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
                                         rounds[index_block].token = input.value;
@@ -1531,7 +1530,7 @@
                                 } catch (error) {
                                     showNoti(`Transaction failed !!`)
                                 }
-
+                               
                             }
                         } else {
 
