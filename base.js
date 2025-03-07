@@ -117,13 +117,7 @@
 
     const baseurl = "https://soc.bitrefund.co"
 
-    let rounds = [{
-        status: "EXPIRED",
-        id: "0000000",
-        size: "2374651",
-        token: 0,
-        team: ''
-    }];
+    let rounds = [];
     let histories = [
         { id: "9234293", size: "8342837" },
         { id: "9234292", size: "8342865" },
@@ -284,6 +278,8 @@
                 token: '',
                 team: '',
                 size: '',
+                min: 0,
+                max: 0,
             })
         }
     }
@@ -329,28 +325,33 @@
     }
 
     // Connect WSS data game
-    function connectGamedata() {
+    async function connectGamedata() {
         Ssocket = new WebSocket('wss://soc.bitrefund.co/websocket')
 
         Ssocket.onopen = function (event) {
             Ssocket.send(JSON.stringify({
-                type: 'auth',
-                access_token: ""
+                type: "auth",
+                access_token: "vj0N9mA85sds38EnokvhkKl1uK5T83Px"
             }))
         }
         Ssocket.onmessage = function (event) {
             const response = JSON.parse(event.data);
+            console.log(response);
+
             switch (response.type) {
                 case 'auth':
                     if (response.status === 'ok') {
                         Ssocket.send(
                             JSON.stringify({
                                 type: 'subscribe',
-                                collection: 'game',
+                                collection: 'bet',
                                 query: {
                                     filter: {
-                                        "id": {
+                                        "game_id": {
                                             "_eq": gameData.id
+                                        },
+                                        "block_height": {
+                                            "_in": [...Array(5).fill(current_block).map((item, index) => nextBetBlock(item.height + index * 10))]
                                         }
                                     },
                                     fields: [
@@ -365,7 +366,20 @@
                     const { data } = response;
                     switch (response.event) {
                         case 'init':
-
+                            data.map((item) => {
+                                const option = item.choice == "50" ? "max" : "min"
+                                const round = rounds.find((items) => items.id == item.block_height)
+                                round[option] += Number(item.bet_amount)
+                                const dom = document.getElementById(`${option}_total_${item.block_height}`)
+                                dom.innerHTML = `${round[option]}<span class="text-black-token">${gameData.symbol}</span>`
+                            })
+                            break;
+                        case 'create':
+                            const option = data[0].choice == "50" ? "max" : "min"
+                            const round = rounds.find((item) => item.id == data[0].block_height)
+                            round[option] += Number(data[0].bet_amount)
+                            const dom = document.getElementById(`${option}_total_${data[0].block_height}`)
+                            dom.innerHTML = `${round[option]}<span class="text-black-token">${gameData.symbol}</span>`
                             break;
                         case 'delete':
                             break;
@@ -398,7 +412,7 @@
     }
 
     // Create Card and add Function, action button
-    function createTradingCardsWidget(containerId) {
+    function createTradingCardsWidget(containerId, rounds) {
         // Inject CSS styles
         const style = document.createElement('style');
         const script = document.createElement('script');
@@ -1341,6 +1355,7 @@
             })
 
             function renderCard() {
+
                 if (rounds.length === 0) {
                     return;
                 }
@@ -1361,11 +1376,11 @@
                             <div class="betted-contaciner-widget">
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-49-widget">49</p>
-                                    <p class="merienda-text-widget text-49-widget">97,29347<span class="text-black-token">${gameData.symbol}</span></p>
+                                    <p class="merienda-text-widget text-49-widget">${item.min}<span class="text-black-token">${gameData.symbol}</span></p>
                                 </div>
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-50-widget">50</p>
-                                    <p class="merienda-text-widget text-50-widget">97,29347<span class="text-black-token">${gameData.symbol}</span></p>
+                                    <p class="merienda-text-widget text-50-widget">${item.max}<span class="text-black-token">${gameData.symbol}</span></p>
                                 </div>
                             </div>
                             <div class="card-content-widget">
@@ -1395,11 +1410,11 @@
                             <div class="betted-contaciner-widget">
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-49-widget">49</p>
-                                    <p class="merienda-text-widget text-49-widget">97,29347<span class="text-black-token">${gameData.symbol}</span></p>
+                                    <p id="min_total_${item.id}" class="merienda-text-widget text-49-widget">${item.min}<span class="text-black-token">${gameData.symbol}</span></p>
                                 </div>
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-50-widget">50</p>
-                                    <p class="merienda-text-widget text-50-widget">97,29347<span class="text-black-token">${gameData.symbol}</span></p>
+                                    <p id="max_total_${item.id}" class="merienda-text-widget text-50-widget">${item.max}<span class="text-black-token">${gameData.symbol}</span></p>
                                 </div>
                             </div>
                             <div class="card-content-widget">
@@ -1489,28 +1504,25 @@
                             return;
                         }
 
-                        if (rounds[index_block].team) {
-                            showNoti("You have already bet on this transactions!!")
-                            return;
-                        }
-
                         if (input.value > 0) {
 
                             const tx = await TransferToken(input.value)
                             if (tx.status) {
                                 try {
-                                    const body = {
-                                        "game_id": gameData.id,
-                                        "wallet_address": currentWallet,
-                                        "block_height": rounds[index_block].id,
-                                        "choice": event.target.id === 'btn-min-widget' ? "49" : "50",
-                                        "bet_amount": input.value,
-                                        "bet_tx_hash": tx.data.transactionHash,
+                                    const body = (value, choice) => {
+                                        return {
+                                            "game_id": gameData.id,
+                                            "wallet_address": currentWallet,
+                                            "block_height": rounds[index_block].id,
+                                            "choice": choice ? "49" : "50",
+                                            "bet_amount": value,
+                                            "bet_tx_hash": tx.data.transactionHash,
+                                        }
                                     }
 
                                     const bet = await fetch(`${urlAction.bet}`, {
                                         method: "POST",
-                                        body: JSON.stringify(body)
+                                        body: JSON.stringify(body(input.value, event.target.id === 'btn-min-widget'))
                                     }).then(data => data.json()).then(() => true)
                                         .catch(err => {
                                             showNoti(`Transaction failed !!`)
@@ -1565,6 +1577,8 @@
                                 token: '',
                                 team: '',
                                 size: '',
+                                min: 0,
+                                max: 0,
                             })
 
                             function burnToken(n) {
@@ -1621,10 +1635,10 @@
     data_game().then((data) => {
         gameData = data
         changeFavicon(Image(gameData.contract_icon));
-        // connectGamedata()
         getBlock().then(() => {
             connectBlockChain()
-            createTradingCardsWidget(containerId);
+            connectGamedata()
+            createTradingCardsWidget(containerId, rounds);
         })
     })
 
