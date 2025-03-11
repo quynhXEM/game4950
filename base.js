@@ -21,6 +21,7 @@
         `
     }
 
+
     const color = {
         red: "#FF3F3F",
         green: "#00D335",
@@ -140,7 +141,7 @@
     let currentIndex = 0;
     let currentWallet = '';
     let Ssocket;
-    // Hàm xử lý 
+    // Hàm xử lý
     function Image(id) {
         return `${baseurl}/assets/${id}`
     }
@@ -253,7 +254,7 @@
         return reponse
     }
 
-    // Get Block 
+    // Get Block
     async function getBlock() {
         current_block = await fetch(`${urlAction.block}`, {
             method: "GET",
@@ -428,8 +429,8 @@
                 gap: 20px;
                 margin-top: 50px;
             }
-            
-            input[type=number]::-webkit-inner-spin-button, 
+
+            input[type=number]::-webkit-inner-spin-button,
             input[type=number]::-webkit-outer-spin-button {
                 -webkit-appearance: none;
                 margin: 0;
@@ -510,7 +511,7 @@
             }
 
             .card-line-widget {
-                width: 100%; 
+                width: 100%;
                 height: 2px;
                 background: linear-gradient(to right, #EE00FF, #0099FF, #00FFB2);
             }
@@ -518,7 +519,7 @@
             .text-black {
                 color: black;
             }
-            
+
             .card-widget {
                 min-width: 300px;
                 max-width: 330px;
@@ -532,7 +533,7 @@
             .card-widget.active-widget {
                 transform: scale(1.05);
             }
-    
+
             .card-header-widget {
                 padding: 5px;
                 border-radius: 10px 10px 0 0;
@@ -576,7 +577,7 @@
             .updown-widget {
                 animation: updown 2s infinite ease-in-out;
             }
-    
+
             .card-filter-widget {
                 position: absolute;
                 width: 100%;
@@ -601,7 +602,7 @@
                 width: 100%;
                 position: relative;
             }
-    
+
             .content-bet-widget {
                 position: absolute;
                 width: 90%;
@@ -611,7 +612,7 @@
                 z-index: 2;
                 background: white;
             }
-    
+
             .btn-widget {
                 padding: 10px;
                 width: 80px;
@@ -637,32 +638,32 @@
                 border-radius: 360px;
                 cursor: pointer;
             }
-    
+
             .btn-widget:hover {
                 opacity: 0.7;
             }
-    
+
             .btn-49-widget {
                 background-color: #ef362d ;
             }
-    
+
             .btn-50-widget {
                 background-color:  #34b253;
             }
-    
+
             .btn-disable-widget {
                 cursor: not-allowed;
                 opacity: 0.2;
             }
-    
+
             .btn-expired-widget {
                 cursor: not-allowed;
             }
-    
+
             .text-range-widget {
                 transform: rotate(-45deg);
             }
-    
+
             .text-range-min-widget {
                 position: absolute;
                 right: 20px;
@@ -673,20 +674,20 @@
                 font-size: 32px;
                 margin: 20px 0px;
             }
-    
+
             .text-range-max-widget {
                 position: absolute;
                 left: 20px;
                 top: 20px;
             }
-    
+
             .status-widget {
                 display: flex;
                 align-items: center;
                 gap: 8px;
                 color: rgba(16, 18, 121, 0.8);
             }
-    
+
             .status-dot-active-widget {
                 width: 20px;
                 height: 20px;
@@ -694,30 +695,30 @@
                 border-radius: 50%;
                 over-flow: hilden;
             }
-    
+
             .status-dot-expired-widget {
                 width: 15px;
                 height: 15px;
                 background: rgb(95, 95, 95);
                 border-radius: 50%;
             }
-    
+
             .status-dot-next-widget {
                 width: 15px;
                 height: 15px;
                 background: rgb(7, 224, 0);
                 border-radius: 50%;
             }
-    
+
             .id-widget {
                 color: rgba(16, 18, 121, 0.8);
             }
-    
+
             .change-widget {
                 font-size: 1rem;
                 color: #ff6b9d;
             }
-    
+
             .price-content-widget {
                 flex-direction: row;
                 display: flex;
@@ -725,7 +726,7 @@
                 flex: 1;
                 align-items: center;
             }
-    
+
             .last-price-widget {
                 margin: 10px 0;
                 display: flex;
@@ -734,32 +735,32 @@
                 flex: 1;
                 justify-content: start;
             }
-    
+
             .text-price-widget {
                 font-size: 10px;
                 font-weight: 600;
                 color: gray;
             }
-    
+
             .final-price-widget {
                 color: red;
             }
-    
+
             .coin-img-widget {
                 width: 20px;
                 height: 20px;
             }
-    
+
             .input-container-widget {
                 padding: 10px;
             }
-    
+
             .nav-buttons-widget {
                 display: flex;
                 justify-content: center;
                 gap: 20px;
             }
-    
+
             .nav-btn-widget {
                 font-size: 13px;
                 outline: none;
@@ -767,12 +768,12 @@
                 background: transparent;
                 cursor: pointer;
             }
-    
+
             .actions-container-widget {
                 width: 100%;
                 display: flex;
             }
-    
+
             .btn-wallet-widget {
                 background: #FFC30F;
                 font-size: 12px;
@@ -784,12 +785,12 @@
                 width: 100%;
                 justify-content: center;
             }
-    
+
             .btn-wallet-text-widget {
                 color: white;
                 text-wrap: nowrap;
             }
-            
+
             .text-49-widget {
                 font-size: larger;
                 color: ${color.red}
@@ -803,7 +804,7 @@
             .text-id {
                 font-size: larger;
             }
-            
+
             .text-status {
                 font-size: small;
             }
@@ -817,15 +818,15 @@
             .text-black {
                 color: black;
             }
-    
+
             .btn-wallet-widget:hover {
                 opacity: 0.9;
             }
-    
+
             .no-display-widget {
                 display: none;
             }
-    
+
             .now-price-widget {
                 display: none
             }
@@ -851,7 +852,7 @@
                 50% { background-position: right top; }
                 100% { background-position: center top; }
             }
-            
+
             @media (max-width: 768px) {
                 .card-widget {
                     min-width: 300px;
@@ -866,12 +867,12 @@
                     margin: 10% 20%;
                 }
             }
-    
+
             @media (max-width: 480px) {
                 .card-widget {
                     min-width: 280px;
                 }
-    
+
                 .card-modal-widget {
                     margin: 5%;
                 }
@@ -880,7 +881,7 @@
                     padding: 10px;
                 }
             }
-                
+
             .card-content {
                 width: 100%;
             }
@@ -952,7 +953,7 @@
                 padding:0;
                 position: absolute;
                 top: 0;
-                background-color: rgba(0, 0, 0, 0.5); 
+                background-color: rgba(0, 0, 0, 0.5);
                 display: flex;
                 flex: 1;
                 justify-content: center;
@@ -1056,45 +1057,45 @@
             content_info.className = "content-modal-widget"
             content_info.innerHTML = `
                     <p>Welcome to <span class="text-highlight-widget">49-50 Game</span>, an exciting blockchain-based betting game! Follow these steps to start playing and maximize your winnings.</p>
-                    
+
                     <h3>Step 1: Connect Your Wallet</h3>
                     <ul>
                         <li>To participate, you must connect your cryptocurrency wallet to the game.</li>
                         <li>Ensure your wallet contains <span class="text-highlight-widget">${gameData.symbol}</span> for betting and some BNB for transaction fees.</li>
                     </ul>
-                    
+
                     <h3>Step 2: Understanding the Game Rounds</h3>
                     <ul>
                         <li>Each game round lasts for <span class="text-highlight-widget">10 BTC blockchain blocks</span>.</li>
                         <li>You will be betting on the last two decimal digits of the "size" of a specific BTC block.</li>
                         <li>You need to predict whether the value falls within <span class="text-highlight-widget">0-49</span> or <span class="text-highlight-widget">50-99</span>.</li>
                     </ul>
-                    
+
                     <h3>Step 3: Placing a Bet</h3>
                     <ul>
                         <li>Choose the amount of <span class="text-highlight-widget">${gameData.symbol}</span> you wish to bet in a specific round.</li>
                         <li>Select your prediction range (<span class="text-highlight-widget">0-49</span> or <span class="text-highlight-widget">50-99</span>).</li>
                         <li>You have <span class="text-highlight-widget">5 blocks</span> from the start of the round to place your bet before the betting phase is locked.</li>
                     </ul>
-                    
+
                     <h3>Step 4: Awaiting Results</h3>
                     <ul>
                         <li>After the betting phase ends, wait for the corresponding BTC block information to be published.</li>
                         <li>The result is determined based on the last two decimal digits of the block size.</li>
                     </ul>
-                    
+
                     <h3>Step 5: Winning and Payouts</h3>
                     <ul>
                         <li>If your prediction is correct, you win a share of the losing side's total bet, after deducting the game fee.</li>
                         <li>Winnings are distributed proportionally based on your bet amount relative to the total pool.</li>
                     </ul>
-                    
+
                     <h3>Additional Notes</h3>
                     <ul>
                         <li>Only <span class="text-highlight-widget">${gameData.symbol}</span> is accepted for betting.</li>
                         <li>Make sure to have enough BNB in your wallet to cover transaction fees.</li>
                     </ul>
-                    
+
                     <p>Enjoy the game and good luck!</p>
             `
 
@@ -1124,7 +1125,7 @@
                     box-sizing: border-box;
                     flex-direction: row;
                     justify-content: center;
-                    align-items: center; 
+                    align-items: center;
                     gap: 10px;
                 `
                 const his_id = document.createElement('p')
@@ -1302,7 +1303,7 @@
                         const button = document.createElement("button");
                         button.innerText = "🦊 Install now";
                         button.style.cssText = `
-                        width: 90%; 
+                        width: 90%;
                         margin-top:200px;
                         padding:10px 15px;
                         font-size:16px;
@@ -1483,7 +1484,7 @@
 
             updateSlider()
 
-            //Transfer token 
+            //Transfer token
             async function TransferToken(value) {
                 try {
                     const abi = ["function transfer(address to, uint256 value) public returns (bool)", "function decimals() view returns (uint256)"];
