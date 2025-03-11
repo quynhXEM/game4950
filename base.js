@@ -119,25 +119,15 @@
     const baseurl = "https://soc.bitrefund.co"
 
     let rounds = [];
-    let histories = [
-        { id: "9234293", size: "8342837" },
-        { id: "9234292", size: "8342865" },
-        { id: "9234291", size: "8342835" },
-        { id: "9234290", size: "8342876" },
-        { id: "9234289", size: "8342890" },
-        { id: "9234288", size: "8342872" },
-        { id: "9234287", size: "8342801" },
-        { id: "9234286", size: "8342855" },
-        { id: "9234285", size: "8342849" },
-        { id: "9234284", size: "8342850" },
-    ]
+    let histories = [];
+    let hisData = [];
+    let hisIndex = 0
     let gameData;
     let current_block;
     let singer_wallet;
     let bet_block;
     const time_bet = 6;
     const number_block = 5;
-    const stepInput = 1;
     let currentIndex = 0;
     let currentWallet = '';
     let Ssocket;
@@ -326,6 +316,43 @@
         };
     }
 
+    // History
+    function historyData(array) {
+            const groupedData = {};
+            
+            array.forEach(item => {
+                const { block_height, choice, bet_amount, wallet_address, result } = item;
+                
+                if (!groupedData[block_height]) {
+                    groupedData[block_height] = {
+                        block_height: block_height,
+                        total_50: 0,
+                        bet_50: 0,
+                        total_49: 0,
+                        bet_49: 0,
+                        result: result
+                    };
+                }
+                
+                if (choice === "50") {
+                    groupedData[block_height].total_50 += parseFloat(bet_amount);
+                    if (wallet_address === currentWallet) {
+                        groupedData[block_height].bet_50 += parseFloat(bet_amount);
+                    }
+                }
+                
+                if (choice === "49") {
+                    groupedData[block_height].total_49 += parseFloat(bet_amount);
+                    if (wallet_address === currentWallet) {
+                        groupedData[block_height].bet_49 += parseFloat(bet_amount);
+                    }
+                }
+            });
+            
+            histories = Object.values(groupedData).sort((a, b) => b.block_height - a.block_height);
+
+        
+    }
     // Connect WSS data game
     async function connectGamedata() {
         Ssocket = new WebSocket('wss://soc.bitrefund.co/websocket')
@@ -350,9 +377,6 @@
                                         "game_id": {
                                             "_eq": gameData.id
                                         },
-                                        "block_height": {
-                                            "_in": [...Array(5).fill(current_block).map((item, index) => nextBetBlock(item.height + index * 10))]
-                                        }
                                     },
                                     fields: [
                                         '*',
@@ -366,6 +390,8 @@
                     const { data } = response;
                     switch (response.event) {
                         case 'init':
+                            historyData(data.filter(item => item.status != 'waiting_result'))
+                            hisData = data.filter(item => item.status != 'waiting_result')
                             data.map((item) => {
                                 const option = item.choice == "50" ? "max" : "min"
                                 const round = rounds.find((items) => items.id == item.block_height)
@@ -422,6 +448,11 @@
             html {
                 scrollbar-width: none; /* Firefox */
                 -ms-overflow-style: none; /* IE và Edge */
+            }
+            * {
+                padding: 0;
+                border: 0;
+                box-sizing: border-box;
             }
             .slider-widget {
                 display: flex;
@@ -858,13 +889,16 @@
                     min-width: 300px;
                 }
                 .card-modal-widget {
-                    margin: 10%;
+                     margin: 10% 20%;
                 }
             }
 
-             @media (min-width: 768px) {
+              @media (min-width: 768px) {
+                .card-widget {
+                    min-width: 300px;
+                }
                 .card-modal-widget {
-                    margin: 10% 20%;
+                     margin: 10% 30%;
                 }
             }
 
@@ -972,6 +1006,7 @@
                 background-color: white;
                 flex:1;
                 display: flex;
+                overflow: hidden;
                 justify-content: center;
                 align-items: center;
                 flex-direction: column;
@@ -1017,6 +1052,123 @@
                 font-weight: bold;
                 color: #ff5722;
                 font-family: "Merienda", serif;
+            }
+
+
+            p,
+            h2 {
+                margin: 0px;
+                padding: 0px;
+                font-family: "Merienda", serif;
+                font-optical-sizing: auto;
+                font-weight: 700;
+                font-style: normal;
+            }
+
+            .title-his-widget {
+                width: 100%;
+                padding: 10px;
+                border-bottom: 1px solid rgb(233, 233, 233);
+                background-color: rgb(237, 237, 237);
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            .closed-his {
+                cursor: pointer;
+            }
+
+            .content-his-widget {
+                text-align: center;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+            }
+
+            .resault-content-widget {
+                width: 80px;
+                height: 80px;
+                border-radius: 360px;
+                display: flex;
+                text-align: center;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                margin: 10px;
+            }
+
+            .resault-content-widget p {
+                font-size: 35px;
+                font-weight: bold;
+                color: white;
+            }
+
+            .bet-his-widget {
+                display: flex;
+                flex: 1;
+                width: 100%;
+
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .bet-box-his {
+                padding: 5px;
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                justify-content: center;
+                gap: 5px;
+                border-radius: 5px;
+            }
+            .bet-box-his > p {
+                font-weight: 700;
+                font-size: 16px
+            }
+
+            .box-49 {
+                background-color: #FCE3DF;
+            }
+
+            .box-50 {
+                background-color: #DCFCE7;
+            }
+
+            .total-content {
+                flex-wrap: nowrap;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .footer-his-widget {
+                display: flex;
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 10px;
+            }
+            .btn-action-his {
+                background-color: transparent;
+                outline: none;
+                padding: 5px;
+                border-radius: 5px;
+                border: 1px solid gray;
+                cursor: pointer;
+
+            }
+            .btn-action-his p {
+                font-weight: 500;
+            }
+
+            .bg-49 {
+                background-color: ${color.red}
+            }
+
+            .bg-50 {
+                background-color: ${color.green}
             }
 
         `;
@@ -1110,48 +1262,51 @@
             background_modal.id = "bg-modal-widget"
             const card_modal = document.createElement('div')
             card_modal.className = "card-modal-widget"
-            const title_his = document.createElement('p')
-            title_his.className = "tilte-modal-widget"
-            title_his.innerText = "History games"
-            const content_his = document.createElement('div')
-            content_his.className = "content-modal-his-widget"
-            histories.forEach(item => {
-                const his_item = document.createElement('div')
-                his_item.style = `
-                    display: flex;
-                    flex: 1;
-                    text-align: center;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 10px;
-                `
-                const his_id = document.createElement('p')
-                his_id.innerText = `BTC - ${item.id}`
-                his_id.className = "text-black merienda-text-widget"
-                his_id.style = `
-                    text-wrap: nowrap
-                `
-                const his_size = document.createElement('div')
-                his_size.style = `
-                    border-radius: 5px;
-                    background-color: ${Number(item.size.substring(item.size.length - 2)) > 49 ? color.green : color.red};
-                    font-family: "Merienda", serif;
-                    font-weight: 700;
-                    color: white;
-                    padding: 10px;
-                    font-size: 12px
-                `
-                his_size.textContent = item.size.substring(item.size.length - 2)
-
-                his_item.appendChild(his_id)
-                his_item.appendChild(his_size)
-                content_his.appendChild(his_item)
-            })
-            card_modal.appendChild(title_his)
-            card_modal.appendChild(content_his)
+            card_modal.innerHTML = `
+                <div class="title-his-widget">
+                    <p class="merienda-text-widget" style="font-size: x-large;">🧭 History</p>
+                    <p class="closed-his" id="closed-his">❌</p>
+                </div>
+                <div class="content-his-widget">
+                    <p class="merienda-text-widget">Block</p>
+                    <h1 id="block-show-his" class="merienda-text-widget">#${current_block.height}</h1>
+                    <div id="resault-content" class="resault-content-widget bg-49">
+                        <p id="resault-show-his" class="merienda-text-widget">--</p>
+                    </div>
+                    <div class="bet-his-widget">
+                        <div class="bet-box-his box-49">
+                            <p>Team 49</p>
+                            <div class="total-content">
+                                <p>Total</p>
+                                <p>Bet</p>
+                            </div>
+                            <div class="total-content">
+                                <p id="total-49-his">---</p>
+                                <p id="bet-49-his">---</p>
+                            </div>
+                        </div>
+                        <div class="bet-box-his box-50">
+                            <p>Team 50</p>
+                            <div class="total-content">
+                                <p>Total</p>
+                                <p>Bet</p>
+                            </div>
+                            <div class="total-content">
+                                <p id="total-50-his">---</p>
+                                <p id="bet-50-his">---</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-his-widget ">
+                    <button class="btn-action-his btn-his-pre">
+                        <p> ◀️ Previous </p>
+                    </button>
+                    <button class="btn-action-his btn-his-next">
+                        <p> Next ▶️</p>
+                    </button>
+                </div>
+            `
             background_modal.appendChild(card_modal)
             document.body.appendChild(background_modal)
 
@@ -1248,12 +1403,41 @@
 
             const btnwallet = document.querySelector('.btn-wallet-widget');
             const btnwallet_text = document.querySelector('.btn-wallet-text-widget');
+            const closed_his = document.getElementById('closed-his')
+
+            const his_Prev = card_modal.querySelector('.btn-his-pre');
+            const his_Next = card_modal.querySelector('.btn-his-next');
+
 
             function showNoti(noti, type = false) {
                 title_noti.innerText = noti
                 background_modal_noti.className = "bg-modal-widget block"
                 if (!type) {
                     error.play()
+                }
+            }
+
+            function reRenderHis(index) {
+                const item = histories[index]
+                if (item) {
+                    const resault_content = document.getElementById('resault-content')
+                    resault_content.className = item.result > 49 ? "resault-content-widget bg-50" : "resault-content-widget bg-49"
+                    const block_show_his = document.getElementById('block-show-his')
+                    block_show_his.innerText = "#"+item.block_height
+                    const resault_show_his = document.getElementById('resault-show-his')
+                    resault_show_his.innerText = item.result
+                    // 49
+                    const total_49 = document.getElementById('total-49-his')
+                    total_49.innerHTML = item.total_49
+                    const bet_49 = document.getElementById('bet-49-his')
+                    bet_49.innerHTML = item.bet_49
+                    // 50
+                    const total_50 = document.getElementById('total-50-his')
+                    total_50.innerHTML = item.total_50
+                    const bet_50 = document.getElementById('bet-50-his')
+                    bet_50.innerHTML = item.bet_50
+
+                    hisIndex = index
                 }
             }
 
@@ -1295,6 +1479,7 @@
                             btnwallet_text.innerText = `${address.slice(0, 6)}...${address.slice(-4)}`;
                             btnwallet.disabled = true;
                             currentWallet = address;
+                            historyData(hisData)
                         } catch (err) {
                             showNoti("Connect Wallet failed ")
                         }
@@ -1345,9 +1530,18 @@
                 }
             });
 
-            background_modal.addEventListener('click', () => {
+            closed_his.addEventListener('click', () => {
                 background_modal.className = "bg-modal-widget none"
             })
+
+            his_Prev.addEventListener('click', function () {
+                reRenderHis(hisIndex - 1)
+            });
+
+            his_Next.addEventListener('click', function () {
+                reRenderHis(hisIndex + 1)
+            });
+
 
             history_btn.addEventListener('click', () => {
                 background_modal.className = "bg-modal-widget block"
@@ -1440,7 +1634,6 @@
                                                 <input class="input-token-widget text-black" type="number" value="5" min=${gameData.min_bet_amount} max=${gameData.max_bet_amount} placeholder="Enter token to bet" />
                                                 <button id="btn-plus-widget" class="btn-mp-widget">+</button>
                                             </div>
-                                            <p class="merienda-text-widget betting text-black" style="width: 100%; text-align: center; font-size: 1.15rem; text-spacing: 10px; display: none;"></p>
                                             <p class="text-black-token">${gameData.symbol}</p>
                                         </div>
                                         <img id="btn-min-widget" class="position-relative-widget " src="https://game-widget.vercel.app/images/49.png" alt="" width="150" height="60" />
@@ -1570,11 +1763,6 @@
                                         if (bet) {
                                             rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
                                             rounds[index_block].token = input.value;
-                                            input.disabled = true;
-                                            input.style.display = 'none';
-                                            const betting = card.querySelector('.betting');
-                                            betting.style.display = 'block'
-                                            betting.innerText = `Betting team ${rounds[index_block].team} with  ${rounds[index_block].token}`
                                             showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
                                             add_coin.play()
                                         }
@@ -1632,11 +1820,6 @@
                                         if (bet) {
                                             rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
                                             rounds[index_block].token = input.value;
-                                            input.disabled = true;
-                                            input.style.display = 'none';
-                                            const betting = card.querySelector('.betting');
-                                            betting.style.display = 'block'
-                                            betting.innerText = `Betting team ${rounds[index_block].team} with  ${rounds[index_block].token}`
                                             showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
                                             add_coin.play()
                                         }
