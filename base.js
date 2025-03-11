@@ -337,8 +337,6 @@
         }
         Ssocket.onmessage = function (event) {
             const response = JSON.parse(event.data);
-            console.log(response);
-
             switch (response.type) {
                 case 'auth':
                     if (response.status === 'ok') {
@@ -1438,7 +1436,7 @@
                                             <img src="${Image(gameData.contract_icon)}" width="30" height="30" />
                                             <div style="display: flex; justify-content: space-around; ">
                                                 <button id="btn-mine-widget" class="btn-mp-widget">-</button>
-                                                <input class="input-token-widget text-black" type="number" value="5" placeholder="Enter token to bet" />
+                                                <input class="input-token-widget text-black" type="number" value="5" min=${gameData.min_bet_amount} max=${gameData.max_bet_amount} placeholder="Enter token to bet" />
                                                 <button id="btn-plus-widget" class="btn-mp-widget">+</button>
                                             </div>
                                             <p class="merienda-text-widget betting text-black" style="width: 100%; text-align: center; font-size: 1.15rem; text-spacing: 10px; display: none;"></p>
@@ -1507,73 +1505,150 @@
                 const card = event.target.closest('.card-widget');
                 const input = card.querySelector('.input-token-widget');
                 const index_block = rounds.findIndex(item => item.id == card.id)
-                if (event.target.id === 'btn-min-widget' || event.target.id === 'btn-max-widget') {
-                    function isCheck(n, m) {
-                        return n > (m - time_bet)
+
+                const checkValue = () => {
+                    if (Number(input.value) > Number(gameData.max_bet_amount)) {
+                        showNoti(`Max bet amount is ${gameData.max_bet_amount}`)
+                        return false
                     }
-
-                    if (isCheck(current_block.height, rounds[index_block].id)) {
-                        return;
-                    } else {
-                        if (!currentWallet) {
-                            showNoti("Please connect your wallet!!!")
-                            return;
-                        }
-
-                        if (input.value > 0) {
-
-                            const tx = await TransferToken(input.value)
-                            if (tx.status) {
-                                try {
-                                    const body = (value, choice) => {
-                                        return {
-                                            "game_id": gameData.id,
-                                            "wallet_address": currentWallet,
-                                            "block_height": rounds[index_block].id,
-                                            "choice": choice ? "49" : "50",
-                                            "bet_amount": value,
-                                            "bet_tx_hash": tx.data.transactionHash,
-                                        }
-                                    }
-
-                                    const bet = await fetch(`${urlAction.bet}`, {
-                                        method: "POST",
-                                        body: JSON.stringify(body(input.value, event.target.id === 'btn-min-widget'))
-                                    }).then(data => data.json()).then(() => true)
-                                        .catch(err => {
-                                            showNoti(`Transaction failed !!`)
-                                            return false
-                                        })
-                                    if (bet) {
-                                        rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
-                                        rounds[index_block].token = input.value;
-                                        input.disabled = true;
-                                        input.style.display = 'none';
-                                        const betting = card.querySelector('.betting');
-                                        betting.style.display = 'block'
-                                        betting.innerText = `Betting team ${rounds[index_block].team} with  ${rounds[index_block].token}`
-                                        showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
-                                        add_coin.play()
-                                    }
-                                } catch (error) {
-                                    showNoti(`Transaction failed !!`)
-                                }
-
-                            }
-                        } else {
-
-                            showNoti('Please enter the number of tokens');
-                        }
+                    if (Number(input.value) < Number(gameData.min_bet_amount)) {
+                        showNoti(`Min bet amount is ${gameData.min_bet_amount}`)
+                        return false
                     }
-
+                    return true
                 }
 
                 switch (id_click) {
                     case "btn-plus-widget":
-                        input.value = Number(input.value) + stepInput 
+                        input.value = Number(input.value) + Number(gameData.bet_step_amount)
                         break;
                     case "btn-mine-widget":
-                        input.value = Number(input.value) - stepInput > 0 ? Number(input.value) - stepInput : 1
+                        input.value = Number(input.value) - Number(gameData.bet_step_amount) > 0 ? Number(input.value) - Number(gameData.bet_step_amount) : gameData.bet_step_amount
+                        break;
+                    case "btn-min-widget":
+                        if (!checkValue()) {
+                            return;
+                        }
+
+                        function isCheck(n, m) {
+                            return n > (m - time_bet)
+                        }
+
+                        if (isCheck(current_block.height, rounds[index_block].id)) {
+                            return;
+                        } else {
+                            if (!currentWallet) {
+                                showNoti("Please connect your wallet!!!")
+                                return;
+                            }
+
+                            if (input.value > 0) {
+
+                                const tx = await TransferToken(input.value)
+                                if (tx.status) {
+                                    try {
+                                        const body = (value, choice) => {
+                                            return {
+                                                "game_id": gameData.id,
+                                                "wallet_address": currentWallet,
+                                                "block_height": rounds[index_block].id,
+                                                "choice": choice ? "49" : "50",
+                                                "bet_amount": value,
+                                                "bet_tx_hash": tx.data.transactionHash,
+                                            }
+                                        }
+
+                                        const bet = await fetch(`${urlAction.bet}`, {
+                                            method: "POST",
+                                            body: JSON.stringify(body(input.value, event.target.id === 'btn-min-widget'))
+                                        }).then(data => data.json()).then(() => true)
+                                            .catch(err => {
+                                                showNoti(`Transaction failed !!`)
+                                                return false
+                                            })
+                                        if (bet) {
+                                            rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
+                                            rounds[index_block].token = input.value;
+                                            input.disabled = true;
+                                            input.style.display = 'none';
+                                            const betting = card.querySelector('.betting');
+                                            betting.style.display = 'block'
+                                            betting.innerText = `Betting team ${rounds[index_block].team} with  ${rounds[index_block].token}`
+                                            showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
+                                            add_coin.play()
+                                        }
+                                    } catch (error) {
+                                        showNoti(`Transaction failed !!`)
+                                    }
+
+                                }
+                            } else {
+
+                                showNoti('Please enter the number of tokens');
+                            }
+                        }
+                        break;
+                    case "btn-max-widget":
+                        if (!checkValue()) {
+                            return;
+                        }
+                        function isCheck(n, m) {
+                            return n > (m - time_bet)
+                        }
+
+                        if (isCheck(current_block.height, rounds[index_block].id)) {
+                            return;
+                        } else {
+                            if (!currentWallet) {
+                                showNoti("Please connect your wallet!!!")
+                                return;
+                            }
+
+                            if (input.value > 0) {
+
+                                const tx = await TransferToken(input.value)
+                                if (tx.status) {
+                                    try {
+                                        const body = (value, choice) => {
+                                            return {
+                                                "game_id": gameData.id,
+                                                "wallet_address": currentWallet,
+                                                "block_height": rounds[index_block].id,
+                                                "choice": choice ? "49" : "50",
+                                                "bet_amount": value,
+                                                "bet_tx_hash": tx.data.transactionHash,
+                                            }
+                                        }
+
+                                        const bet = await fetch(`${urlAction.bet}`, {
+                                            method: "POST",
+                                            body: JSON.stringify(body(input.value, event.target.id === 'btn-min-widget'))
+                                        }).then(data => data.json()).then(() => true)
+                                            .catch(err => {
+                                                showNoti(`Transaction failed !!`)
+                                                return false
+                                            })
+                                        if (bet) {
+                                            rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
+                                            rounds[index_block].token = input.value;
+                                            input.disabled = true;
+                                            input.style.display = 'none';
+                                            const betting = card.querySelector('.betting');
+                                            betting.style.display = 'block'
+                                            betting.innerText = `Betting team ${rounds[index_block].team} with  ${rounds[index_block].token}`
+                                            showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
+                                            add_coin.play()
+                                        }
+                                    } catch (error) {
+                                        showNoti(`Transaction failed !!`)
+                                    }
+
+                                }
+                            } else {
+
+                                showNoti('Please enter the number of tokens');
+                            }
+                        }
                         break;
                     default:
                         break;
