@@ -136,6 +136,7 @@
     let bet_block;
     const time_bet = 6;
     const number_block = 5;
+    const stepInput = 1;
     let currentIndex = 0;
     let currentWallet = '';
     let Ssocket;
@@ -523,7 +524,7 @@
             .card-widget {
                 min-width: 300px;
                 max-width: 330px;
-                height: 330px;
+                height: 340px;
                 position: relative;
                 transition: all 0.3s ease;
                 transform: scale(0.9);
@@ -626,6 +627,17 @@
                 transform: rotate(45deg);
                 position: relative;
                 overflow: hidden;
+            }
+
+            .btn-mp-widget {
+                outline: none;
+                background-color: transparent;
+                border: 1px solid gray;
+                padding: 0px 20px;
+                font-size: 20px;
+                font-weight: 700;
+                border-radius: 360px;
+                cursor: pointer;
             }
     
             .btn-widget:hover {
@@ -893,21 +905,21 @@
             .bet-box-widget {
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                justify-content: space-between;
                 border: 1px solid #ccc;
                 background-color: white;
                 height: 50px;
                 width: 90%;
                 border-radius: 4px;
                 padding: 0px 10px;
+                gap: 10px;
             }
             .bet-box-widget input {
-                margin: 0 10px;
                 font-size: 1.35rem;
                 border: none;
                 outline: none;
+                width:40%;
                 text-align: center;
-                width: 100%;
                 font-family: "Merienda", serif;
             }
             .position-relative-widget {
@@ -1424,8 +1436,12 @@
                                         <img id="btn-max-widget" class="position-relative-widget" src="https://game-widget.vercel.app/images/50.png" alt="" width="150" height="60" />
                                         <div class="bet-box-widget">
                                             <img src="${Image(gameData.contract_icon)}" width="30" height="30" />
-                                            <input class="input-token-widget text-black" type="number" placeholder="Enter token to bet" />
-                                             <p class="merienda-text-widget betting text-black" style="width: 100%; text-align: center; font-size: 1.15rem; text-spacing: 10px; display: none;"></p>
+                                            <div style="display: flex; justify-content: space-around; ">
+                                                <button id="btn-mine-widget" class="btn-mp-widget">-</button>
+                                                <input class="input-token-widget text-black" type="number" value="5" placeholder="Enter token to bet" />
+                                                <button id="btn-plus-widget" class="btn-mp-widget">+</button>
+                                            </div>
+                                            <p class="merienda-text-widget betting text-black" style="width: 100%; text-align: center; font-size: 1.15rem; text-spacing: 10px; display: none;"></p>
                                             <p class="text-black-token">${gameData.symbol}</p>
                                         </div>
                                         <img id="btn-min-widget" class="position-relative-widget " src="https://game-widget.vercel.app/images/49.png" alt="" width="150" height="60" />
@@ -1487,11 +1503,11 @@
             }
 
             slider.addEventListener('click', async (event) => {
+                const id_click = event.target.id
+                const card = event.target.closest('.card-widget');
+                const input = card.querySelector('.input-token-widget');
+                const index_block = rounds.findIndex(item => item.id == card.id)
                 if (event.target.id === 'btn-min-widget' || event.target.id === 'btn-max-widget') {
-                    const card = event.target.closest('.card-widget');
-                    const input = card.querySelector('.input-token-widget');
-                    const index_block = rounds.findIndex(item => item.id == card.id)
-
                     function isCheck(n, m) {
                         return n > (m - time_bet)
                     }
@@ -1550,6 +1566,17 @@
                         }
                     }
 
+                }
+
+                switch (id_click) {
+                    case "btn-plus-widget":
+                        input.value = Number(input.value) + stepInput 
+                        break;
+                    case "btn-mine-widget":
+                        input.value = Number(input.value) - stepInput > 0 ? Number(input.value) - stepInput : 1
+                        break;
+                    default:
+                        break;
                 }
             });
 
