@@ -318,40 +318,40 @@
 
     // History
     function historyData(array) {
-            const groupedData = {};
-            
-            array.forEach(item => {
-                const { block_height, choice, bet_amount, wallet_address, result } = item;
-                
-                if (!groupedData[block_height]) {
-                    groupedData[block_height] = {
-                        block_height: block_height,
-                        total_50: 0,
-                        bet_50: 0,
-                        total_49: 0,
-                        bet_49: 0,
-                        result: result
-                    };
-                }
-                
-                if (choice === "50") {
-                    groupedData[block_height].total_50 += parseFloat(bet_amount);
-                    if (wallet_address === currentWallet) {
-                        groupedData[block_height].bet_50 += parseFloat(bet_amount);
-                    }
-                }
-                
-                if (choice === "49") {
-                    groupedData[block_height].total_49 += parseFloat(bet_amount);
-                    if (wallet_address === currentWallet) {
-                        groupedData[block_height].bet_49 += parseFloat(bet_amount);
-                    }
-                }
-            });
-            
-            histories = Object.values(groupedData).sort((a, b) => b.block_height - a.block_height);
+        const groupedData = {};
 
-        
+        array.forEach(item => {
+            const { block_height, choice, bet_amount, wallet_address, result } = item;
+
+            if (!groupedData[block_height]) {
+                groupedData[block_height] = {
+                    block_height: block_height,
+                    total_50: 0,
+                    bet_50: 0,
+                    total_49: 0,
+                    bet_49: 0,
+                    result: result
+                };
+            }
+
+            if (choice === "50") {
+                groupedData[block_height].total_50 += parseFloat(bet_amount);
+                if (wallet_address === currentWallet) {
+                    groupedData[block_height].bet_50 += parseFloat(bet_amount);
+                }
+            }
+
+            if (choice === "49") {
+                groupedData[block_height].total_49 += parseFloat(bet_amount);
+                if (wallet_address === currentWallet) {
+                    groupedData[block_height].bet_49 += parseFloat(bet_amount);
+                }
+            }
+        });
+
+        histories = Object.values(groupedData).sort((a, b) => b.block_height - a.block_height);
+
+
     }
     // Connect WSS data game
     async function connectGamedata() {
@@ -1017,7 +1017,7 @@
                 font-weight: 700;
                 font-size: 1.5rem;
                 color: black;
-                margin-top: 20px;
+                margin: 10px;
             }
             .content-modal-his-widget {
                 flex: 1;
@@ -1423,7 +1423,7 @@
                     const resault_content = document.getElementById('resault-content')
                     resault_content.className = item.result > 49 ? "resault-content-widget bg-50" : "resault-content-widget bg-49"
                     const block_show_his = document.getElementById('block-show-his')
-                    block_show_his.innerText = "#"+item.block_height
+                    block_show_his.innerText = "#" + item.block_height
                     const resault_show_his = document.getElementById('resault-show-his')
                     resault_show_his.innerText = item.result
                     // 49
@@ -1689,7 +1689,13 @@
                     const data = await tx.wait()
                     return { status: true, data }
                 } catch (error) {
-                    showNoti(error.toString().split(';')[0])
+                    if (error.toString().includes('estimate gas')) {
+                        showNoti("🔴 Insufficient balance")
+                    }
+                    if (error.toString().includes('user rejected')) {
+                        showNoti("🔴 Transaction canceled")
+                    }
+
                     return { status: false, data: error }
                 }
             }
@@ -1702,11 +1708,11 @@
 
                 const checkValue = () => {
                     if (Number(input.value) > Number(gameData.max_bet_amount)) {
-                        showNoti(`Max bet amount is ${gameData.max_bet_amount}`)
+                        showNoti(`🟡 Max bet amount is ${gameData.max_bet_amount}`)
                         return false
                     }
                     if (Number(input.value) < Number(gameData.min_bet_amount)) {
-                        showNoti(`Min bet amount is ${gameData.min_bet_amount}`)
+                        showNoti(`🟡 Min bet amount is ${gameData.min_bet_amount}`)
                         return false
                     }
                     return true
@@ -1723,57 +1729,48 @@
                         if (!checkValue()) {
                             return;
                         }
-
                         function isCheck(n, m) {
                             return n > (m - time_bet)
                         }
-
                         if (isCheck(current_block.height, rounds[index_block].id)) {
                             return;
                         } else {
                             if (!currentWallet) {
-                                showNoti("Please connect your wallet!!!")
+                                showNoti("🟡 Please connect your wallet!!!")
                                 return;
                             }
 
                             if (input.value > 0) {
-
                                 const tx = await TransferToken(input.value)
                                 if (tx.status) {
-                                    try {
-                                        const body = (value, choice) => {
-                                            return {
-                                                "game_id": gameData.id,
-                                                "wallet_address": currentWallet,
-                                                "block_height": rounds[index_block].id,
-                                                "choice": choice ? "49" : "50",
-                                                "bet_amount": value,
-                                                "bet_tx_hash": tx.data.transactionHash,
-                                            }
+                                    const body = (value, choice) => {
+                                        return {
+                                            "game_id": gameData.id,
+                                            "wallet_address": currentWallet,
+                                            "block_height": rounds[index_block].id,
+                                            "choice": choice ? "49" : "50",
+                                            "bet_amount": value,
+                                            "bet_tx_hash": tx.data.transactionHash,
                                         }
-
-                                        const bet = await fetch(`${urlAction.bet}`, {
-                                            method: "POST",
-                                            body: JSON.stringify(body(input.value, event.target.id === 'btn-min-widget'))
-                                        }).then(data => data.json()).then(() => true)
-                                            .catch(err => {
-                                                showNoti(`Transaction failed !!`)
-                                                return false
-                                            })
-                                        if (bet) {
-                                            rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
-                                            rounds[index_block].token = input.value;
-                                            showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
-                                            add_coin.play()
-                                        }
-                                    } catch (error) {
-                                        showNoti(`Transaction failed !!`)
                                     }
 
+                                    const bet = await fetch(`${urlAction.bet}`, {
+                                        method: "POST",
+                                        body: JSON.stringify(body(input.value, event.target.id === 'btn-min-widget'))
+                                    }).then(data => data.json()).then(() => true)
+                                        .catch(err => {
+                                            showNoti(`🔴 Bet Failed !!!`)
+                                            return false
+                                        })
+                                    if (bet) {
+                                        rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
+                                        rounds[index_block].token = input.value;
+                                        showNoti(`🟢 You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
+                                        add_coin.play()
+                                    }
                                 }
                             } else {
-
-                                showNoti('Please enter the number of tokens');
+                                showNoti('🟡 Please enter the number of tokens');
                             }
                         }
                         break;
@@ -1789,7 +1786,7 @@
                             return;
                         } else {
                             if (!currentWallet) {
-                                showNoti("Please connect your wallet!!!")
+                                showNoti("🟡 Please connect your wallet!!!")
                                 return;
                             }
 
@@ -1797,40 +1794,35 @@
 
                                 const tx = await TransferToken(input.value)
                                 if (tx.status) {
-                                    try {
-                                        const body = (value, choice) => {
-                                            return {
-                                                "game_id": gameData.id,
-                                                "wallet_address": currentWallet,
-                                                "block_height": rounds[index_block].id,
-                                                "choice": choice ? "49" : "50",
-                                                "bet_amount": value,
-                                                "bet_tx_hash": tx.data.transactionHash,
-                                            }
+                                    const body = (value, choice) => {
+                                        return {
+                                            "game_id": gameData.id,
+                                            "wallet_address": currentWallet,
+                                            "block_height": rounds[index_block].id,
+                                            "choice": choice ? "49" : "50",
+                                            "bet_amount": value,
+                                            "bet_tx_hash": tx.data.transactionHash,
                                         }
+                                    }
 
-                                        const bet = await fetch(`${urlAction.bet}`, {
-                                            method: "POST",
-                                            body: JSON.stringify(body(input.value, event.target.id === 'btn-min-widget'))
-                                        }).then(data => data.json()).then(() => true)
-                                            .catch(err => {
-                                                showNoti(`Transaction failed !!`)
-                                                return false
-                                            })
-                                        if (bet) {
-                                            rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
-                                            rounds[index_block].token = input.value;
-                                            showNoti(`You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
-                                            add_coin.play()
-                                        }
-                                    } catch (error) {
-                                        showNoti(`Transaction failed !!`)
+                                    const bet = await fetch(`${urlAction.bet}`, {
+                                        method: "POST",
+                                        body: JSON.stringify(body(input.value, event.target.id === 'btn-min-widget'))
+                                    }).then(data => data.json()).then(() => true)
+                                        .catch(err => {
+                                            showNoti(`🔴 Bet Failed !!!`)
+                                            return false
+                                        })
+                                    if (bet) {
+                                        rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
+                                        rounds[index_block].token = input.value;
+                                        showNoti(`🟢 You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
+                                        add_coin.play()
                                     }
 
                                 }
                             } else {
-
-                                showNoti('Please enter the number of tokens');
+                                showNoti('🟡 Please enter the number of tokens');
                             }
                         }
                         break;
@@ -1855,7 +1847,6 @@
 
                     } else {
                         getBetBlock(current_block.hash).then(() => {
-
                             rounds.push({
                                 status: 'ACTIVE',
                                 id: nextBetBlock(current_block.height + (number_block - 1) * 10),
@@ -1866,7 +1857,6 @@
                                 min: 0,
                                 max: 0,
                             })
-
                             function burnToken(n) {
                                 return parseFloat(n) * 90 / 100
                             }
@@ -1887,7 +1877,6 @@
                             rounds[block_0].status = 'EXPIRED';
                             rounds[block_0].size = bet_block.size + "";
                             rounds[block_0].issummar = false
-
                             renderCard();
                             updateSlider();
                         })
@@ -1897,11 +1886,8 @@
 
             setInterval(updateClock, 10000);
             updateClock()
-
             window.addEventListener('resize', updateSlider);
-
         }
-
         createInitialElements()
     }
 
