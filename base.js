@@ -34,93 +34,109 @@
             "name": "Ethereum",
             "chain_id": 1,
             "api_explorer": "https://api.etherscan.io/v2/api",
-            "api_url": "https://mainnet.infura.io/v3"
+            "api_url": "https://mainnet.infura.io/v3",
+            "scan_url": "https://etherscan.io"
         },
         {
             "name": "Binance Smart Chain",
             "chain_id": 56,
             "api_url": "https://bsc-testnet.infura.io/v3",
-            "api_explorer": "https://api.bscscan.com/api"
+            "api_explorer": "https://api.bscscan.com/api",
+            "scan_url": "https://bscscan.com"
         },
         {
             "name": "Polygon",
             "chain_id": 137,
             "api_explorer": "https://api.polygonscan.com/api",
-            "api_url": "https://polygon-mainnet.infura.io/v3"
+            "api_url": "https://polygon-mainnet.infura.io/v3",
+            "scan_url": "https://polygonscan.com"
         },
         {
             "name": "Avalanche (Coming Soon)",
             "chain_id": 43114,
             "api_explorer": "https://snowtrace.io",
-            "api_url": "https://avalanche-mainnet.infura.io/v3"
+            "api_url": "https://avalanche-mainnet.infura.io/v3",
+            "scan_url": "https://snowtrace.io"
         },
         {
             "name": "Arbitrum One",
             "chain_id": 42161,
             "api_explorer": "https://api.arbiscan.io/api",
-            "api_url": "https://arbitrum-mainnet.infura.io/v3"
+            "api_url": "https://arbitrum-mainnet.infura.io/v3",
+            "scan_url": "https://arbiscan.io"
         },
         {
             "name": "Optimism Ethescan",
             "chain_id": 10,
             "api_explorer": "https://api-optimistic.etherscan.io/api",
-            "api_url": "https://optimism-mainnet.infura.io/v3"
+            "api_url": "https://optimism-mainnet.infura.io/v3",
+            "scan_url": "https://optimistic.etherscan.io"
         },
         {
             "name": "Celo",
             "chain_id": 42220,
             "api_explorer": "https://api.celoscan.io/api",
-            "api_url": "https://celo-mainnet.infura.io/v3"
+            "api_url": "https://celo-mainnet.infura.io/v3",
+            "scan_url": "https://celoscan.io"
         },
         {
             "name": "Ethereum Sepolia Testnet",
             "chain_id": 11155111,
             "api_explorer": "https://api-sepolia.etherscan.io/api",
-            "api_url": "https://sepolia.infura.io/v3"
+            "api_url": "https://sepolia.infura.io/v3",
+            "scan_url": "https://sepolia.etherscan.io"
         },
         {
             "name": "BSC Testnet",
             "chain_id": 97,
             "api_explorer": "https://api-testnet.bscscan.com/api",
-            "api_url": "https://bsc-testnet.infura.io/v3"
+            "api_url": "https://bsc-testnet.infura.io/v3",
+            "scan_url": "https://testnet.bscscan.com"
         },
         {
             "name": "Avalanche Fuji Testnet (Coming Soon)",
             "chain_id": 43113,
             "api_explorer": "https://testnet.snowtrace.io",
-            "api_url": "https://avalanche-fuji.infura.io/v3"
+            "api_url": "https://avalanche-fuji.infura.io/v3",
+            "scan_url": "https://testnet.snowtrace.io"
         },
         {
             "name": "Fantom",
             "chain_id": 250,
             "api_explorer": "https://api.ftmscan.com/api",
-            "api_url": "https://rpc.ftm.tools"
+            "api_url": "https://rpc.ftm.tools",
+            "scan_url": "https://ftmscan.com"
         },
         {
             "name": "Cronos",
             "chain_id": 25,
             "api_explorer": "https://api.cronoscan.com/api",
-            "api_url": "https://evm.cronos.org"
+            "api_url": "https://evm.cronos.org",
+            "scan_url": "https://cronoscan.com"
         },
         {
             "name": "Moonbeam",
             "chain_id": 1284,
             "api_explorer": "https://api-moonbeam.moonscan.io/api",
-            "api_url": "https://1rpc.io/glmr"
+            "api_url": "https://1rpc.io/glmr",
+            "scan_url": "https://moonscan.io"
         },
         {
             "name": "Moonbase Alpha Testnet",
             "chain_id": 1287,
             "api_explorer": "https://api-moonbase.moonscan.io/api",
-            "api_url": "https://rpc.testnet.moonbeam.network"
+            "api_url": "https://rpc.testnet.moonbeam.network",
+            "scan_url": "https://moonbase.moonscan.io"
         }
     ]
+
 
     const baseurl = "https://soc.bitrefund.co"
 
     let rounds = [];
     let histories = [];
     let hisData = [];
+    let balance = {};
     let hisIndex = 0
     let gameData;
     let current_block;
@@ -453,7 +469,9 @@
                 padding: 0;
                 border: 0;
                 box-sizing: border-box;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             }
+                
             .slider-widget {
                 display: flex;
                 transition: transform 0.5s ease;
@@ -493,6 +511,17 @@
 
             .action-btn-widget {
                 width: 35px;
+                height: 35px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .swap-btn-widget {
+                background-color:rgb(255, 255, 255);
+                 width: 35px;
                 height: 35px;
                 display: flex;
                 justify-content: center;
@@ -1171,6 +1200,196 @@
                 background-color: ${color.green}
             }
 
+            :root {
+                --primary: #F0B90B;
+                --primary-dark: #D9A400;
+                --secondary: #1E2026;
+                --text: #1E2026;
+                --text-secondary: #707A8A;
+                --background: #FAFAFA;
+                --card-bg: #FFFFFF;
+                --border: #E6E8EA;
+                --input-bg: #F5F5F5;
+                --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .dark {
+                --primary: #F0B90B;
+                --primary-dark: #D9A400;
+                --secondary: #1E2026;
+                --text: #FFFFFF;
+                --text-secondary: #B7BDC6;
+                --background: #0B0E11;
+                --card-bg: #1E2026;
+                --border: #2A2D35;
+                --input-bg: #2A2D35;
+                --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+
+            body {
+                background-color: var(--background);
+                color: var(--text);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+                .theme-toggle {
+                background: none;
+                border: none;
+                cursor: pointer;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--input-bg);
+                color: var(--text);
+                transition: background-color 0.3s;
+            }
+
+            .swap-container {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin: 10px 10px;
+            }
+
+            .input-container {
+                background-color: var(--input-bg);
+                border-radius: 12px;
+                padding: 16px;
+                transition: background-color 0.3s;
+            }
+
+            .input-header {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 12px;
+            }
+
+            .input-label {
+                color: var(--text-secondary);
+                font-size: 14px;
+            }
+
+            .balance {
+                color: var(--text-secondary);
+                font-size: 14px;
+            }
+
+            .input-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .amount-input {
+                background: none;
+                border: none;
+                outline: none;
+                font-size: 24px;
+                font-weight: 500;
+                color: var(--text);
+                width: 70%;
+                transition: color 0.3s;
+            }
+
+            .token-selector {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                background-color: var(--card-bg);
+                padding: 8px 12px;
+                border-radius: 8px;
+                font-weight: 500;
+                transition: background-color 0.3s;
+            }
+
+            .token-icon {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background-color: var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 12px;
+                font-weight: bold;
+            }
+
+            .rate-container {
+                display: flex;
+                justify-content: space-between;
+                padding: 12px 0;
+                border-top: 1px solid var(--border);
+                border-bottom: 1px solid var(--border);
+                margin: 16px 0;
+                transition: border-color 0.3s;
+            }
+
+            .rate-label {
+                color: var(--text-secondary);
+                font-size: 14px;
+            }
+
+            .rate-value {
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .swap-button {
+                background-color: var(--primary);
+                color: var(--secondary);
+                border: none;
+                border-radius: 12px;
+                padding: 16px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                width: 100%;
+                transition: background-color 0.3s;
+            }
+
+            .swap-button:hover {
+                background-color: var(--primary-dark);
+            }
+
+            .info-container {
+                margin-bottom: 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .info-row {
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+            }
+
+            .info-label {
+                color: var(--text-secondary);
+            }
+
+            .info-value {
+                font-weight: 500;
+            }
+
+            @media (max-width: 480px) {
+                .container {
+                    padding: 16px;
+                }
+                
+                .amount-input {
+                    font-size: 20px;
+                }
+            }
+
         `;
         document.head.appendChild(style);
         document.head.appendChild(script);
@@ -1186,7 +1405,6 @@
             // Modal Noti
             const background_modal_noti = document.createElement('div')
             background_modal_noti.className = "bg-modal-widget none"
-            background_modal_noti.id = "bg-modal-widget"
             const card_modal_noti = document.createElement('div')
             card_modal_noti.className = "card-modal-widget"
             const title_noti = document.createElement('p')
@@ -1196,10 +1414,71 @@
             background_modal_noti.appendChild(card_modal_noti)
             document.body.appendChild(background_modal_noti)
 
-            // Modal how to play
+            // Modal Swap
+            const background_swap = document.createElement('div')
+            background_swap.className = "bg-modal-widget none"
+            const card_swap = document.createElement('div')
+            card_swap.className = "card-modal-widget"
+            card_swap.innerHTML = `
+                <div class="title-his-widget">
+                    <p class="merienda-text-widget" style="font-size: x-large;">🔄 Swap ${gameData.symbol}</p>
+                    <p class="closed-his" id="closed-swap">❌</p>
+                </div>
+                <div class="swap-container">
+                    <div class="input-container">
+                        <div class="input-header">
+                            <span class="input-label">From</span>
+                        </div>
+                        <div class="input-content">
+                            <input id="input-coin" value="0.0001" type="number" min="0.000001" max="1" class="amount-input" placeholder="0.0" />
+                            <div class="token-selector">
+                                <div class="token-icon">B</div>
+                                <span>WBNB</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-container">
+                        <div class="input-header">
+                            <span class="input-label">To</span>
+                        </div>
+                        <div class="input-content">
+                            <input id="input-token" type="number" class="amount-input" placeholder="0.0" readonly />
+                            <div class="token-selector">
+                                <div class="token-icon">G</div>
+                                <span>${gameData.symbol}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="rate-container">
+                        <span class="rate-label">Exchange Rate</span>
+                        <span class="rate-value">1 WBNB = 1.000.000 ${gameData.symbol}</span>
+                    </div>
+                    
+                    <div class="info-container">
+                        <div class="info-row">
+                            <span class="info-label">Minimum received</span>
+                            <span class="info-value">100 ${gameData.symbol}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Price Impact</span>
+                            <span class="info-value">< 0.01%</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Network Fee</span>
+                            <span class="info-value">~0.000125 WBNB</span>
+                        </div>
+                    </div>
+                     <button id="swap_btn" class="swap-button">Xác nhận Swap</button>
+                 </div>
+            `
+            background_swap.appendChild(card_swap)
+            document.body.appendChild(background_swap)
+
+            // Modal how to plays
             const background_modal_info = document.createElement('div')
             background_modal_info.className = "bg-modal-widget none"
-            background_modal_info.id = "bg-modal-widget"
             const card_modal_info = document.createElement('div')
             card_modal_info.className = "card-modal-widget"
             const title_info = document.createElement('p')
@@ -1209,6 +1488,13 @@
             content_info.className = "content-modal-widget"
             content_info.innerHTML = `
                     <p>Welcome to <span class="text-highlight-widget">49-50 Game</span>, an exciting blockchain-based betting game! Follow these steps to start playing and maximize your winnings.</p>
+
+                     <h3>First try</h3>
+                    <ul>
+                        <li>Contarct Info: <a target="_blank" href="${getNetwork(gameData.chain_id).scan_url + "/address/" + gameData.contract_address}">Click here!</a></li>
+                        <li>Get tBNB fee: <a target="_blank" href="https://discord.gg/nj5fsyRp">Get fauscet in discord</a></li>
+                        <li>Click to Swap to get ${gameData.symbol} token</li>
+                    </ul>
 
                     <h3>Step 1: Connect Your Wallet</h3>
                     <ul>
@@ -1259,7 +1545,6 @@
             // Modal history
             const background_modal = document.createElement('div')
             background_modal.className = "bg-modal-widget none"
-            background_modal.id = "bg-modal-widget"
             const card_modal = document.createElement('div')
             card_modal.className = "card-modal-widget"
             card_modal.innerHTML = `
@@ -1337,6 +1622,10 @@
             info_btn.className = "action-btn-widget info-btn-widget"
             info_btn.textContent = '?'
             history_btn.appendChild(his_icon)
+            const swap_btn = document.createElement('div')
+            swap_btn.className = " swap-btn-widget"
+            swap_btn.innerText = `🔄`
+            action_div.appendChild(swap_btn)
             action_div.appendChild(history_btn)
             action_div.appendChild(info_btn)
 
@@ -1404,12 +1693,14 @@
             const btnwallet = document.querySelector('.btn-wallet-widget');
             const btnwallet_text = document.querySelector('.btn-wallet-text-widget');
             const closed_his = document.getElementById('closed-his')
-
+            const closed_swap = document.getElementById('closed-swap')
+            const input_coin = document.getElementById('input-coin')
             const his_Prev = card_modal.querySelector('.btn-his-pre');
             const his_Next = card_modal.querySelector('.btn-his-next');
-
+            const swap = document.getElementById('swap_btn')
 
             function showNoti(noti, type = false) {
+                background_swap.className = "bg-modal-widget none"
                 title_noti.innerText = noti
                 background_modal_noti.className = "bg-modal-widget block"
                 if (!type) {
@@ -1438,6 +1729,78 @@
                     bet_50.innerHTML = item.bet_50
 
                     hisIndex = index
+                }
+            }
+
+            async function swapToken(amountInBNB, tokenOut, coinIn = "0xae13d989dac2f0debff460ac112a837c89baa7cd") {
+                try {
+                    // Kiểm tra xem trình duyệt có hỗ trợ Ethereum không (MetaMask hoặc ví tương tự)
+                    if (!window.ethereum) {
+                        showNoti("🔴 Please install MetaMask or another Ethereum-compatible wallet!");
+                        return;
+                    }
+
+                    // Tạo provider từ window.ethereum
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+                    // Yêu cầu người dùng kết nối ví
+                    await provider.send("eth_requestAccounts", []);
+                    const signer = provider.getSigner();
+                    const userAddress = await signer.getAddress(); // Lấy địa chỉ ví của người dùng
+
+                    const PANCAKESWAP_ROUTER = "0xD99D1c33F9fC3444f8101754aBC46c52416550D1";
+                    const WBNB = coinIn;
+
+                    // Tạo contract instance với signer
+                    const router = new ethers.Contract(
+                        PANCAKESWAP_ROUTER,
+                        [
+                            "function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) payable external returns (uint[] memory amounts)",
+                            "function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts)"
+                        ],
+                        signer
+                    );
+
+                    // Kiểm tra số dư BNB của ví người dùng
+                    const balance = await provider.getBalance(userAddress);
+                    if (balance.lt(ethers.utils.parseEther(amountInBNB))) {
+                        showNoti("🔴 Insufficient tBNB balance");
+                        return;
+                    }
+
+                    const amountInWei = ethers.utils.parseEther(amountInBNB);
+                    const path = [WBNB, tokenOut];
+                    const to = userAddress;
+                    const deadline = Math.floor(Date.now() / 1000) + 60 * 10;
+
+                    // Kiểm tra lượng token dự kiến nhận được
+                    const amounts = await router.getAmountsOut(amountInWei, path);
+                    const amountOutMin = amounts[1].mul(95).div(100);
+
+                    // Thực hiện giao dịch swap
+                    const tx = await router.swapExactETHForTokens(
+                        amountOutMin,
+                        path,
+                        to,
+                        deadline,
+                        {
+                            value: amountInWei,
+                            gasLimit: ethers.BigNumber.from("500000")
+                        }
+                    );
+                    const receipt = await tx.wait();
+                    console.log(receipt);
+                    
+                    if (receipt) {
+
+                    }
+                } catch (error) {
+                    if (error.toString().includes('estimate gas')) {
+                        showNoti("🔴 Insufficient balance")
+                    }
+                    if (error.toString().includes('user rejected')) {
+                        showNoti("🔴 Transaction canceled")
+                    }
                 }
             }
 
@@ -1534,6 +1897,10 @@
                 background_modal.className = "bg-modal-widget none"
             })
 
+            closed_swap.addEventListener('click', () => {
+                background_swap.className = "bg-modal-widget none"
+            })
+
             his_Prev.addEventListener('click', function () {
                 reRenderHis(hisIndex - 1)
             });
@@ -1541,7 +1908,6 @@
             his_Next.addEventListener('click', function () {
                 reRenderHis(hisIndex + 1)
             });
-
 
             history_btn.addEventListener('click', () => {
                 background_modal.className = "bg-modal-widget block"
@@ -1557,6 +1923,20 @@
 
             background_modal_noti.addEventListener('click', () => {
                 background_modal_noti.className = "bg-modal-widget none"
+            })
+
+            swap_btn.addEventListener('click', () => {
+                background_swap.className = "bg-modal-widget block"
+            })
+
+            swap.addEventListener('click', () => {
+                swapToken(input_coin.value, gameData.contract_address)
+                
+            })
+
+            input_coin.addEventListener('input', (e) => {
+                const swap_value = document.getElementById('input-token')
+                swap_value.value = (e.target.value) * 1000000
             })
 
             function renderCard() {
