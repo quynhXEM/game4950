@@ -1488,48 +1488,39 @@
             content_info.className = "content-modal-widget"
             content_info.innerHTML = `
                     <p>Welcome to <span class="text-highlight-widget">49-50 Game</span>, an exciting blockchain-based betting game! Follow these steps to start playing and maximize your winnings.</p>
-
-                     <h3>First try</h3>
                     <ul>
+                        <h3>Over view</h3>
                         <li>Contarct Info: <a target="_blank" href="${getNetwork(gameData.chain_id).scan_url + "/address/" + gameData.contract_address}">Click here!</a></li>
-                        <li>Get tBNB fee: <a target="_blank" href="https://discord.gg/nj5fsyRp">Get fauscet in discord</a></li>
-                        <li>Click to Swap to get ${gameData.symbol} token</li>
                     </ul>
-
-                    <h3>Step 1: Connect Your Wallet</h3>
                     <ul>
+                        <h3>Step 1: Connect Your Wallet</h3>
                         <li>To participate, you must connect your cryptocurrency wallet to the game.</li>
                         <li>Ensure your wallet contains <span class="text-highlight-widget">${gameData.symbol}</span> for betting and some BNB for transaction fees.</li>
                     </ul>
-
-                    <h3>Step 2: Understanding the Game Rounds</h3>
                     <ul>
+                        <h3>Step 2: Understanding the Game Rounds</h3>
                         <li>Each game round lasts for <span class="text-highlight-widget">10 BTC blockchain blocks</span>.</li>
                         <li>You will be betting on the last two decimal digits of the "size" of a specific BTC block.</li>
                         <li>You need to predict whether the value falls within <span class="text-highlight-widget">0-49</span> or <span class="text-highlight-widget">50-99</span>.</li>
                     </ul>
-
-                    <h3>Step 3: Placing a Bet</h3>
                     <ul>
+                        <h3>Step 3: Placing a Bet</h3>
                         <li>Choose the amount of <span class="text-highlight-widget">${gameData.symbol}</span> you wish to bet in a specific round.</li>
                         <li>Select your prediction range (<span class="text-highlight-widget">0-49</span> or <span class="text-highlight-widget">50-99</span>).</li>
                         <li>You have <span class="text-highlight-widget">5 blocks</span> from the start of the round to place your bet before the betting phase is locked.</li>
                     </ul>
-
-                    <h3>Step 4: Awaiting Results</h3>
                     <ul>
+                        <h3>Step 4: Awaiting Results</h3>
                         <li>After the betting phase ends, wait for the corresponding BTC block information to be published.</li>
                         <li>The result is determined based on the last two decimal digits of the block size.</li>
                     </ul>
-
-                    <h3>Step 5: Winning and Payouts</h3>
                     <ul>
+                        <h3>Step 5: Winning and Payouts</h3>
                         <li>If your prediction is correct, you win a share of the losing side's total bet, after deducting the game fee.</li>
                         <li>Winnings are distributed proportionally based on your bet amount relative to the total pool.</li>
                     </ul>
-
-                    <h3>Additional Notes</h3>
                     <ul>
+                        <h3>Additional Notes</h3>
                         <li>Only <span class="text-highlight-widget">${gameData.symbol}</span> is accepted for betting.</li>
                         <li>Make sure to have enough BNB in your wallet to cover transaction fees.</li>
                     </ul>
@@ -1625,7 +1616,7 @@
             const swap_btn = document.createElement('div')
             swap_btn.className = " swap-btn-widget"
             swap_btn.innerText = `🔄`
-            action_div.appendChild(swap_btn)
+            // action_div.appendChild(swap_btn)
             action_div.appendChild(history_btn)
             action_div.appendChild(info_btn)
 
@@ -1790,7 +1781,7 @@
                     );
                     const receipt = await tx.wait();
                     console.log(receipt);
-                    
+
                     if (receipt) {
 
                     }
@@ -1931,7 +1922,7 @@
 
             swap.addEventListener('click', () => {
                 swapToken(input_coin.value, gameData.contract_address)
-                
+
             })
 
             input_coin.addEventListener('input', (e) => {
@@ -2237,22 +2228,6 @@
                                 min: 0,
                                 max: 0,
                             })
-                            function burnToken(n) {
-                                return parseFloat(n) * 90 / 100
-                            }
-                            function getRessault() {
-                                return rounds[block_0].size.substring(rounds[block_0].size.length - 2)
-                            }
-
-                            if (rounds[block_0].team) {
-                                if ((rounds[block_0].team === 49) && (getRessault() < 50)) {
-                                    showNoti(`You win $${burnToken(rounds[block_0].token)}`);
-                                } else if ((rounds[block_0].team === 50) && (getRessault() > 49)) {
-                                    showNoti(`You win $${burnToken(rounds[block_0].token)}`);
-                                } else {
-                                    showNoti('You lose');
-                                }
-                            }
 
                             rounds[block_0].status = 'EXPIRED';
                             rounds[block_0].size = bet_block.size + "";
