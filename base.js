@@ -396,7 +396,9 @@
                                     },
                                     fields: [
                                         '*',
-                                    ]
+                                    ],
+                                    sort: ['-date_created'],
+                                    limit: 100000
                                 }
                             })
                         )
