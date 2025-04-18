@@ -1483,49 +1483,65 @@
             card_modal_info.className = "card-modal-widget"
             const title_info = document.createElement('p')
             title_info.className = "tilte-modal-widget"
-            title_info.innerText = "How to play ?"
+            title_info.innerText = "Thông tin & Hướng dẫn"
             const content_info = document.createElement('div')
             content_info.className = "content-modal-widget"
             content_info.innerHTML = `
-                    <p>Welcome to <span class="text-highlight-widget">49-50 Game</span>, an exciting blockchain-based betting game! Follow these steps to start playing and maximize your winnings.</p>
-                    <ul>
-                        <h3>Over view</h3>
-                        <li>Contarct Info: <a target="_blank" href="${getNetwork(gameData.chain_id).scan_url + "/address/" + gameData.contract_address}">Click here!</a></li>
-                    </ul>
-                    <ul>
-                        <h3>Step 1: Connect Your Wallet</h3>
-                        <li>To participate, you must connect your cryptocurrency wallet to the game.</li>
-                        <li>Ensure your wallet contains <span class="text-highlight-widget">${gameData.symbol}</span> for betting and some BNB for transaction fees.</li>
-                    </ul>
-                    <ul>
-                        <h3>Step 2: Understanding the Game Rounds</h3>
-                        <li>Each game round lasts for <span class="text-highlight-widget">10 BTC blockchain blocks</span>.</li>
-                        <li>You will be betting on the last two decimal digits of the "size" of a specific BTC block.</li>
-                        <li>You need to predict whether the value falls within <span class="text-highlight-widget">0-49</span> or <span class="text-highlight-widget">50-99</span>.</li>
-                    </ul>
-                    <ul>
-                        <h3>Step 3: Placing a Bet</h3>
-                        <li>Choose the amount of <span class="text-highlight-widget">${gameData.symbol}</span> you wish to bet in a specific round.</li>
-                        <li>Select your prediction range (<span class="text-highlight-widget">0-49</span> or <span class="text-highlight-widget">50-99</span>).</li>
-                        <li>You have <span class="text-highlight-widget">5 blocks</span> from the start of the round to place your bet before the betting phase is locked.</li>
-                    </ul>
-                    <ul>
-                        <h3>Step 4: Awaiting Results</h3>
-                        <li>After the betting phase ends, wait for the corresponding BTC block information to be published.</li>
-                        <li>The result is determined based on the last two decimal digits of the block size.</li>
-                    </ul>
-                    <ul>
-                        <h3>Step 5: Winning and Payouts</h3>
-                        <li>If your prediction is correct, you win a share of the losing side's total bet, after deducting the game fee.</li>
-                        <li>Winnings are distributed proportionally based on your bet amount relative to the total pool.</li>
-                    </ul>
-                    <ul>
-                        <h3>Additional Notes</h3>
-                        <li>Only <span class="text-highlight-widget">${gameData.symbol}</span> is accepted for betting.</li>
-                        <li>Make sure to have enough BNB in your wallet to cover transaction fees.</li>
-                    </ul>
+                    <p>Chào mừng đến với <span class="text-highlight-widget">49-50 Game</span> – một trò chơi cá cược dựa trên blockchain đầy hấp dẫn! Hãy làm theo các bước sau để bắt đầu chơi và tối đa hóa phần thưởng của bạn.</p>
 
-                    <p>Enjoy the game and good luck!</p>
+                <ul>
+                    <h3>Tổng quan</h3>
+                    <li>Thông tin hợp đồng: <a target="_blank" href="${getNetwork(gameData.chain_id).scan_url + "/address/" + gameData.contract_address}">Bấm vào đây!</a></li>
+                    <li>Thông tin khối: <a target="_blank" href="https://www.blockchain.com/explorer/blocks/btc/${current_block.height}">Bấm vào đây!</a></li>
+                </ul>
+
+                 <ul>
+                    <h3>Quy tấc cược</h3>
+                    <li>Cược tối thiểu: ${Number(gameData?.min_bet_amount).toFixed(2)} ${gameData.symbol}</li>
+                    <li>Cược tối đa: ${Number(gameData?.max_bet_amount).toFixed(2)} ${gameData.symbol}</li>
+                    <li>Cược tối đa: ${Number(gameData?.bet_step_amount).toFixed(2)} ${gameData.symbol}</li>
+                </ul>
+
+                <ul>
+                    <h3>Bước 1: Kết nối ví của bạn</h3>
+                    <li>Để tham gia, bạn cần kết nối ví tiền mã hóa của mình với trò chơi.</li>
+                    <li>Hãy đảm bảo ví của bạn có chứa <span class="text-highlight-widget">${gameData.symbol}</span> để đặt cược và một ít BNB để trả phí giao dịch.</li>
+                </ul>
+
+                <ul>
+                    <h3>Bước 2: Tìm hiểu về các vòng chơi</h3>
+                    <li>Mỗi vòng chơi kéo dài trong <span class="text-highlight-widget">10 khối BTC</span>.</li>
+                    <li>Bạn sẽ đặt cược vào 2 chữ số thập phân cuối cùng của "kích thước" một khối BTC cụ thể.</li>
+                    <li>Bạn cần dự đoán giá trị đó rơi vào khoảng <span class="text-highlight-widget">0-49</span> hay <span class="text-highlight-widget">50-99</span>.</li>
+                </ul>
+
+                <ul>
+                    <h3>Bước 3: Đặt cược</h3>
+                    <li>Chọn số lượng <span class="text-highlight-widget">${gameData.symbol}</span> bạn muốn đặt cược trong một vòng cụ thể.</li>
+                    <li>Chọn khoảng dự đoán của bạn (<span class="text-highlight-widget">0-49</span> hoặc <span class="text-highlight-widget">50-99</span>).</li>
+                    <li>Bạn có <span class="text-highlight-widget">5 khối</span> kể từ khi vòng bắt đầu để đặt cược, sau đó giai đoạn đặt cược sẽ bị khóa.</li>
+                </ul>
+
+                <ul>
+                    <h3>Bước 4: Chờ kết quả</h3>
+                    <li>Sau khi giai đoạn đặt cược kết thúc, hãy chờ thông tin khối BTC tương ứng được công bố.</li>
+                    <li>Kết quả được xác định dựa trên 2 chữ số thập phân cuối cùng của kích thước khối đó.</li>
+                </ul>
+
+                <ul>
+                    <h3>Bước 5: Thắng cược và nhận thưởng</h3>
+                    <li>Nếu bạn đoán đúng, bạn sẽ nhận được một phần trong tổng cược của bên thua, sau khi trừ phí trò chơi.</li>
+                    <li>Phần thưởng sẽ được phân chia tỷ lệ với số tiền bạn đã đặt so với tổng quỹ cược.</li>
+                </ul>
+
+                <ul>
+                    <h3>Lưu ý thêm</h3>
+                    <li>Chỉ chấp nhận <span class="text-highlight-widget">${gameData.symbol}</span> để đặt cược.</li>
+                    <li>Hãy đảm bảo ví của bạn có đủ BNB để trả phí giao dịch.</li>
+                </ul>
+
+                <p>Chúc bạn chơi vui vẻ và may mắn!</p>
+
             `
 
             card_modal_info.appendChild(title_info)
