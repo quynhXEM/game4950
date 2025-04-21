@@ -2060,6 +2060,8 @@
                     if (error.toString().includes('user rejected')) {
                         showNoti("🔴 Transaction canceled")
                     }
+                    alert(error)
+
 
                     return { status: false, data: error }
                 }
