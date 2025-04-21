@@ -196,6 +196,7 @@
             .then((data) => data.json())
             .then((data) => {
                 return data.data[0]
+
             })
             .catch((err) => {
                 return null
@@ -2275,16 +2276,294 @@
         }
     }
 
+    // render marqueText
+    function renderCommingSoon() {
+        const container = document.getElementById(containerId)
+        container.style = `display: flex; justify-content: center; padding-top: 20px`
+
+        const style = document.createElement('style');
+        style.textContent = `
+      * {
+        margin: 0; padding: 0; box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+      }
+      body {
+        background-color: #0f172a;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjMGYxNzJhIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDVMNSAwWk02IDRMNCA2Wk0tMSAxTDEgLTFaIiBzdHJva2U9IiMxZTI5M2IiIHN0cm9rZS13aWR0aD0iMSI+PC9wYXRoPgo8L3N2Zz4=');
+      }
+      .container {
+        max-width: 600px;
+        width: 90%;
+        padding: 2rem;
+        background-color: rgba(30, 41, 59, 0.8);
+        border-radius: 12px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        text-align: center;
+        animation: fadeIn 1s ease-out;
+      }
+      h1 {
+        color: #f8fafc;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+      }
+      .notification {
+        background-color: #334155;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .notification::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 5px;
+        height: 100%;
+        background-color: #3b82f6;
+      }
+      .message {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+      .countdown {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+      }
+      .countdown-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 80px;
+      }
+      .countdown-value {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #3b82f6;
+        background-color: #1e293b;
+        border-radius: 8px;
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .countdown-label {
+        font-size: 0.9rem;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .btn {
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+      }
+      .btn:hover {
+        background-color: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+      .btn:active {
+        transform: translateY(0);
+      }
+      .disabled {
+        background-color: #64748b;
+        cursor: not-allowed;
+      }
+      .disabled:hover {
+        background-color: #64748b;
+        transform: none;
+        box-shadow: none;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+    `;
+        document.head.appendChild(style);
+
+        // ===== 2. Create HTML Elements via JS =====
+        const containerNoti = document.createElement('div');
+        containerNoti.className = 'container';
+        container.appendChild(containerNoti);
+
+        const title = document.createElement('h1');
+        title.textContent = 'Thông Báo Mở Cửa Trò Chơi';
+        containerNoti.appendChild(title);
+
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        containerNoti.appendChild(notification);
+
+        const message = document.createElement('p');
+        message.className = 'message';
+        const openTime = document.createElement('strong');
+        openTime.id = 'openTime';
+        message.innerHTML = `Trò chơi sẽ chính thức mở cửa vào lúc ${new Date(gameData.open_time).toLocaleString("vi-VN")}`;
+        message.appendChild(openTime);
+        message.innerHTML += '. Hãy chuẩn bị sẵn sàng để tham gia!';
+        notification.appendChild(message);
+
+        const countdown = document.createElement('div');
+        countdown.className = 'countdown';
+        containerNoti.appendChild(countdown);
+
+        const units = ['Ngày', 'Giờ', 'Phút', 'Giây'];
+        const ids = ['days', 'hours', 'minutes', 'seconds'];
+
+        ids.forEach((id, i) => {
+            const item = document.createElement('div');
+            item.className = 'countdown-item';
+
+            const value = document.createElement('div');
+            value.className = 'countdown-value';
+            value.id = id;
+            value.textContent = '00';
+
+            const label = document.createElement('div');
+            label.className = 'countdown-label';
+            label.textContent = units[i];
+
+            item.appendChild(value);
+            item.appendChild(label);
+            countdown.appendChild(item);
+        });
+
+        // ===== 3. Logic countdown + format thời gian =====
+        const openDate = new Date(gameData.open_time).getTime();
+
+        const updateCountdown = () => {
+            const now = new Date().getTime();
+            const distance = openDate - now;
+
+            let [d, h, m, s] = [0, 0, 0, 0];
+            if (distance > 0) {
+                d = Math.floor(distance / (1000 * 60 * 60 * 24));
+                h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                s = Math.floor((distance % (1000 * 60)) / 1000);
+            }
+
+            document.getElementById('days').textContent = d.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = h.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = m.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = s.toString().padStart(2, '0');
+
+            if (distance <= 0) {
+                clearInterval(timer);
+                document.querySelector('.message').innerHTML = '<strong>Trò chơi chưa được phát hành. Hãy đợi thông báo chính thức và quay lại sau.</strong>';
+            }
+        };
+
+        // Cập nhật định dạng thời gian mở cửa
+        const openDateObj = new Date(openDate);
+        const options = { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' };
+        openTime.textContent = openDateObj.toLocaleString('vi-VN', options);
+
+        // Chạy countdown mỗi giây
+        const timer = setInterval(updateCountdown, 1000);
+        updateCountdown(); // gọi lần đầu
+    }
+
+    function renderWillClose() {
+        if (!gameData.close_time) {
+            return;
+        }
+        const container = document.getElementById(containerId)
+
+        const style = document.createElement('style');
+        style.textContent = `
+            body {
+                overflow: hidden;
+            }
+            .marquee-container {
+                position: absolute;
+                bottom: 50px;
+                width: 100%;
+                overflow: hidden;
+                height: 30px;
+            }
+            .marquee-text {
+                white-space: nowrap;
+                position: relative;
+                color:rgb(255, 255, 255);
+                font-weight: bold;
+                font-size: 1.3em;
+                left: 100%;
+            }
+        `;
+        document.head.appendChild(style);
+
+        const marqueeContainer = document.createElement('div');
+        marqueeContainer.className = 'marquee-container';
+        document.body.appendChild(marqueeContainer);
+
+        const marqueeText = document.createElement('div');
+        marqueeText.className = 'marquee-text';
+        marqueeText.textContent = `🛠 Trò chơi sẽ tạm khóa vào lúc ${new Date(gameData.close_time).toLocaleString("vi-VN")} để bảo trì, hạn chế giao dịch vào trước khung giờ khóa 30 phút. 🛠`;
+        marqueeContainer.appendChild(marqueeText);
+
+        container.appendChild(marqueeText)
+
+        // ===== JS animation =====
+        let pos = window.innerWidth;
+        let isPaused = false;
+
+        function scrollText() {
+            if (!isPaused) {
+                pos--;
+                if (pos < -marqueeText.offsetWidth) {
+                    pos = window.innerWidth;
+                }
+                marqueeText.style.left = pos + 'px';
+            }
+            requestAnimationFrame(scrollText);
+        }
+
+        scrollText();
+    }
+
     import_js()
     // Genarate UI
     data_game().then((data) => {
-        gameData = data
-        changeFavicon(Image(gameData.contract_icon));
-        getBlock().then(() => {
-            connectBlockChain()
-            connectGamedata()
-            createTradingCardsWidget(containerId, rounds);
-        })
+        if (data.status === 'draft') {
+            gameData = data
+            renderCommingSoon()
+        } else {
+            gameData = data
+            changeFavicon(Image(gameData.contract_icon));
+            getBlock().then(() => {
+                connectBlockChain()
+                connectGamedata()
+                createTradingCardsWidget(containerId, rounds);
+            })
+            renderWillClose()
+        }
+
     })
 
     window.addEventListener("unload", function () {
