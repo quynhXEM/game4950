@@ -32,104 +32,155 @@
     const network = [
         {
             "name": "Ethereum",
+            "symbol": "ETH",
+            "native_currency": "Ether",
             "chain_id": 1,
             "api_explorer": "https://api.etherscan.io/v2/api",
             "api_url": "https://mainnet.infura.io/v3",
-            "scan_url": "https://etherscan.io"
+            "scan_url": "https://etherscan.io",
+            "rpc_url": "https://rpc.builder0x69.io"
         },
         {
             "name": "Binance Smart Chain",
+            "symbol": "BNB",
+            "native_currency": "BNB",
             "chain_id": 56,
             "api_url": "https://bsc-testnet.infura.io/v3",
             "api_explorer": "https://api.bscscan.com/api",
-            "scan_url": "https://bscscan.com"
+            "scan_url": "https://bscscan.com",
+            "rpc_url": "https://bsc-dataseed.binance.org"
         },
         {
             "name": "Polygon",
+            "symbol": "MATIC",
+            "native_currency": "MATIC",
             "chain_id": 137,
             "api_explorer": "https://api.polygonscan.com/api",
             "api_url": "https://polygon-mainnet.infura.io/v3",
-            "scan_url": "https://polygonscan.com"
+            "scan_url": "https://polygonscan.com",
+            "rpc_url": "https://polygon-rpc.com"
         },
         {
             "name": "Avalanche (Coming Soon)",
+            "symbol": "AVAX",
+            "native_currency": "AVAX",
             "chain_id": 43114,
             "api_explorer": "https://snowtrace.io",
             "api_url": "https://avalanche-mainnet.infura.io/v3",
-            "scan_url": "https://snowtrace.io"
+            "scan_url": "https://snowtrace.io",
+            "rpc_url": "https://api.avax.network/ext/bc/C/rpc"
         },
         {
             "name": "Arbitrum One",
+            "symbol": "ETH",
+            "native_currency": "Ether",
             "chain_id": 42161,
             "api_explorer": "https://api.arbiscan.io/api",
             "api_url": "https://arbitrum-mainnet.infura.io/v3",
-            "scan_url": "https://arbiscan.io"
+            "scan_url": "https://arbiscan.io",
+            "rpc_url": "https://arb1.arbitrum.io/rpc"
         },
         {
             "name": "Optimism Ethescan",
+            "symbol": "ETH",
+            "native_currency": "Ether",
             "chain_id": 10,
             "api_explorer": "https://api-optimistic.etherscan.io/api",
             "api_url": "https://optimism-mainnet.infura.io/v3",
-            "scan_url": "https://optimistic.etherscan.io"
+            "scan_url": "https://optimistic.etherscan.io",
+            "rpc_url": "https://mainnet.optimism.io"
         },
         {
             "name": "Celo",
+            "symbol": "CELO",
+            "native_currency": "CELO",
             "chain_id": 42220,
             "api_explorer": "https://api.celoscan.io/api",
             "api_url": "https://celo-mainnet.infura.io/v3",
-            "scan_url": "https://celoscan.io"
+            "scan_url": "https://celoscan.io",
+            "rpc_url": "https://forno.celo.org"
         },
         {
             "name": "Ethereum Sepolia Testnet",
+            "symbol": "ETH",
+            "native_currency": "SepoliaETH",
             "chain_id": 11155111,
             "api_explorer": "https://api-sepolia.etherscan.io/api",
             "api_url": "https://sepolia.infura.io/v3",
-            "scan_url": "https://sepolia.etherscan.io"
+            "scan_url": "https://sepolia.etherscan.io",
+            "rpc_url": "https://rpc.sepolia.org"
         },
         {
             "name": "BSC Testnet",
+            "symbol": "tBNB",
+            "native_currency": "Testnet BNB",
             "chain_id": 97,
             "api_explorer": "https://api-testnet.bscscan.com/api",
             "api_url": "https://bsc-testnet.infura.io/v3",
-            "scan_url": "https://testnet.bscscan.com"
+            "scan_url": "https://testnet.bscscan.com",
+            "rpc_url": "https://data-seed-prebsc-1-s1.binance.org:8545"
         },
         {
             "name": "Avalanche Fuji Testnet (Coming Soon)",
+            "symbol": "AVAX",
+            "native_currency": "Testnet AVAX",
             "chain_id": 43113,
             "api_explorer": "https://testnet.snowtrace.io",
             "api_url": "https://avalanche-fuji.infura.io/v3",
-            "scan_url": "https://testnet.snowtrace.io"
+            "scan_url": "https://testnet.snowtrace.io",
+            "rpc_url": "https://api.avax-test.network/ext/bc/C/rpc"
         },
         {
             "name": "Fantom",
+            "symbol": "FTM",
+            "native_currency": "FTM",
             "chain_id": 250,
             "api_explorer": "https://api.ftmscan.com/api",
             "api_url": "https://rpc.ftm.tools",
-            "scan_url": "https://ftmscan.com"
+            "scan_url": "https://ftmscan.com",
+            "rpc_url": "https://rpcapi.fantom.network"
         },
         {
             "name": "Cronos",
+            "symbol": "CRO",
+            "native_currency": "CRO",
             "chain_id": 25,
             "api_explorer": "https://api.cronoscan.com/api",
             "api_url": "https://evm.cronos.org",
-            "scan_url": "https://cronoscan.com"
+            "scan_url": "https://cronoscan.com",
+            "rpc_url": "https://evm.cronos.org"
         },
         {
             "name": "Moonbeam",
+            "symbol": "GLMR",
+            "native_currency": "GLMR",
             "chain_id": 1284,
             "api_explorer": "https://api-moonbeam.moonscan.io/api",
             "api_url": "https://1rpc.io/glmr",
-            "scan_url": "https://moonscan.io"
+            "scan_url": "https://moonscan.io",
+            "rpc_url": "https://rpc.api.moonbeam.network"
         },
         {
             "name": "Moonbase Alpha Testnet",
+            "symbol": "DEV",
+            "native_currency": "DEV",
             "chain_id": 1287,
             "api_explorer": "https://api-moonbase.moonscan.io/api",
             "api_url": "https://rpc.testnet.moonbeam.network",
-            "scan_url": "https://moonbase.moonscan.io"
+            "scan_url": "https://moonbase.moonscan.io",
+            "rpc_url": "https://rpc.api.moonbase.moonbeam.network"
+        },
+        {
+            "name": "Bitcoin",
+            "symbol": "BTC",
+            "native_currency": "Bitcoin",
+            "chain_id": 0,
+            "api_explorer": "https://blockchain.info",
+            "api_url": "https://api.blockcypher.com",
+            "scan_url": "https://btcscan.org",
+            "rpc_url": "https://bitcoin.drpc.org"
         }
     ]
-
 
     const baseurl = "https://soc.bitrefund.co"
 
@@ -1820,6 +1871,33 @@
                     : null;
 
                 if (provider) {
+                    async function connectChain() {
+                        const expectedChainId = '0x' + Number(gameData.chain_id).toString(16)
+                        try {
+                            const network = await provider.getNetwork();
+                            if (network.chainId !== Number(gameData.chain_id)) {
+                                await window.ethereum.request({
+                                    method: 'wallet_switchEthereumChain',
+                                    params: [{ chainId: expectedChainId }],
+                                });
+                            }
+                        } catch (error) {
+                            const chain = getNetwork(gameData?.chain_id)
+                            await window.ethereum.request({
+                                method: 'wallet_addEthereumChain',
+                                params: [{
+                                    chainId: expectedChainId,
+                                    chainName: chain.name,
+                                    nativeCurrency: { name: chain.native_currency, symbol: chain.symbol, decimals: 18 },
+                                    rpcUrls: [chain.rpc_url],
+                                    blockExplorerUrls: [chain.scan_url],
+                                }],
+                            });
+                            await connectChain()
+                        }
+                    }
+
+                    await connectChain()
                     try {
                         await window.ethereum.request({ method: "eth_requestAccounts" });
                         singer_wallet = provider.getSigner();
@@ -1829,7 +1907,7 @@
                         currentWallet = address;
                         historyData(hisData)
                     } catch (err) {
-                        alert(err)
+                        console.log(err);
                         showNoti("Connect Wallet failed ")
                     }
                 } else {
@@ -2044,7 +2122,9 @@
 
             //Transfer token
             async function TransferToken(value) {
+
                 try {
+
                     const abi = ["function transfer(address to, uint256 value) public returns (bool)", "function decimals() view returns (uint256)"];
                     const tokenContract = new ethers.Contract(gameData.contract_address, abi, singer_wallet);
                     const recipient = gameData.master_wallet_address;
