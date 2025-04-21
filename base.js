@@ -1819,53 +1819,24 @@
                     ? new ethers.providers.Web3Provider(window.ethereum)
                     : null;
 
-                function isMobileDevice() {
-                    return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-                }
-
-                // if (isMobileDevice()) {
-                //     try {
-                //         // const WalletConnectProvider = window.WalletConnectProvider;
-                //         // console.log(WalletConnectProvider);
-                        
-                //         // const walletProvider = new WalletConnectProvider({
-                //         //     bridge: "https://bridge.walletconnect.org",
-                //         // });
-
-                //         // await walletProvider.enable();
-                //         // const web3Provider = new ethers.providers.Web3Provider(walletProvider);
-                //         // const signer = web3Provider.getSigner();
-                //         // const address = await signer.getAddress();
-
-                //         // showNoti(address)
-                //         // btnwallet_text.innerText = `✅ ${address.slice(0, 6)}...${address.slice(-4)}`;
-                //         // btnwallet.disabled = true;
-
-                //         console.log('https://metamask.app.link/dapp/' + window.location.host + window.location.pathname);
-                        
-                //     } catch (err) {
-                //         showNoti("Cannot connect Wallet on Phone")
-                //         console.error("Lỗi kết nối WalletConnect:", err);
-                //     }
-                // } else {
-                    // PC
-                    if (provider) {
-                        try {
-                            await window.ethereum.request({ method: "eth_requestAccounts" });
-                            singer_wallet = provider.getSigner();
-                            const address = await singer_wallet.getAddress();
-                            btnwallet_text.innerText = `${address.slice(0, 6)}...${address.slice(-4)}`;
-                            btnwallet.disabled = true;
-                            currentWallet = address;
-                            historyData(hisData)
-                        } catch (err) {
-                            showNoti("Connect Wallet failed ")
-                        }
-                    } else {
-                        showNoti("⚠️ Install Metamask to continute");
-                        const button = document.createElement("button");
-                        button.innerText = "🦊 Install now";
-                        button.style.cssText = `
+                if (provider) {
+                    try {
+                        await window.ethereum.request({ method: "eth_requestAccounts" });
+                        singer_wallet = provider.getSigner();
+                        const address = await singer_wallet.getAddress();
+                        btnwallet_text.innerText = `${address.slice(0, 6)}...${address.slice(-4)}`;
+                        btnwallet.disabled = true;
+                        currentWallet = address;
+                        historyData(hisData)
+                    } catch (err) {
+                        alert(err)
+                        showNoti("Connect Wallet failed ")
+                    }
+                } else {
+                    showNoti("⚠️ Install Metamask to continute");
+                    const button = document.createElement("button");
+                    button.innerText = "🦊 Install now";
+                    button.style.cssText = `
                         width: 90%;
                         margin-top:200px;
                         padding:10px 15px;
@@ -1875,24 +1846,22 @@
                         border:none;
                         border-radius:5px;
                         cursor:pointer;`;
-                        document.body.style.cssText = `
+                    document.body.style.cssText = `
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         background: #090a0c;
                     `
 
-                        button.addEventListener("click", () => {
-                            window.location.replace("https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn")
-                        })
-                        document.body.innerHTML = ''
-                        document.body.appendChild(button);
-                    }
-
+                    button.addEventListener("click", () => {
+                        window.location.replace("https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn")
+                    })
+                    document.body.innerHTML = ''
+                    document.body.appendChild(button);
                 }
 
-            // }
-        );
+            }
+            );
 
             prevButton.addEventListener('click', () => {
                 if (currentIndex > 0) {
