@@ -1823,26 +1823,31 @@
                     return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
                 }
 
-                if (isMobileDevice()) {
-                    try {
-                        const WalletConnectProvider = window.WalletConnectProvider;
-                        const walletProvider = new WalletConnectProvider({
-                            bridge: "https://bridge.walletconnect.org",
-                        });
+                // if (isMobileDevice()) {
+                //     try {
+                //         // const WalletConnectProvider = window.WalletConnectProvider;
+                //         // console.log(WalletConnectProvider);
+                        
+                //         // const walletProvider = new WalletConnectProvider({
+                //         //     bridge: "https://bridge.walletconnect.org",
+                //         // });
 
-                        await walletProvider.enable();
-                        const web3Provider = new ethers.providers.Web3Provider(walletProvider);
-                        const signer = web3Provider.getSigner();
-                        const address = await signer.getAddress();
+                //         // await walletProvider.enable();
+                //         // const web3Provider = new ethers.providers.Web3Provider(walletProvider);
+                //         // const signer = web3Provider.getSigner();
+                //         // const address = await signer.getAddress();
 
-                        showNoti(address)
-                        btnwallet_text.innerText = `✅ ${address.slice(0, 6)}...${address.slice(-4)}`;
-                        btnwallet.disabled = true;
-                    } catch (err) {
-                        showNoti("Cannot connect Wallet on Phone")
-                        console.error("Lỗi kết nối WalletConnect:", err);
-                    }
-                } else {
+                //         // showNoti(address)
+                //         // btnwallet_text.innerText = `✅ ${address.slice(0, 6)}...${address.slice(-4)}`;
+                //         // btnwallet.disabled = true;
+
+                //         console.log('https://metamask.app.link/dapp/' + window.location.host + window.location.pathname);
+                        
+                //     } catch (err) {
+                //         showNoti("Cannot connect Wallet on Phone")
+                //         console.error("Lỗi kết nối WalletConnect:", err);
+                //     }
+                // } else {
                     // PC
                     if (provider) {
                         try {
@@ -1886,7 +1891,8 @@
 
                 }
 
-            });
+            // }
+        );
 
             prevButton.addEventListener('click', () => {
                 if (currentIndex > 0) {
