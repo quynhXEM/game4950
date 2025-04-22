@@ -385,41 +385,77 @@
     }
 
     // History
-    function historyData(array) {
-        const groupedData = {};
+    function historyData(data) {
+        const grouped = {};
 
-        array.forEach(item => {
-            const { block_height, choice, bet_amount, wallet_address, result } = item;
+        data.forEach(item => {
+            const block = item.block_height;
 
-            if (!groupedData[block_height]) {
-                groupedData[block_height] = {
-                    block_height: block_height,
-                    total_50: 0,
-                    bet_50: 0,
-                    total_49: 0,
-                    bet_49: 0,
-                    result: result
+            if (!grouped[block]) {
+                grouped[block] = {
+                    block,
+                    total_bet: 0,
+                    win_amount: 0,
+                    result: item.result,
+                    bets: 0,
+                    win_count: 0,
+                    description: {},
+                    wallets_win: []
                 };
             }
 
-            if (choice === "50") {
-                groupedData[block_height].total_50 += parseFloat(bet_amount);
-                if (wallet_address === currentWallet) {
-                    groupedData[block_height].bet_50 += parseFloat(bet_amount);
-                }
+            grouped[block].bets = grouped[block].bets + 1
+            grouped[block].total_bet += parseFloat(item.bet_amount);
+            grouped[block].win_amount += item.winning_amount ? parseFloat(item.winning_amount) : 0;
+            if (item.status === 'win') grouped[block].win_count += 1;
+
+
+            // Description theo choice
+            const choice = item.choice;
+            if (!grouped[block].description[choice]) {
+                grouped[block].description[choice] = {
+                    total_bet: 0,
+                    you_bet: 0
+                };
             }
 
-            if (choice === "49") {
-                groupedData[block_height].total_49 += parseFloat(bet_amount);
-                if (wallet_address === currentWallet) {
-                    groupedData[block_height].bet_49 += parseFloat(bet_amount);
+            grouped[block].description[choice].total_bet += parseFloat(item.bet_amount);
+            if (item.wallet_address.toLowerCase() === currentWallet?.toLowerCase()) {
+                grouped[block].description[choice].you_bet += parseFloat(item.bet_amount);
+            }
+
+            // Wallet thắng
+            if (item.status === 'win') {
+                let winWallet = grouped[block].wallets_win.find(w => w.wallet.toLowerCase() === item.wallet_address.toLowerCase());
+                if (!winWallet) {
+                    winWallet = {
+                        wallet: item.wallet_address,
+                        bet_amount: 0,
+                        win_amount: 0
+                    };
+                    grouped[block].wallets_win.push(winWallet);
                 }
+
+                winWallet.bet_amount += parseFloat(item.bet_amount);
+                winWallet.win_amount += parseFloat(item.winning_amount || 0);
             }
         });
 
-        histories = Object.values(groupedData).sort((a, b) => b.block_height - a.block_height);
+        // Chuyển sang array, tính win_rate, sắp xếp giảm dần theo block
+        const result = Object.values(grouped).map(group => ({
+            block: group.block,
+            win_rate: (group.win_count / group.bets) * 100 || 0,
+            total_bet: group.total_bet,
+            win_amount: group.win_amount,
+            result: group.result,
+            description: group.description,
+            wallets_win: group.wallets_win
+        })).sort((a, b) => parseInt(b.block) - parseInt(a.block));
 
 
+
+        histories = result
+        return result;
     }
     // Connect WSS data game
     async function connectGamedata() {
@@ -972,7 +1008,7 @@
                     min-width: 300px;
                 }
                 .card-modal-widget {
-                     margin: 10% 20%;
+                    margin: 10%;
                 }
             }
 
@@ -981,7 +1017,7 @@
                     min-width: 300px;
                 }
                 .card-modal-widget {
-                     margin: 10% 30%;
+                 margin: 10% 20%;
                 }
             }
 
@@ -991,7 +1027,7 @@
                 }
 
                 .card-modal-widget {
-                    margin: 5%;
+                margin: 5%;
                 }
 
                 .container-widget {
@@ -1070,7 +1106,7 @@
                 padding:0;
                 position: absolute;
                 top: 0;
-                background-color: rgba(0, 0, 0, 0.5);
+                background-color: rgba(0, 0, 0, 0.5); 
                 display: flex;
                 flex: 1;
                 justify-content: center;
@@ -1087,13 +1123,12 @@
             }
             .card-modal-widget {
                 background-color: white;
-                flex:1;
                 display: flex;
-                overflow: hidden;
                 justify-content: center;
                 align-items: center;
                 flex-direction: column;
                 border-radius: 10px;
+                padding: 5px;
             }
             .tilte-modal-widget {
                 font-family: "Merienda", serif;
@@ -1608,51 +1643,90 @@
             background_modal.className = "bg-modal-widget none"
             const card_modal = document.createElement('div')
             card_modal.className = "card-modal-widget"
+            // const content_his = document.createElement('div')
+            // content_his.className = "content-modal-widget"
             card_modal.innerHTML = `
-                <div class="title-his-widget">
-                    <p class="merienda-text-widget" style="font-size: x-large;">🧭 History</p>
-                    <p class="closed-his" id="closed-his">❌</p>
-                </div>
-                <div class="content-his-widget">
-                    <p class="merienda-text-widget">Block</p>
-                    <h1 id="block-show-his" class="merienda-text-widget">#${current_block.height}</h1>
-                    <div id="resault-content" class="resault-content-widget bg-49">
-                        <p id="resault-show-his" class="merienda-text-widget">--</p>
+                <div class="popup-header" style="display: flex; width: 100%; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div class="header-left" style="display: flex; align-items: center; gap: 10px;">
+                    <div class="history-icon" style="background-color: #FFC107; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                        <i class="fas fa-history"></i>
                     </div>
-                    <div class="bet-his-widget">
-                        <div class="bet-box-his box-49">
-                            <p>Team 49</p>
-                            <div class="total-content">
-                                <p>Total</p>
-                                <p>Bet</p>
-                            </div>
-                            <div class="total-content">
-                                <p id="total-49-his">---</p>
-                                <p id="bet-49-his">---</p>
-                            </div>
+                    <h2 style="font-size: 22px; font-weight: 600; color: #333; margin: 0;">Lịch sử </h2>
+                </div>
+                <p class="closed-his" id="closed-his">❌</p>
+                </div>
+
+                <div class="block-info" style="text-align: center; margin-bottom: 15px;">
+                <p style="font-size: 16px; color: #666; margin-bottom: 5px;">Block</p>
+                <h1 id="block-view" style="font-size: 28px; font-weight: 700; color: #333; margin-bottom: 5px;">${current_block.height}</h1>
+                <a id="block-detail-view" href="https://www.blockchain.com/explorer/blocks/btc/${current_block.height} class="blockchain-link" target="_blank" style="display: inline-block; color: #3498db; text-decoration: none; font-size: 14px; margin-top: 5px;">
+                    Xem thông tin <i class="fas fa-external-link-alt"></i>
+                </a>
+                </div>
+
+                <div id="result-container" class="result-circle" style="width: 80px; height: 80px; background-color:rgb(180, 180, 180); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 20px auto; color: white; font-size: 24px; font-weight: bold;">
+                <span id="result-view">--</span>
+                </div>
+
+                <div class="stats-summary" style="display: flex; width: 100%; justify-content: space-between; margin: 20px 0; background-color: #f8f9fa; border-radius: 10px; padding: 15px;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <span style="font-size: 12px; color: #666; margin-bottom: 5px;">Tỉ Lệ Thắng</span>
+                    <span id="win-rate-view" style="font-size: 16px; font-weight: 600; color: #333;">---</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <span style="font-size: 12px; color: #666; margin-bottom: 5px;">Tổng Cược</span>
+                    <span id="total-bet-view" style="font-size: 16px; font-weight: 600; color: #333;">---</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <span style="font-size: 12px; color: #666; margin-bottom: 5px;">Thắng Cược</span>
+                    <span id="win-amount-view" style="font-size: 16px; font-weight: 600; color: #333;">---</span>
+                </div>
+                </div>
+
+                <div class="teams-container" style="display: flex; flex: 1; width: 100%; gap: 10px; margin-bottom: 20px;">
+                <div class="team team-left" style="flex: 1; border-radius: 10px; padding: 15px; background-color: #FFEBEE;">
+                    <h3 style="text-align: center; margin-bottom: 10px; font-size: 18px; color: #333;">Team 49</h3>
+                    <div class="team-stats" style="margin-bottom: 15px;">
+                        <div class="stat-row" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span style="color: #666;">Tổng cược:</span>
+                            <span id="total-49-view" style="font-weight: 600; color: #333;">---</span>
                         </div>
-                        <div class="bet-box-his box-50">
-                            <p>Team 50</p>
-                            <div class="total-content">
-                                <p>Total</p>
-                                <p>Bet</p>
-                            </div>
-                            <div class="total-content">
-                                <p id="total-50-his">---</p>
-                                <p id="bet-50-his">---</p>
-                            </div>
+                        <div class="stat-row" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span style="color: #666;">Bạn cược:</span>
+                            <span id="bet-49-view" style="font-weight: 600; color: #333;">---</span>
                         </div>
                     </div>
                 </div>
-                <div class="footer-his-widget ">
-                    <button class="btn-action-his btn-his-pre">
-                        <p> ◀️ Previous </p>
-                    </button>
-                    <button class="btn-action-his btn-his-next">
-                        <p> Next ▶️</p>
-                    </button>
+
+                <div class="team team-right" style="flex: 1; width: 100%; border-radius: 10px; padding: 15px; background-color: #E8F5E9;">
+                    <h3 style="text-align: center; text-wrap: nowrap; margin-bottom: 10px; font-size: 18px; color: #333;">Team 50</h3>
+                    <div class="team-stats" style="margin-bottom: 15px;">
+                        <div class="stat-row" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span style="color: #666;">Tổng cược</span>
+                            <span id="total-50-view" style="font-weight: 600; color: #333;">---</span>
+                        </div>
+                        <div class="stat-row" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span style="color: #666;">Bạn cược:</span>
+                            <span id="bet-50-view" style="font-weight: 600; color: #333;">---</span>
+                        </div>
+                    </div>
+                    
+                </div>
+                </div>
+                <div class="navigation" style="display: flex; width: 100%; justify-content: space-between;">
+                <button class="btn-action-his btn-his-next nav-btn next-btn" style="background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 5px; padding: 8px 12px 8px 15px; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 14px; color: #555; transition: all 0.2s;">
+                    Tiếp theo <i class="fas fa-chevron-right"></i>
+                </button>    
+                <button class="btn-action-his nav-btn prev-btn btn-his-pre" style="background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 5px; padding: 8px 15px 8px 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 14px; color: #555; transition: all 0.2s;">
+                    <i class="fas fa-chevron-left"></i> Trước đó
+                </button>
+                </div>
+                <div class="winning-wallets">
+                <h4 style="font-size: 14px; margin-bottom: 8px; color: #555;">Ví thắng</h4>
+                <ul id="win-wallets-view" style="list-style: none; padding: 0; margin: 0;"></ul>
                 </div>
             `
+            // card_modal.appendChild(content_his)
             background_modal.appendChild(card_modal)
             document.body.appendChild(background_modal)
 
@@ -1772,23 +1846,42 @@
             function reRenderHis(index) {
                 const item = histories[index]
                 if (item) {
-                    const resault_content = document.getElementById('resault-content')
-                    resault_content.className = item.result > 49 ? "resault-content-widget bg-50" : "resault-content-widget bg-49"
-                    const block_show_his = document.getElementById('block-show-his')
-                    block_show_his.innerText = "#" + item.block_height
-                    const resault_show_his = document.getElementById('resault-show-his')
-                    resault_show_his.innerText = item.result
-                    // 49
-                    const total_49 = document.getElementById('total-49-his')
-                    total_49.innerHTML = item.total_49
-                    const bet_49 = document.getElementById('bet-49-his')
-                    bet_49.innerHTML = item.bet_49
-                    // 50
-                    const total_50 = document.getElementById('total-50-his')
-                    total_50.innerHTML = item.total_50
-                    const bet_50 = document.getElementById('bet-50-his')
-                    bet_50.innerHTML = item.bet_50
+                    const block_view = document.getElementById("block-view")
+                    const result_view = document.getElementById("result-view")
+                    const win_rate_view = document.getElementById("win-rate-view")
+                    const total_bet_view = document.getElementById("total-bet-view")
+                    const win_amount_view = document.getElementById("win-amount-view")
+                    const total_49_view = document.getElementById("total-49-view")
+                    const bet_49_view = document.getElementById("bet-49-view")
+                    const total_50_view = document.getElementById("total-50-view")
+                    const bet_50_view = document.getElementById("bet-50-view")
+                    const win_wallets_view = document.getElementById("win-wallets-view")
+                    const block_detail_view = document.getElementById("block-detail-view")
+                    const result_container = document.getElementById("result-container")
 
+                    result_container.style.backgroundColor = item.result == 49 ? color.red : color.green;
+                    block_view.innerText = item.block;
+                    result_view.innerText = item.result;
+                    win_rate_view.innerText = item?.win_rate + "%";
+                    total_bet_view.innerText = item?.total_bet + gameData.symbol;
+                    win_amount_view.innerText = item?.win_amount + gameData.symbol;
+                    total_49_view.innerText = item?.description?.["49"]?.total_bet + gameData.symbol;;
+                    bet_49_view.innerText = item?.description?.["49"]?.you_bet + gameData.symbol;
+                    total_50_view.innerText = item?.description?.["50"]?.total_bet + gameData.symbol;
+                    bet_50_view.innerText = item?.description?.["50"]?.you_bet + gameData.symbol;
+                    block_detail_view.href = `https://www.blockchain.com/explorer/blocks/btc/${item.block}`
+                    let win_wallets_html = '';
+                    item?.wallets_win?.forEach(win => {
+                        win_wallets_html = win_wallets_html + `
+                        <li style="font-size: 13px; margin-bottom: 5px; display: flex; justify-content: space-between; gap: 10px;">
+                            ${win.wallet.substring(0, 7)}...${win.wallet.substring(35)}
+                            <span style="color:rgb(214, 59, 59); font-weight: 600;">-${win.bet_amount} ${gameData.symbol}</span>
+                            <span style="color: #4CAF50; font-weight: 600;">+${win.win_amount} ${gameData.symbol}</span>
+                            <span><a target="_blank" href="${getNetwork(gameData.chain_id).scan_url}/tx/${win?.tx_hash}">Chi tiết</a></span>
+                        </li>
+                        `
+                    })
+                    win_wallets_view.innerHTML = win_wallets_html;
                     hisIndex = index
                 }
             }
@@ -1965,11 +2058,11 @@
             })
 
             his_Prev.addEventListener('click', function () {
-                reRenderHis(hisIndex - 1)
+                reRenderHis(hisIndex + 1)
             });
 
             his_Next.addEventListener('click', function () {
-                reRenderHis(hisIndex + 1)
+                reRenderHis(hisIndex - 1)
             });
 
             history_btn.addEventListener('click', () => {
