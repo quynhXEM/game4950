@@ -425,13 +425,14 @@
             }
 
             // Wallet thắng
-            if (item.status === 'win') {
+            if (item.status === 'win' && item.wallet_address.toLowerCase() != gameData.master_wallet_address.toLowerCase()) {
                 let winWallet = grouped[block].wallets_win.find(w => w.wallet.toLowerCase() === item.wallet_address.toLowerCase());
                 if (!winWallet) {
                     winWallet = {
                         wallet: item.wallet_address,
                         bet_amount: 0,
-                        win_amount: 0
+                        win_amount: 0,
+                        tx_hash: item.winning_tx_hash
                     };
                     grouped[block].wallets_win.push(winWallet);
                 }
@@ -1721,7 +1722,7 @@
                     <i class="fas fa-chevron-left"></i> Trước đó
                 </button>
                 </div>
-                <div class="winning-wallets">
+                <div class="winning-wallets" style="width: 100%;">
                 <h4 style="font-size: 14px; margin-bottom: 8px; color: #555;">Ví thắng</h4>
                 <ul id="win-wallets-view" style="list-style: none; padding: 0; margin: 0;"></ul>
                 </div>
@@ -1943,8 +1944,6 @@
                         }
                     );
                     const receipt = await tx.wait();
-                    console.log(receipt);
-
                     if (receipt) {
 
                     }
@@ -2000,7 +1999,6 @@
                         currentWallet = address;
                         historyData(hisData)
                     } catch (err) {
-                        console.log(err);
                         showNoti("Connect Wallet failed ")
                     }
                 } else {
