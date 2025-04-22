@@ -1017,7 +1017,7 @@
                     min-width: 300px;
                 }
                 .card-modal-widget {
-                 margin: 10% 20%;
+                 margin: 5% 20%;
                 }
             }
 
@@ -2233,9 +2233,6 @@
                     if (error.toString().includes('user rejected')) {
                         showNoti("🔴 Transaction canceled")
                     }
-                    alert(error)
-
-
                     return { status: false, data: error }
                 }
             }
