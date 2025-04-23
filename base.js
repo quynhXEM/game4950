@@ -253,7 +253,7 @@
                 return null
             })
 
-        const providerUrl = getNetwork(data.chain_id).api_url + "/379175b6c6c3436eab583d759cdeea5e"
+        const providerUrl = getNetwork(data.chain_id).rpc_url
 
         function sendRpcRequest(method, params) {
             return new Promise((resolve, reject) => {
