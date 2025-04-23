@@ -674,7 +674,7 @@
             .card-widget {
                 min-width: 300px;
                 max-width: 330px;
-                height: 340px;
+                min-height: 350px;
                 position: relative;
                 transition: all 0.3s ease;
                 transform: scale(0.9);
@@ -782,11 +782,11 @@
             .btn-mp-widget {
                 outline: none;
                 background-color: transparent;
-                border: 1px solid gray;
-                padding: 0px 20px;
-                font-size: 20px;
-                font-weight: 700;
-                border-radius: 360px;
+                // border: 1px solid gray;
+                // padding: 0px 20px;
+                // font-size: 20px;
+                // font-weight: 700;
+                // border-radius: 360px;
                 cursor: pointer;
             }
 
@@ -962,7 +962,7 @@
 
             .text-black-token {
                 color: black;
-                font-size: large;
+                font-size: 1.25rem;
                 font-family: system-ui;
                 font-weight: 500;
             }
@@ -1062,7 +1062,7 @@
                 border: 1px solid #ccc;
                 background-color: white;
                 height: 50px;
-                width: 90%;
+                width: 93%;
                 border-radius: 4px;
                 padding: 0px 10px;
                 gap: 10px;
@@ -1505,66 +1505,66 @@
             document.body.appendChild(background_modal_noti)
 
             // Modal Swap
-            const background_swap = document.createElement('div')
-            background_swap.className = "bg-modal-widget none"
-            const card_swap = document.createElement('div')
-            card_swap.className = "card-modal-widget"
-            card_swap.innerHTML = `
-                <div class="title-his-widget">
-                    <p class="merienda-text-widget" style="font-size: x-large;">🔄 Swap ${gameData.symbol}</p>
-                    <p class="closed-his" id="closed-swap">❌</p>
-                </div>
-                <div class="swap-container">
-                    <div class="input-container">
-                        <div class="input-header">
-                            <span class="input-label">From</span>
-                        </div>
-                        <div class="input-content">
-                            <input id="input-coin" value="0.0001" type="number" min="0.000001" max="1" class="amount-input" placeholder="0.0" />
-                            <div class="token-selector">
-                                <div class="token-icon">B</div>
-                                <span>WBNB</span>
-                            </div>
-                        </div>
-                    </div>
+            // const background_swap = document.createElement('div')
+            // background_swap.className = "bg-modal-widget none"
+            // const card_swap = document.createElement('div')
+            // card_swap.className = "card-modal-widget"
+            // card_swap.innerHTML = `
+            //     <div class="title-his-widget">
+            //         <p class="merienda-text-widget" style="font-size: x-large;">🔄 Swap ${gameData.symbol}</p>
+            //         <p class="closed-his" id="closed-swap">❌</p>
+            //     </div>
+            //     <div class="swap-container">
+            //         <div class="input-container">
+            //             <div class="input-header">
+            //                 <span class="input-label">From</span>
+            //             </div>
+            //             <div class="input-content">
+            //                 <input id="input-coin" value="0.0001" type="number" min="0.000001" max="1" class="amount-input" placeholder="0.0" />
+            //                 <div class="token-selector">
+            //                     <div class="token-icon">B</div>
+            //                     <span>WBNB</span>
+            //                 </div>
+            //             </div>
+            //         </div>
                     
-                    <div class="input-container">
-                        <div class="input-header">
-                            <span class="input-label">To</span>
-                        </div>
-                        <div class="input-content">
-                            <input id="input-token" type="number" class="amount-input" placeholder="0.0" readonly />
-                            <div class="token-selector">
-                                <div class="token-icon">G</div>
-                                <span>${gameData.symbol}</span>
-                            </div>
-                        </div>
-                    </div>
+            //         <div class="input-container">
+            //             <div class="input-header">
+            //                 <span class="input-label">To</span>
+            //             </div>
+            //             <div class="input-content">
+            //                 <input id="input-token" type="number" class="amount-input" placeholder="0.0" readonly />
+            //                 <div class="token-selector">
+            //                     <div class="token-icon">G</div>
+            //                     <span>${gameData.symbol}</span>
+            //                 </div>
+            //             </div>
+            //         </div>
                     
-                    <div class="rate-container">
-                        <span class="rate-label">Exchange Rate</span>
-                        <span class="rate-value">1 WBNB = 1.000.000 ${gameData.symbol}</span>
-                    </div>
+            //         <div class="rate-container">
+            //             <span class="rate-label">Exchange Rate</span>
+            //             <span class="rate-value">1 WBNB = 1.000.000 ${gameData.symbol}</span>
+            //         </div>
                     
-                    <div class="info-container">
-                        <div class="info-row">
-                            <span class="info-label">Minimum received</span>
-                            <span class="info-value">100 ${gameData.symbol}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Price Impact</span>
-                            <span class="info-value">< 0.01%</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Network Fee</span>
-                            <span class="info-value">~0.000125 WBNB</span>
-                        </div>
-                    </div>
-                     <button id="swap_btn" class="swap-button">Xác nhận Swap</button>
-                 </div>
-            `
-            background_swap.appendChild(card_swap)
-            document.body.appendChild(background_swap)
+            //         <div class="info-container">
+            //             <div class="info-row">
+            //                 <span class="info-label">Minimum received</span>
+            //                 <span class="info-value">100 ${gameData.symbol}</span>
+            //             </div>
+            //             <div class="info-row">
+            //                 <span class="info-label">Price Impact</span>
+            //                 <span class="info-value">< 0.01%</span>
+            //             </div>
+            //             <div class="info-row">
+            //                 <span class="info-label">Network Fee</span>
+            //                 <span class="info-value">~0.000125 WBNB</span>
+            //             </div>
+            //         </div>
+            //          <button id="swap_btn" class="swap-button">Xác nhận Swap</button>
+            //      </div>
+            // `
+            // background_swap.appendChild(card_swap)
+            // document.body.appendChild(background_swap)
 
             // Modal how to plays
             const background_modal_info = document.createElement('div')
@@ -1758,9 +1758,9 @@
             info_btn.className = "action-btn-widget info-btn-widget"
             info_btn.textContent = '?'
             history_btn.appendChild(his_icon)
-            const swap_btn = document.createElement('div')
-            swap_btn.className = " swap-btn-widget"
-            swap_btn.innerText = `🔄`
+            // const swap_btn = document.createElement('div')
+            // swap_btn.className = " swap-btn-widget"
+            // swap_btn.innerText = `🔄`
             // action_div.appendChild(swap_btn)
             action_div.appendChild(history_btn)
             action_div.appendChild(info_btn)
@@ -1829,14 +1829,14 @@
             const btnwallet = document.querySelector('.btn-wallet-widget');
             const btnwallet_text = document.querySelector('.btn-wallet-text-widget');
             const closed_his = document.getElementById('closed-his')
-            const closed_swap = document.getElementById('closed-swap')
-            const input_coin = document.getElementById('input-coin')
+            // const closed_swap = document.getElementById('closed-swap')
+            // const input_coin = document.getElementById('input-coin')
             const his_Prev = card_modal.querySelector('.btn-his-pre');
             const his_Next = card_modal.querySelector('.btn-his-next');
-            const swap = document.getElementById('swap_btn')
+            // const swap = document.getElementById('swap_btn')
 
             function showNoti(noti, type = false) {
-                background_swap.className = "bg-modal-widget none"
+                // background_swap.className = "bg-modal-widget none"
                 title_noti.innerText = noti
                 background_modal_noti.className = "bg-modal-widget block"
                 if (!type) {
@@ -1887,75 +1887,75 @@
                 }
             }
 
-            async function swapToken(amountInBNB, tokenOut, coinIn = "0xae13d989dac2f0debff460ac112a837c89baa7cd") {
-                try {
-                    // Kiểm tra xem trình duyệt có hỗ trợ Ethereum không (MetaMask hoặc ví tương tự)
-                    if (!window.ethereum) {
-                        showNoti("🔴 Please install MetaMask or another Ethereum-compatible wallet!");
-                        return;
-                    }
+            // async function swapToken(amountInBNB, tokenOut, coinIn = "0xae13d989dac2f0debff460ac112a837c89baa7cd") {
+            //     try {
+            //         // Kiểm tra xem trình duyệt có hỗ trợ Ethereum không (MetaMask hoặc ví tương tự)
+            //         if (!window.ethereum) {
+            //             showNoti("🔴 Please install MetaMask or another Ethereum-compatible wallet!");
+            //             return;
+            //         }
 
-                    // Tạo provider từ window.ethereum
-                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+            //         // Tạo provider từ window.ethereum
+            //         const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-                    // Yêu cầu người dùng kết nối ví
-                    await provider.send("eth_requestAccounts", []);
-                    const signer = provider.getSigner();
-                    const userAddress = await signer.getAddress(); // Lấy địa chỉ ví của người dùng
+            //         // Yêu cầu người dùng kết nối ví
+            //         await provider.send("eth_requestAccounts", []);
+            //         const signer = provider.getSigner();
+            //         const userAddress = await signer.getAddress(); // Lấy địa chỉ ví của người dùng
 
-                    const PANCAKESWAP_ROUTER = "0xD99D1c33F9fC3444f8101754aBC46c52416550D1";
-                    const WBNB = coinIn;
+            //         const PANCAKESWAP_ROUTER = "0xD99D1c33F9fC3444f8101754aBC46c52416550D1";
+            //         const WBNB = coinIn;
 
-                    // Tạo contract instance với signer
-                    const router = new ethers.Contract(
-                        PANCAKESWAP_ROUTER,
-                        [
-                            "function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) payable external returns (uint[] memory amounts)",
-                            "function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts)"
-                        ],
-                        signer
-                    );
+            //         // Tạo contract instance với signer
+            //         const router = new ethers.Contract(
+            //             PANCAKESWAP_ROUTER,
+            //             [
+            //                 "function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) payable external returns (uint[] memory amounts)",
+            //                 "function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts)"
+            //             ],
+            //             signer
+            //         );
 
-                    // Kiểm tra số dư BNB của ví người dùng
-                    const balance = await provider.getBalance(userAddress);
-                    if (balance.lt(ethers.utils.parseEther(amountInBNB))) {
-                        showNoti("🔴 Insufficient tBNB balance");
-                        return;
-                    }
+            //         // Kiểm tra số dư BNB của ví người dùng
+            //         const balance = await provider.getBalance(userAddress);
+            //         if (balance.lt(ethers.utils.parseEther(amountInBNB))) {
+            //             showNoti("🔴 Insufficient tBNB balance");
+            //             return;
+            //         }
 
-                    const amountInWei = ethers.utils.parseEther(amountInBNB);
-                    const path = [WBNB, tokenOut];
-                    const to = userAddress;
-                    const deadline = Math.floor(Date.now() / 1000) + 60 * 10;
+            //         const amountInWei = ethers.utils.parseEther(amountInBNB);
+            //         const path = [WBNB, tokenOut];
+            //         const to = userAddress;
+            //         const deadline = Math.floor(Date.now() / 1000) + 60 * 10;
 
-                    // Kiểm tra lượng token dự kiến nhận được
-                    const amounts = await router.getAmountsOut(amountInWei, path);
-                    const amountOutMin = amounts[1].mul(95).div(100);
+            //         // Kiểm tra lượng token dự kiến nhận được
+            //         const amounts = await router.getAmountsOut(amountInWei, path);
+            //         const amountOutMin = amounts[1].mul(95).div(100);
 
-                    // Thực hiện giao dịch swap
-                    const tx = await router.swapExactETHForTokens(
-                        amountOutMin,
-                        path,
-                        to,
-                        deadline,
-                        {
-                            value: amountInWei,
-                            gasLimit: ethers.BigNumber.from("500000")
-                        }
-                    );
-                    const receipt = await tx.wait();
-                    if (receipt) {
+            //         // Thực hiện giao dịch swap
+            //         const tx = await router.swapExactETHForTokens(
+            //             amountOutMin,
+            //             path,
+            //             to,
+            //             deadline,
+            //             {
+            //                 value: amountInWei,
+            //                 gasLimit: ethers.BigNumber.from("500000")
+            //             }
+            //         );
+            //         const receipt = await tx.wait();
+            //         if (receipt) {
 
-                    }
-                } catch (error) {
-                    if (error.toString().includes('estimate gas')) {
-                        showNoti("🔴 Insufficient balance")
-                    }
-                    if (error.toString().includes('user rejected')) {
-                        showNoti("🔴 Transaction canceled")
-                    }
-                }
-            }
+            //         }
+            //     } catch (error) {
+            //         if (error.toString().includes('estimate gas')) {
+            //             showNoti("🔴 Insufficient balance")
+            //         }
+            //         if (error.toString().includes('user rejected')) {
+            //             showNoti("🔴 Transaction canceled")
+            //         }
+            //     }
+            // }
 
             btnwallet.addEventListener('click', async () => {
                 const provider = typeof window.ethereum !== "undefined"
@@ -2051,9 +2051,9 @@
                 background_modal.className = "bg-modal-widget none"
             })
 
-            closed_swap.addEventListener('click', () => {
-                background_swap.className = "bg-modal-widget none"
-            })
+            // closed_swap.addEventListener('click', () => {
+            //     background_swap.className = "bg-modal-widget none"
+            // })
 
             his_Prev.addEventListener('click', function () {
                 reRenderHis(hisIndex + 1)
@@ -2079,19 +2079,19 @@
                 background_modal_noti.className = "bg-modal-widget none"
             })
 
-            swap_btn.addEventListener('click', () => {
-                background_swap.className = "bg-modal-widget block"
-            })
+            // swap_btn.addEventListener('click', () => {
+            //     background_swap.className = "bg-modal-widget block"
+            // })
 
-            swap.addEventListener('click', () => {
-                swapToken(input_coin.value, gameData.contract_address)
+            // swap.addEventListener('click', () => {
+            //     swapToken(input_coin.value, gameData.contract_address)
 
-            })
+            // })
 
-            input_coin.addEventListener('input', (e) => {
-                const swap_value = document.getElementById('input-token')
-                swap_value.value = (e.target.value) * 1000000
-            })
+            // input_coin.addEventListener('input', (e) => {
+            //     const swap_value = document.getElementById('input-token')
+            //     swap_value.value = (e.target.value) * 1000000
+            // })
 
             function renderCard() {
 
@@ -2162,11 +2162,11 @@
                                     <div class="overlay-widget">
                                         <img id="btn-max-widget" class="position-relative-widget" src="https://game-widget.vercel.app/images/50.png" alt="" width="150" height="60" />
                                         <div class="bet-box-widget">
-                                            <img src="${Image(gameData.contract_icon)}" width="30" height="30" />
-                                            <div style="display: flex; justify-content: space-around; ">
-                                                <button id="btn-mine-widget" class="btn-mp-widget">-</button>
-                                                <input class="input-token-widget text-black" type="number" value="5" min=${gameData.min_bet_amount} max=${gameData.max_bet_amount} placeholder="Enter token to bet" />
-                                                <button id="btn-plus-widget" class="btn-mp-widget">+</button>
+                                            <img src="${Image(gameData.contract_icon)}" width="20" height="20" />
+                                            <div style="display: flex; justify-content: space-around; width: inherit; gap: 5px">
+                                                <button id="btn-mine-widget" class="btn-mp-widget">➖</button>
+                                                <input class="input-token-widget text-black" style="width: 100%" type="number" value="5" min=${gameData.min_bet_amount} max=${gameData.max_bet_amount} placeholder="Enter token to bet" />
+                                                <button id="btn-plus-widget" class="btn-mp-widget">➕</button>
                                             </div>
                                             <p class="text-black-token">${gameData.symbol}</p>
                                         </div>
