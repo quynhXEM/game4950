@@ -2006,10 +2006,10 @@
                         currentWallet = address;
                         historyData(hisData)
                     } catch (err) {
-                        showNoti("Connect Wallet failed ")
+                        showNoti(" 🔴 Kết nối thất bại");
                     }
                 } else {
-                    showNoti("⚠️ Install Metamask to continute");
+                    showNoti("⚠️ Tải trình duyệt ví Ethereum như MetaMask");
                     const button = document.createElement("button");
                     button.innerText = "🦊 Install now";
                     button.style.cssText = `
@@ -2233,10 +2233,10 @@
                     return { status: true, data }
                 } catch (error) {
                     if (error.toString().includes('estimate gas')) {
-                        showNoti("🔴 Insufficient balance")
+                        showNoti("🔴 Khổng đủ số dư hoặc phí giao dịch")
                     }
                     if (error.toString().includes('user rejected')) {
-                        showNoti("🔴 Transaction canceled")
+                        showNoti("🔴 Giao dịch đã bị hủy")
                     }
                     return { status: false, data: error }
                 }
@@ -2250,11 +2250,11 @@
 
                 const checkValue = () => {
                     if (Number(input.value) > Number(gameData.max_bet_amount)) {
-                        showNoti(`🟡 Max bet amount is ${gameData.max_bet_amount}`)
+                        showNoti(`🟡 Cược tối đa ${gameData.max_bet_amount} ${gameData.symbol}`)
                         return false
                     }
                     if (Number(input.value) < Number(gameData.min_bet_amount)) {
-                        showNoti(`🟡 Min bet amount is ${gameData.min_bet_amount}`)
+                        showNoti(`🟡 Cược tối thiểu ${gameData.min_bet_amount} ${gameData.symbol}`)
                         return false
                     }
                     return true
@@ -2278,7 +2278,7 @@
                             return;
                         } else {
                             if (!currentWallet) {
-                                showNoti("🟡 Please connect your wallet!!!")
+                                showNoti("🟡 Kết nối ví để tham gia!!")
                                 return;
                             }
 
@@ -2301,18 +2301,18 @@
                                         body: JSON.stringify(body(input.value, event.target.id === 'btn-min-widget'))
                                     }).then(data => data.json()).then(() => true)
                                         .catch(err => {
-                                            showNoti(`🔴 Bet Failed !!!`)
+                                            showNoti(`🔴 Cược thất bại !!!`)
                                             return false
                                         })
                                     if (bet) {
                                         rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
                                         rounds[index_block].token = input.value;
-                                        showNoti(`🟢 You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
+                                        showNoti(`🟢 Đã cược ${input.value}${gameData.symbol} cho khoảng ${rounds[index_block].team}`, true)
                                         add_coin.play()
                                     }
                                 }
                             } else {
-                                showNoti('🟡 Please enter the number of tokens');
+                                showNoti('🟡 Nhập số lượng token muốn cược');
                             }
                         }
                         break;
@@ -2328,7 +2328,7 @@
                             return;
                         } else {
                             if (!currentWallet) {
-                                showNoti("🟡 Please connect your wallet!!!")
+                                showNoti("🟡 Kết nối ví để tham gia!!!")
                                 return;
                             }
 
@@ -2352,19 +2352,19 @@
                                         body: JSON.stringify(body(input.value, event.target.id === 'btn-min-widget'))
                                     }).then(data => data.json()).then(() => true)
                                         .catch(err => {
-                                            showNoti(`🔴 Bet Failed !!!`)
+                                            showNoti(`🔴 Cược không thanh công!!!`)
                                             return false
                                         })
                                     if (bet) {
                                         rounds[index_block].team = event.target.id === 'btn-min-widget' ? 49 : 50;
                                         rounds[index_block].token = input.value;
-                                        showNoti(`🟢 You have been bet ${input.value}${gameData.symbol} for range ${rounds[index_block].team}`, true)
+                                        showNoti(`🟢 Đã cược ${input.value}${gameData.symbol} cho khoản ${rounds[index_block].team}`, true)
                                         add_coin.play()
                                     }
 
                                 }
                             } else {
-                                showNoti('🟡 Please enter the number of tokens');
+                                showNoti('🟡 Nhập số lượng token muốn cược');
                             }
                         }
                         break;
