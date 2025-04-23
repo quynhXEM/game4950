@@ -674,7 +674,7 @@
             .card-widget {
                 min-width: 300px;
                 max-width: 330px;
-                min-height: 350px;
+                min-height: 360px;
                 position: relative;
                 transition: all 0.3s ease;
                 transform: scale(0.9);
@@ -2162,13 +2162,13 @@
                                     <div class="overlay-widget">
                                         <img id="btn-max-widget" class="position-relative-widget" src="https://game-widget.vercel.app/images/50.png" alt="" width="150" height="60" />
                                         <div class="bet-box-widget">
-                                            <img src="${Image(gameData.contract_icon)}" width="20" height="20" />
+                                            <img src="${Image(gameData.contract_icon)}" width="20" height="20" style="max-width: 30px"/>
                                             <div style="display: flex; justify-content: space-around; width: inherit; gap: 5px">
                                                 <button id="btn-mine-widget" class="btn-mp-widget">➖</button>
                                                 <input class="input-token-widget text-black" style="width: 100%" type="number" value="5" min=${gameData.min_bet_amount} max=${gameData.max_bet_amount} placeholder="Enter token to bet" />
                                                 <button id="btn-plus-widget" class="btn-mp-widget">➕</button>
                                             </div>
-                                            <p class="text-black-token">${gameData.symbol}</p>
+                                            <p class="text-black-token" style="max-width: 30px">${gameData.symbol}</p>
                                         </div>
                                         <img id="btn-min-widget" class="position-relative-widget " src="https://game-widget.vercel.app/images/49.png" alt="" width="150" height="60" />
                                     </div>
