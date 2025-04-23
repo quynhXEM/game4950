@@ -504,7 +504,7 @@
                                 const round = rounds.find((items) => items.id == item.block_height)
                                 round[option] += Number(item.bet_amount)
                                 const dom = document.getElementById(`${option}_total_${item.block_height}`)
-                                dom.innerHTML = `${round[option]}<span class="text-black-token">${gameData.symbol}</span>`
+                                dom.innerHTML = `${round[option]}<span class="symbol">${gameData.symbol}</span>`
                             })
                             break;
                         case 'create':
@@ -512,7 +512,7 @@
                             const round = rounds.find((item) => item.id == data[0].block_height)
                             round[option] += Number(data[0].bet_amount)
                             const dom = document.getElementById(`${option}_total_${data[0].block_height}`)
-                            dom.innerHTML = `${round[option]}<span class="text-black-token">${gameData.symbol}</span>`
+                            dom.innerHTML = `${round[option]}<span class="symbol">${gameData.symbol}</span>`
                             break;
                         case 'delete':
                             break;
@@ -674,7 +674,7 @@
             .card-widget {
                 min-width: 300px;
                 max-width: 330px;
-                min-height: 360px;
+                min-height: 350px;
                 position: relative;
                 transition: all 0.3s ease;
                 transform: scale(0.9);
@@ -782,11 +782,6 @@
             .btn-mp-widget {
                 outline: none;
                 background-color: transparent;
-                // border: 1px solid gray;
-                // padding: 0px 20px;
-                // font-size: 20px;
-                // font-weight: 700;
-                // border-radius: 360px;
                 cursor: pointer;
             }
 
@@ -943,12 +938,10 @@
             }
 
             .text-49-widget {
-                font-size: larger;
                 color: ${color.red}
             }
 
             .text-50-widget {
-                font-size: larger;
                 color: ${color.green}
             }
 
@@ -1017,6 +1010,10 @@
                 .card-widget {
                     min-width: 300px;
                 }
+
+                .symbol{
+                    font-size: 0.8rem;
+                }
                 .card-modal-widget {
                  margin: 5% 20%;
                 }
@@ -1028,7 +1025,7 @@
                 }
 
                 .card-modal-widget {
-                margin: 5%;
+                     margin: 5%;
                 }
 
                 .container-widget {
@@ -1182,6 +1179,11 @@
                 font-optical-sizing: auto;
                 font-weight: 700;
                 font-style: normal;
+            }
+
+            .symbol {
+                font-size: 1rem;
+                font-weight: 700;
             }
 
             .title-his-widget {
@@ -1470,14 +1472,19 @@
                 font-weight: 500;
             }
 
+            .container {
+                padding: 16px;
+            }
+
             @media (max-width: 480px) {
-                .container {
-                    padding: 16px;
-                }
-                
                 .amount-input {
                     font-size: 20px;
                 }
+                .symbol {
+                    font-size: 0.8rem;
+                }
+
+                
             }
 
         `;
@@ -1527,7 +1534,7 @@
             //                 </div>
             //             </div>
             //         </div>
-                    
+
             //         <div class="input-container">
             //             <div class="input-header">
             //                 <span class="input-label">To</span>
@@ -1540,12 +1547,12 @@
             //                 </div>
             //             </div>
             //         </div>
-                    
+
             //         <div class="rate-container">
             //             <span class="rate-label">Exchange Rate</span>
             //             <span class="rate-value">1 WBNB = 1.000.000 ${gameData.symbol}</span>
             //         </div>
-                    
+
             //         <div class="info-container">
             //             <div class="info-row">
             //                 <span class="info-label">Minimum received</span>
@@ -2115,11 +2122,11 @@
                             <div class="betted-contaciner-widget">
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-49-widget">49</p>
-                                    <p class="merienda-text-widget text-49-widget">${item.min}<span class="text-black-token">${gameData.symbol}</span></p>
+                                    <p class="merienda-text-widget text-49-widget">${item.min}<span class="symbol">${gameData.symbol}</span></p>
                                 </div>
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-50-widget">50</p>
-                                    <p class="merienda-text-widget text-50-widget">${item.max}<span class="text-black-token">${gameData.symbol}</span></p>
+                                    <p class="merienda-text-widget text-50-widget">${item.max}<span class="symbol">${gameData.symbol}</span></p>
                                 </div>
                             </div>
                             <div class="card-content-widget">
@@ -2149,11 +2156,11 @@
                             <div class="betted-contaciner-widget">
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-49-widget">49</p>
-                                    <p id="min_total_${item.id}" class="merienda-text-widget text-49-widget">${item.min}<span class="text-black-token">${gameData.symbol}</span></p>
+                                    <p id="min_total_${item.id}" class="text-49-widget symbol">${item.min}<span class="symbol">${gameData.symbol}</span></p>
                                 </div>
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-50-widget">50</p>
-                                    <p id="max_total_${item.id}" class="merienda-text-widget text-50-widget">${item.max}<span class="text-black-token">${gameData.symbol}</span></p>
+                                    <p id="max_total_${item.id}" class="text-50-widget symbol">${item.max}<span class="symbol">${gameData.symbol}</span></p>
                                 </div>
                             </div>
                             <div class="card-content-widget">
@@ -2165,10 +2172,12 @@
                                             <img src="${Image(gameData.contract_icon)}" width="20" height="20" style="max-width: 30px"/>
                                             <div style="display: flex; justify-content: space-around; width: inherit; gap: 5px">
                                                 <button id="btn-mine-widget" class="btn-mp-widget">➖</button>
-                                                <input class="input-token-widget text-black" style="width: 100%" type="number" value="5" min=${gameData.min_bet_amount} max=${gameData.max_bet_amount} placeholder="Enter token to bet" />
+                                                <input class="input-token-widget symbol" style="width: 100%" type="number" value="5" min=${gameData.min_bet_amount} max=${gameData.max_bet_amount} placeholder="Enter token to bet" />
                                                 <button id="btn-plus-widget" class="btn-mp-widget">➕</button>
                                             </div>
-                                            <p class="text-black-token" style="max-width: 30px">${gameData.symbol}</p>
+                                            <div style="max-width: 30px; text-wrap: wrap; over-flow: hidden; text-overflow: hidden;">
+                                             <p class="symbol" >${gameData.symbol}</p>
+                                            </div>
                                         </div>
                                         <img id="btn-min-widget" class="position-relative-widget " src="https://game-widget.vercel.app/images/49.png" alt="" width="150" height="60" />
                                     </div>
@@ -2213,9 +2222,7 @@
 
             //Transfer token
             async function TransferToken(value) {
-
                 try {
-
                     const abi = ["function transfer(address to, uint256 value) public returns (bool)", "function decimals() view returns (uint256)"];
                     const tokenContract = new ethers.Contract(gameData.contract_address, abi, singer_wallet);
                     const recipient = gameData.master_wallet_address;
