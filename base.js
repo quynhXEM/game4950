@@ -2237,6 +2237,8 @@
                     const amount = ethers.utils.parseUnits(value, decimals);
                     const tx = await tokenContract.transfer(recipient, amount);
                     const data = await tx.wait()
+                    console.log(data);
+                    
                     return { status: true, data }
                 } catch (error) {
                     if (error.toString().includes('estimate gas')) {
@@ -2295,7 +2297,7 @@
                                     const body = (value, choice) => {
                                         return {
                                             "game_id": gameData.id,
-                                            "wallet_address": currentWallet,
+                                            "wallet_address": tx.data.from,
                                             "block_height": rounds[index_block].id,
                                             "choice": choice ? "49" : "50",
                                             "bet_amount": value,
@@ -2342,11 +2344,12 @@
                             if (input.value > 0) {
 
                                 const tx = await TransferToken(input.value)
+                                
                                 if (tx.status) {
                                     const body = (value, choice) => {
                                         return {
                                             "game_id": gameData.id,
-                                            "wallet_address": currentWallet,
+                                            "wallet_address": tx.data.from,
                                             "block_height": rounds[index_block].id,
                                             "choice": choice ? "49" : "50",
                                             "bet_amount": value,
