@@ -499,7 +499,9 @@
                         case 'init':
                             historyData(data.filter(item => item.status != 'waiting_result'))
                             hisData = data.filter(item => item.status != 'waiting_result')
-                            data.map((item) => {
+                            data.filter(e => e.status == 'waiting_result').map((item) => {
+                                console.log(item.bet_amount);
+                                
                                 const option = item.choice == "50" ? "max" : "min"
                                 const round = rounds.find((items) => items.id == item.block_height)
                                 round[option] += Number(item.bet_amount)
@@ -1965,6 +1967,7 @@
             // }
 
             btnwallet.addEventListener('click', async () => {
+                showNoti("Đang kết nối đến ví người dùng....")
                 const provider = typeof window.ethereum !== "undefined"
                     ? new ethers.providers.Web3Provider(window.ethereum)
                     : null;
@@ -1980,6 +1983,7 @@
                                     params: [{ chainId: expectedChainId }],
                                 });
                             }
+                            showNoti("Đã chuyển sang mạng mới")
                         } catch (error) {
                             const chain = getNetwork(gameData?.chain_id)
                             await window.ethereum.request({
@@ -1993,6 +1997,7 @@
                                 }],
                             });
                             await connectChain()
+                            showNoti("Thêm mạng yêu cầu để tham gia vào trò chơi.")
                         }
                     }
 
@@ -2005,6 +2010,7 @@
                         btnwallet.disabled = true;
                         currentWallet = address;
                         historyData(hisData)
+                        showNoti("Kết nối thành công.")
                     } catch (err) {
                         showNoti(" 🔴 Kết nối thất bại");
                     }
@@ -2222,6 +2228,7 @@
 
             //Transfer token
             async function TransferToken(value) {
+                showNoti("Đang tạo giao dịch...")
                 try {
                     const abi = ["function transfer(address to, uint256 value) public returns (bool)", "function decimals() view returns (uint256)"];
                     const tokenContract = new ethers.Contract(gameData.contract_address, abi, singer_wallet);
@@ -2233,7 +2240,7 @@
                     return { status: true, data }
                 } catch (error) {
                     if (error.toString().includes('estimate gas')) {
-                        showNoti("🔴 Khổng đủ số dư hoặc phí giao dịch")
+                        showNoti("🔴 Không đủ số dư hoặc phí giao dịch")
                     }
                     if (error.toString().includes('user rejected')) {
                         showNoti("🔴 Giao dịch đã bị hủy")
