@@ -1593,7 +1593,7 @@
                 </ul>
 
                  <ul>
-                    <h3>Quy tấc cược</h3>
+                    <h3>Quy tắc cược</h3>
                     <li>Cược tối thiểu: ${Number(gameData?.min_bet_amount).toFixed(2)} ${gameData.symbol}</li>
                     <li>Cược tối đa: ${Number(gameData?.max_bet_amount).toFixed(2)} ${gameData.symbol}</li>
                     <li>Cược tối đa: ${Number(gameData?.bet_step_amount).toFixed(2)} ${gameData.symbol}</li>
