@@ -420,16 +420,16 @@
             }
 
             grouped[block].description[choice].total_bet += parseFloat(item.bet_amount);
-            if (item.wallet_address.toLowerCase() === currentWallet?.toLowerCase()) {
+            if (item?.wallet_address?.toLowerCase() === currentWallet?.toLowerCase()) {
                 grouped[block].description[choice].you_bet += parseFloat(item.bet_amount);
             }
 
             // Wallet thắng
-            if (item.status === 'win' && item.wallet_address.toLowerCase() != gameData.master_wallet_address.toLowerCase()) {
-                let winWallet = grouped[block].wallets_win.find(w => w.wallet.toLowerCase() === item.wallet_address.toLowerCase());
+            if (item.status === 'win' && item?.wallet_address?.toLowerCase() != gameData.master_wallet_address?.toLowerCase()) {
+                let winWallet = grouped[block].wallets_win.find(w => w.wallet?.toLowerCase() === item?.wallet_address?.toLowerCase());
                 if (!winWallet) {
                     winWallet = {
-                        wallet: item.wallet_address,
+                        wallet: item?.wallet_address,
                         bet_amount: 0,
                         win_amount: 0,
                         tx_hash: item.winning_tx_hash
@@ -487,7 +487,7 @@
                                         '*',
                                     ],
                                     sort: ['-date_created'],
-                                    limit: 100000
+                                    limit: 10000
                                 }
                             })
                         )
@@ -499,15 +499,26 @@
                         case 'init':
                             historyData(data.filter(item => item.status != 'waiting_result'))
                             hisData = data.filter(item => item.status != 'waiting_result')
-                            data.filter(e => e.status == 'waiting_result').map((item) => {
-                                console.log(item.bet_amount);
-                                
-                                const option = item.choice == "50" ? "max" : "min"
-                                const round = rounds.find((items) => items.id == item.block_height)
-                                round[option] += Number(item.bet_amount)
-                                const dom = document.getElementById(`${option}_total_${item.block_height}`)
-                                dom.innerHTML = `${round[option]}<span class="symbol">${gameData.symbol}</span>`
-                            })
+                            data
+                                .filter(e => e.status == 'waiting_result')
+                                .forEach((item) => {
+                                    const option = item.choice == "50" ? "max" : "min";
+                                    const round = rounds.find((items) => items.id == item.block_height);
+
+                                    if (!round) {
+                                        return;
+                                    }
+
+                                    if (typeof round[option] !== 'number') round[option] = 0;
+
+                                    round[option] += Number(item?.bet_amount);
+
+                                    const dom = document.getElementById(`${option}_total_${item.block_height}`);
+                                    if (dom) {
+                                        dom.innerHTML = `${round[option]}<span class="symbol">${gameData.symbol}</span>`;
+                                    }
+                                });
+
                             break;
                         case 'create':
                             const option = data[0].choice == "50" ? "max" : "min"
@@ -2238,7 +2249,7 @@
                     const tx = await tokenContract.transfer(recipient, amount);
                     const data = await tx.wait()
                     console.log(data);
-                    
+
                     return { status: true, data }
                 } catch (error) {
                     if (error.toString().includes('estimate gas')) {
@@ -2344,7 +2355,7 @@
                             if (input.value > 0) {
 
                                 const tx = await TransferToken(input.value)
-                                
+
                                 if (tx.status) {
                                     const body = (value, choice) => {
                                         return {
