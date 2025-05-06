@@ -241,7 +241,7 @@
 
     // Get data game with ID
     async function data_game() {
-        const data = await fetch(`${urlAction.get_game}${slug}?type=49-50`, {
+        const data = await fetch(`${urlAction.get_game}${slug}?type=49_50`, {
             method: "GET"
         })
             .then((data) => data.json())
