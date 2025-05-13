@@ -509,13 +509,13 @@
                                         return;
                                     }
 
-                                    if (typeof round[option] !== 'number') round[option] = 0;
+                                    if (typeof round[option] !== 'number') round[option] = Number(0);
 
-                                    round[option] += Number(item?.bet_amount);
+                                    round[option] += Number(item?.bet_amount).toFixed(2);
 
                                     const dom = document.getElementById(`${option}_total_${item.block_height}`);
                                     if (dom) {
-                                        dom.innerHTML = `${round[option]}<span class="symbol">${gameData.symbol}</span>`;
+                                        dom.innerHTML = `${Number(round[option]).toFixed(2)}<span class="symbol">${gameData.symbol}</span>`;
                                     }
                                 });
 
@@ -523,7 +523,7 @@
                         case 'create':
                             const option = data[0].choice == "50" ? "max" : "min"
                             const round = rounds.find((item) => item.id == data[0].block_height)
-                            round[option] += Number(data[0].bet_amount)
+                            round[option] += Number(data[0].bet_amount || 0).toFixed(2);
                             const dom = document.getElementById(`${option}_total_${data[0].block_height}`)
                             dom.innerHTML = `${round[option]}<span class="symbol">${gameData.symbol}</span>`
                             break;
