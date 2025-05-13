@@ -9,11 +9,11 @@
     </div>
     <script>
         const widget = document.getElementById('trading-cards-widget')
-        const idGame = window.location.pathname.substring(1) === 'index.html' ? 'game-4950' : window.location.pathname.substring(1);
+        const idGame = window.location.pathname.substring(1) === 'index.html' ? 'lucky-1' : window.location.pathname.substring(1);
         widget.setAttribute("data-id", idGame)
 
         const script = document.createElement("script");
-        script.src = "./base.js";
+        script.src = "./widget.js";
         document.body.appendChild(script);
     </script>
 </body>
