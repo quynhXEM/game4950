@@ -1028,7 +1028,7 @@
                     font-size: 0.8rem;
                 }
                 .card-modal-widget {
-                 margin: 5% 20%;
+                 margin: 5% 25%;
                 }
             }
 
@@ -1822,14 +1822,14 @@
                     block_view.innerText = item.block;
                     result_view.innerText = item.result;
                     win_rate_view.innerText = Number(item?.win_rate).toFixed(2) + "%";
-                    total_bet_view.innerText = (item?.total_bet || 0) + gameData.symbol;
-                    win_amount_view.innerText = (item?.result == 49 ?
-                         (item?.description?.["50"]?.total_bet  || 0) * (100 - Number(gameData.win_fee_rate)) / 100
-                         : (item?.description?.["49"]?.total_bet || 0)  * (100 - Number(gameData.win_fee_rate)) / 100) + gameData.symbol 
-                    total_49_view.innerText = (item?.description?.["49"]?.total_bet || 0) + gameData.symbol;;
-                    bet_49_view.innerText = (item?.description?.["49"]?.you_bet || 0) + gameData.symbol;
-                    total_50_view.innerText = (item?.description?.["50"]?.total_bet || 0) + gameData.symbol;
-                    bet_50_view.innerText = (item?.description?.["50"]?.you_bet || 0) + gameData.symbol;
+                    total_bet_view.innerText = Number((item?.total_bet || 0)).toFixed(2) + gameData.symbol;
+                    win_amount_view.innerText = Number((item?.result == 49 ?
+                        (item?.description?.["50"]?.total_bet || 0) * (100 - Number(gameData.win_fee_rate)) / 100
+                        : (item?.description?.["49"]?.total_bet || 0) * (100 - Number(gameData.win_fee_rate)) / 100) ).toFixed(2) + gameData.symbol
+                    total_49_view.innerText = Number(item?.description?.["49"]?.total_bet || 0).toFixed(2) + gameData.symbol;;
+                    bet_49_view.innerText = Number(item?.description?.["49"]?.you_bet || 0).toFixed(2) + gameData.symbol;
+                    total_50_view.innerText = Number(item?.description?.["50"]?.total_bet || 0).toFixed(2) + gameData.symbol;
+                    bet_50_view.innerText = Number(item?.description?.["50"]?.you_bet || 0).toFixed(2) + gameData.symbol;
                     block_detail_view.href = `https://www.blockchain.com/explorer/blocks/btc/${item.block}`
                     let win_wallets_html = '';
                     item?.wallets_win?.forEach((win) => {
@@ -1837,9 +1837,9 @@
                             win_wallets_html = win_wallets_html + `
                             <li style="font-size: 13px; margin: 3px 10px; display: flex; justify-content: space-between; gap: 10px;">
                                 ${win.wallet.substring(0, 3)}...${win.wallet.substring(38)}
-                                <span style="color:rgb(214, 59, 59); font-weight: 600;">${win.bet_amount} ${gameData.symbol}</span>
+                                <span style="color:rgb(214, 59, 59); font-weight: 600;">-${win.bet_amount} ${gameData.symbol}</span>
+                                <span style="color:rgb(59, 214, 87); font-weight: 600;">+${win.win_amount != 0 ? win.win_amount : (win.bet_amount + (win.bet_amount / item?.description?.[item.result]?.total_bet) * item?.description?.[item.result == 49 ? "50" : "49"]?.total_bet).toFixed(2)} ${gameData.symbol}</span>
                                 ${win.wallet == currentWallet ? `<a href="${chain.scan_url}/tx/${win.tx_hash}" target="_blank">Xem</a>` : '<span style="color: #4CAF50; font-weight: 600;"></span>'}
-                               
                             </li>
                             `
                         }
@@ -2047,11 +2047,11 @@
                             <div class="betted-contaciner-widget">
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-49-widget">49</p>
-                                    <p id="min_total_${item.id}" class="text-49-widget symbol">${item.min}<span class="symbol">${gameData.symbol}</span></p>
+                                    <p id="min_total_${item.id}" class="text-49-widget symbol">${Number(item.min).toFixed(2)}<span class="symbol">${gameData.symbol}</span></p>
                                 </div>
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-50-widget">50</p>
-                                    <p id="max_total_${item.id}" class="text-50-widget symbol">${item.max}<span class="symbol">${gameData.symbol}</span></p>
+                                    <p id="max_total_${item.id}" class="text-50-widget symbol">${Number(item.max).toFixed(2)}<span class="symbol">${gameData.symbol}</span></p>
                                 </div>
                             </div>
                             <div class="card-content-widget">
