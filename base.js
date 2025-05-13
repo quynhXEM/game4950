@@ -523,7 +523,7 @@
                         case 'create':
                             const option = data[0].choice == "50" ? "max" : "min"
                             const round = rounds.find((item) => item.id == data[0].block_height)
-                            round[option] += Number(data[0].bet_amount || 0).toFixed(2);
+                            round[option] = Number(Number(round[option]) + Number(data[0].bet_amount || 0)).toFixed(2);
                             const dom = document.getElementById(`${option}_total_${data[0].block_height}`)
                             dom.innerHTML = `${round[option]}<span class="symbol">${gameData.symbol}</span>`
                             break;
@@ -2047,11 +2047,11 @@
                             <div class="betted-contaciner-widget">
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-49-widget">49</p>
-                                    <p id="min_total_${item.id}" class="text-49-widget symbol">${Number(item.min).toFixed(2)}<span class="symbol">${gameData.symbol}</span></p>
+                                    <p id="min_total_${item.id}" class="text-49-widget symbol">${item.min}<span class="symbol">${gameData.symbol}</span></p>
                                 </div>
                                 <div class="content-betted-widget">
                                     <p class="merienda-text-widget text-50-widget">50</p>
-                                    <p id="max_total_${item.id}" class="text-50-widget symbol">${Number(item.max).toFixed(2)}<span class="symbol">${gameData.symbol}</span></p>
+                                    <p id="max_total_${item.id}" class="text-50-widget symbol">${item.max}<span class="symbol">${gameData.symbol}</span></p>
                                 </div>
                             </div>
                             <div class="card-content-widget">
