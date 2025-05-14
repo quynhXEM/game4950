@@ -403,6 +403,9 @@
                     wallets_win: []
                 };
             }
+            if (!grouped[block].result) {
+                grouped[block].result = item.result
+            }
 
             grouped[block].bets = grouped[block].bets + 1
             grouped[block].total_bet += parseFloat(item.bet_amount);
@@ -1825,20 +1828,24 @@
                     total_bet_view.innerText = Number((item?.total_bet || 0)).toFixed(2) + gameData.symbol;
                     win_amount_view.innerText = Number((item?.result == 49 ?
                         (item?.description?.["50"]?.total_bet || 0) * (100 - Number(gameData.win_fee_rate)) / 100
-                        : (item?.description?.["49"]?.total_bet || 0) * (100 - Number(gameData.win_fee_rate)) / 100) ).toFixed(2) + gameData.symbol
+                        : (item?.description?.["49"]?.total_bet || 0) * (100 - Number(gameData.win_fee_rate)) / 100)).toFixed(2) + gameData.symbol
                     total_49_view.innerText = Number(item?.description?.["49"]?.total_bet || 0).toFixed(2) + gameData.symbol;;
                     bet_49_view.innerText = Number(item?.description?.["49"]?.you_bet || 0).toFixed(2) + gameData.symbol;
                     total_50_view.innerText = Number(item?.description?.["50"]?.total_bet || 0).toFixed(2) + gameData.symbol;
                     bet_50_view.innerText = Number(item?.description?.["50"]?.you_bet || 0).toFixed(2) + gameData.symbol;
                     block_detail_view.href = `https://www.blockchain.com/explorer/blocks/btc/${item.block}`
                     let win_wallets_html = '';
+                    console.log(item);
+                    
                     item?.wallets_win?.forEach((win) => {
                         if (win?.wallet) {
                             win_wallets_html = win_wallets_html + `
                             <li style="font-size: 13px; margin: 3px 10px; display: flex; justify-content: space-between; gap: 10px;">
                                 ${win.wallet.substring(0, 3)}...${win.wallet.substring(38)}
                                 <span style="color:rgb(214, 59, 59); font-weight: 600;">-${win.bet_amount} ${gameData.symbol}</span>
-                                <span style="color:rgb(59, 214, 87); font-weight: 600;">+${win.win_amount != 0 ? win.win_amount : (win.bet_amount + (win.bet_amount / item?.description?.[item.result]?.total_bet) * item?.description?.[item.result == 49 ? "50" : "49"]?.total_bet).toFixed(2)} ${gameData.symbol}</span>
+                                <span style="color:rgb(59, 214, 87); font-weight: 600;">+${win.win_amount != 0 ?
+                                    win.win_amount :
+                                    (win.bet_amount + (win.bet_amount / item?.description?.[item.result]?.total_bet) * item?.description?.[item.result == 49 ? "50" : "49"]?.total_bet).toFixed(2)} ${gameData.symbol}</span>
                                 ${win.wallet == currentWallet ? `<a href="${chain.scan_url}/tx/${win.tx_hash}" target="_blank">Xem</a>` : '<span style="color: #4CAF50; font-weight: 600;"></span>'}
                             </li>
                             `
