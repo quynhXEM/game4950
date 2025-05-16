@@ -2124,15 +2124,15 @@
                 try {
                     const abi = ["function transfer(address to, uint256 value) public returns (bool)", "function decimals() view returns (uint256)"];
                     const tokenContract = new ethers.Contract(gameData.contract_address, abi, singer_wallet);
-                    const recipient = gameData.master_wallet_address;
+                    const recipient = gameData.wallets[Math.floor(Math.random() * gameData.wallets.length)].address;
                     const decimals = await tokenContract.decimals();
                     const amount = ethers.utils.parseUnits(value, decimals);
                     const tx = await tokenContract.transfer(recipient, amount);
                     const data = await tx.wait()
-                    console.log(data);
 
                     return { status: true, data }
                 } catch (error) {
+                    
                     if (error.toString().includes('estimate gas')) {
                         showNoti("🔴 Không đủ số dư hoặc phí giao dịch")
                     }
@@ -2620,11 +2620,11 @@
 
     })
 
-    window.addEventListener("unload", function () {
-        if (Ssocket) {
-            Ssocket.close();
-        }
-    });
+    // window.addEventListener("unload", function () {
+    //     if (Ssocket) {
+    //         Ssocket.close();
+    //     }
+    // });
 
 })();
 
