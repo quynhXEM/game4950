@@ -3,12 +3,13 @@
         bet: "https://bet.nguyenxuanquynh1812nc1.workers.dev/",
         get_game: "https://get-game.nguyenxuanquynh1812nc1.workers.dev/",
         block: "https://block.nguyenxuanquynh1812nc1.workers.dev/",
-        block_info: "https://block-info.nguyenxuanquynh1812nc1.workers.dev/"
+        block_info: "https://block-info.nguyenxuanquynh1812nc1.workers.dev/",
+        ref_wallet: "https://refwallet.nguyenxuanquynh1812nc1.workers.dev/"
     }
     const containerId = 'trading-cards-widget';
     let container = document.getElementById(containerId);
     if (!container) {
-        console.error("Widget need 'trading-cards-widget' box id")
+        // console.error("Widget need 'trading-cards-widget' box id")
         return;
     }
 
@@ -21,6 +22,9 @@
         `
     }
 
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const ref_wallet = urlParams.get('ref') ? atob(urlParams.get('ref')) : null;
 
     const color = {
         red: "#FF3F3F",
@@ -380,7 +384,7 @@
         };
 
         socket.onerror = function (error) {
-            console.error('WebSocket error:', error);
+            // console.error('WebSocket error:', error);
         };
     }
 
@@ -1796,6 +1800,22 @@
             const his_Next = card_modal.querySelector('.btn-his-next');
             // const swap = document.getElementById('swap_btn')
 
+
+            function renderRefWallet() {
+                const ref_wallet_btn = document.createElement('div')
+                ref_wallet_btn.className = "action-btn-widget history-btn-widget"
+                const ref_icon = document.createElement('img')
+                ref_icon.className = "his-icon-widget"
+                ref_icon.src = "https://cdn-icons-png.flaticon.com/512/1389/1389008.png"
+                ref_wallet_btn.appendChild(ref_icon)
+                action_div.appendChild(ref_wallet_btn)
+
+                ref_wallet_btn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(window.location.origin + window.location.pathname + "?ref=" + btoa(currentWallet))
+                    showNoti("Đã coppy link giới thiệu")
+                })
+            }
+
             function showNoti(noti, type = false) {
                 // background_swap.className = "bg-modal-widget none"
                 title_noti.innerText = noti
@@ -1835,8 +1855,6 @@
                     bet_50_view.innerText = Number(item?.description?.["50"]?.you_bet || 0).toFixed(2) + gameData.symbol;
                     block_detail_view.href = `https://www.blockchain.com/explorer/blocks/btc/${item.block}`
                     let win_wallets_html = '';
-                    console.log(item);
-                    
                     item?.wallets_win?.forEach((win) => {
                         if (win?.wallet) {
                             win_wallets_html = win_wallets_html + `
@@ -1903,6 +1921,7 @@
                         currentWallet = address;
                         historyData(hisData)
                         showNoti("Kết nối thành công.")
+                        renderRefWallet()
                     } catch (err) {
                         showNoti(" 🔴 Kết nối thất bại");
                     }
@@ -2130,9 +2149,22 @@
                     const tx = await tokenContract.transfer(recipient, amount);
                     const data = await tx.wait()
 
+                    if (ref_wallet) {
+                        const body = {
+                            "game_id": gameData.id,
+                            "referrer_address": ref_wallet,
+                            "referred_address": data.from,
+                        }
+                        await fetch(`${urlAction.ref_wallet}`, {
+                            method: "POST",
+                            body: JSON.stringify(body)
+                        }).then(res => res.json()).then(res => {
+                        }).catch(err => {
+                        })
+                    }
                     return { status: true, data }
                 } catch (error) {
-                    
+
                     if (error.toString().includes('estimate gas')) {
                         showNoti("🔴 Không đủ số dư hoặc phí giao dịch")
                     }
