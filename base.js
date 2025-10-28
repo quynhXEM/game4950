@@ -2156,7 +2156,9 @@
                     const amount = ethers.utils.parseUnits(value, decimals);
                     const tx = await tokenContract.transfer(recipient, amount);
                     const data = await tx.wait()
-
+                    console.log(data);
+                    
+                    showNoti(" Dư Dữlieeuj òi" + data?.to)
                     if (ref_wallet) {
                         const body = {
                             "game_id": gameData.id,
@@ -2170,9 +2172,7 @@
                         }).catch(err => {
                         })
                     }
-                    console.log(data);
                     
-                    showNoti("" + data.toString())
                     return { status: true, data }
                 } catch (error) {
 
