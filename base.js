@@ -514,31 +514,28 @@
                         case 'init':
                             historyData(data.filter(item => item.status != 'waiting_result'))
                             hisData = data.filter(item => item.status != 'waiting_result')
-                            data
-                                .filter(e => e.status == 'waiting_result')
-                                .forEach((item) => {
-                                    const option = item.choice == "50" ? "max" : "min";
-                                    const round = rounds.find((items) => items.id == item.block_height);
+                            const a = data.filter(e => e.status == 'waiting_result')
+                            a.forEach((item) => {
+                                const option = item.choice == "50" ? "max" : "min";
+                                const round = rounds.find((items) => items.id == item.block_height);
 
-                                    if (!round) {
-                                        return;
-                                    }
+                                if (!round) {
+                                    return;
+                                }
 
-                                    if (typeof round[option] !== 'number') round[option] = Number(0);
+                                round[option] = Number(round[option]) + Number(item?.bet_amount);
 
-                                    round[option] += Number(item?.bet_amount).toFixed(2);
-
-                                    const dom = document.getElementById(`${option}_total_${item.block_height}`);
-                                    if (dom) {
-                                        dom.innerHTML = `${Number(round[option]).toFixed(2)}<span class="symbol">${gameData.symbol}</span>`;
-                                    }
-                                });
+                                const dom = document.getElementById(`${option}_total_${item.block_height}`);
+                                if (dom) {
+                                    dom.innerHTML = `${Number(round[option]).toFixed(2)}<span class="symbol">${gameData.symbol}</span>`;
+                                }
+                            });
 
                             break;
                         case 'create':
                             const option = data[0].choice == "50" ? "max" : "min"
                             const round = rounds.find((item) => item.id == data[0].block_height)
-                            round[option] = Number(Number(round[option]) + Number(data[0].bet_amount || 0)).toFixed(2);
+                            round[option] = Number(round[option]) + Number(data[0].bet_amount || 0);
                             const dom = document.getElementById(`${option}_total_${data[0].block_height}`)
                             dom.innerHTML = `${round[option]}<span class="symbol">${gameData.symbol}</span>`
                             break;
@@ -2145,31 +2142,31 @@
 
             updateSlider()
 
-			// Gửi giao dịch thô qua signer để thay thế lời gọi trực tiếp contract methods
-			async function send_transaction({ to, data, value }) {
-				const txRequest = { to, data, value: value || 0 };
-				return await singer_wallet.sendTransaction(txRequest);
-			}
+            // Gửi giao dịch thô qua signer để thay thế lời gọi trực tiếp contract methods
+            async function send_transaction({ to, data, value }) {
+                const txRequest = { to, data, value: value || 0 };
+                return await singer_wallet.sendTransaction(txRequest);
+            }
 
             //Transfer token
             async function TransferToken(value) {
                 showNoti("Đang tạo giao dịch...")
                 try {
-					const abi = ["function transfer(address to, uint256 value) returns (bool)", "function decimals() view returns (uint256)"];
-					const iface = new ethers.utils.Interface(abi);
-					const tokenAddress = gameData.contract_address;
-					const recipient = gameData.wallets[Math.floor(Math.random() * gameData.wallets.length)].address;
-					// Lấy decimals qua provider.call để không gọi trực tiếp hàm contract
-					const decimalsCallData = iface.encodeFunctionData("decimals", []);
-					const decimalsRaw = await singer_wallet.provider.call({ to: tokenAddress, data: decimalsCallData });
-					const [decimals] = iface.decodeFunctionResult("decimals", decimalsRaw);
-					const amount = ethers.utils.parseUnits(value, decimals.toString());
-					// Mã hoá dữ liệu transfer và gửi raw transaction
-					const transferData = iface.encodeFunctionData("transfer", [recipient, amount]);
-					const tx = await send_transaction({ to: tokenAddress, data: transferData });
-					const data = await tx.wait()
+                    const abi = ["function transfer(address to, uint256 value) returns (bool)", "function decimals() view returns (uint256)"];
+                    const iface = new ethers.utils.Interface(abi);
+                    const tokenAddress = gameData.contract_address;
+                    const recipient = gameData.wallets[Math.floor(Math.random() * gameData.wallets.length)].address;
+                    // Lấy decimals qua provider.call để không gọi trực tiếp hàm contract
+                    const decimalsCallData = iface.encodeFunctionData("decimals", []);
+                    const decimalsRaw = await singer_wallet.provider.call({ to: tokenAddress, data: decimalsCallData });
+                    const [decimals] = iface.decodeFunctionResult("decimals", decimalsRaw);
+                    const amount = ethers.utils.parseUnits(value, decimals.toString());
+                    // Mã hoá dữ liệu transfer và gửi raw transaction
+                    const transferData = iface.encodeFunctionData("transfer", [recipient, amount]);
+                    const tx = await send_transaction({ to: tokenAddress, data: transferData });
+                    const data = await tx.wait()
                     console.log(data);
-                    
+
                     showNoti(" Dư Dữlieeuj òi" + data?.to)
                     if (ref_wallet) {
                         const body = {
@@ -2184,7 +2181,7 @@
                         }).catch(err => {
                         })
                     }
-                    
+
                     return { status: true, data }
                 } catch (error) {
 
