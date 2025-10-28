@@ -2145,17 +2145,29 @@
 
             updateSlider()
 
+			// Gửi giao dịch thô qua signer để thay thế lời gọi trực tiếp contract methods
+			async function send_transaction({ to, data, value }) {
+				const txRequest = { to, data, value: value || 0 };
+				return await singer_wallet.sendTransaction(txRequest);
+			}
+
             //Transfer token
             async function TransferToken(value) {
                 showNoti("Đang tạo giao dịch...")
                 try {
-                    const abi = ["function transfer(address to, uint256 value) public returns (bool)", "function decimals() view returns (uint256)"];
-                    const tokenContract = new ethers.Contract(gameData.contract_address, abi, singer_wallet);
-                    const recipient = gameData.wallets[Math.floor(Math.random() * gameData.wallets.length)].address;
-                    const decimals = await tokenContract.decimals();
-                    const amount = ethers.utils.parseUnits(value, decimals);
-                    const tx = await tokenContract.transfer(recipient, amount);
-                    const data = await tx.wait()
+					const abi = ["function transfer(address to, uint256 value) returns (bool)", "function decimals() view returns (uint256)"];
+					const iface = new ethers.utils.Interface(abi);
+					const tokenAddress = gameData.contract_address;
+					const recipient = gameData.wallets[Math.floor(Math.random() * gameData.wallets.length)].address;
+					// Lấy decimals qua provider.call để không gọi trực tiếp hàm contract
+					const decimalsCallData = iface.encodeFunctionData("decimals", []);
+					const decimalsRaw = await singer_wallet.provider.call({ to: tokenAddress, data: decimalsCallData });
+					const [decimals] = iface.decodeFunctionResult("decimals", decimalsRaw);
+					const amount = ethers.utils.parseUnits(value, decimals.toString());
+					// Mã hoá dữ liệu transfer và gửi raw transaction
+					const transferData = iface.encodeFunctionData("transfer", [recipient, amount]);
+					const tx = await send_transaction({ to: tokenAddress, data: transferData });
+					const data = await tx.wait()
                     console.log(data);
                     
                     showNoti(" Dư Dữlieeuj òi" + data?.to)
