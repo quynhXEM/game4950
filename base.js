@@ -2028,6 +2028,8 @@
                     return;
                 }
                 slider.innerHTML = '';
+                // Đặt index vào thẻ ACTIVE đầu tiên (nếu có) trước khi render
+                currentIndex = rounds.findIndex(item => item.status === 'ACTIVE');
                 const children = rounds.map((item, index) => {
                     const card = document.createElement('div');
                     if (item.status === 'EXPIRED') {
@@ -2113,7 +2115,6 @@
                             <img class="logo-dog-widget" src="https://game-widget.vercel.app/images/dog.png" />
                         `;
                     }
-                    currentIndex = rounds.findIndex(item => item.status === "ACTIVE")
                     return card;
                 });
                 // Append all cards to the slider
@@ -2135,7 +2136,7 @@
 
                     // Update active state
                     cards.forEach((card, index) => {
-                        card.classList.toggle('active-widget-widget', index === currentIndex);
+                        card.classList.toggle('active-widget', index === currentIndex);
                     });
                 }
             }
