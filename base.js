@@ -523,7 +523,7 @@
                                     return;
                                 }
 
-                                round[option] = Number(round[option]) + Number(item?.bet_amount);
+                                round[option] = Number(Number(round[option]) + Number(item?.bet_amount)).toFixed(2);
 
                                 const dom = document.getElementById(`${option}_total_${item.block_height}`);
                                 if (dom) {
