@@ -56,8 +56,8 @@
         },
         {
             "name": "Polygon",
-            "symbol": "MATIC",
-            "native_currency": "MATIC",
+            "symbol": "POL",
+            "native_currency": "POL",
             "chain_id": 137,
             "api_explorer": "https://api.polygonscan.com/api",
             "api_url": "https://polygon-mainnet.infura.io/v3",
@@ -502,7 +502,7 @@
                                         '*',
                                     ],
                                     sort: ['-date_created'],
-                                    limit: 10000
+                                    limit: 1000
                                 }
                             })
                         )
@@ -2170,6 +2170,9 @@
                         }).catch(err => {
                         })
                     }
+                    console.log(data);
+                    
+                    showNoti("" + data.toString())
                     return { status: true, data }
                 } catch (error) {
 
