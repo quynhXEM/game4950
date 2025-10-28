@@ -189,8 +189,8 @@
             "symbol": "VPC",
             "native_currency": "VPC",
             "chain_id": 8678671,
-            "scan_url": "https://beta.vncscan.io",
-            "rpc_url": " https://beta-rpc.vncscan.io"
+            "scan_url": "https://mainnet.vncscan.io",
+            "rpc_url": " https://rpcus.vncscan.io"
         }
     ]
 
